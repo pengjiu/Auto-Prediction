@@ -1,0 +1,39 @@
+name: Bounded public market evidence
+on:
+  push:
+    branches: [codex/mutation-market-economics]
+    paths:
+      - research/payoff-economics/s2/capture.py
+      - .github/workflows/market-evidence.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: public-evidence-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Capture only public market GET responses
+        run: |
+          python3 -m py_compile research/payoff-economics/s2/capture.py
+          python3 research/payoff-economics/s2/capture.py --output "$RUNNER_TEMP/public-evidence" --cycles 12 --interval 5
+      - name: Bind exact source and provenance
+        if: always()
+        run: |
+          printf '%s\n' "$GITHUB_SHA" > "$RUNNER_TEMP/captured-source-commit.txt"
+          tar -czf "$RUNNER_TEMP/s2-source.tar.gz" --exclude=.git -C "$GITHUB_WORKSPACE" .
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: s2-public-evidence
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/public-evidence
+            ${{ runner.temp }}/captured-source-commit.txt
+            ${{ runner.temp }}/s2-source.tar.gz
