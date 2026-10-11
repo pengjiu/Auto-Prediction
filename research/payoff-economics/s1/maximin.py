@@ -317,15 +317,38 @@ def exact_bruteforce(model: Model, *, max_candidates: int = 100_000) -> Proposal
         total *= len(all_options)
     if total > max_candidates:
         raise ValueError(f"exhaustive gold reference needs {total} combinations")
-    best = _evaluate(model, tuple(None for _ in model.assets), "EXACT_ENUMERATION")
+    # Independent reference arithmetic: do not call the proposal evaluator
+    # while searching. This catches both MILP formulation mistakes and errors in
+    # the optimized candidate's quantity/cost/state cash-flow evaluation.
+    best_choice = tuple(None for _ in model.assets)
+    best_floor = 0  # deliberately admissible no-trade benchmark
     for choice in product(*options):
-        try:
-            p = _evaluate(model, choice, "EXACT_ENUMERATION")
-        except ValueError:
+        total_cost = 0
+        venue_cost = {v: 0 for v in model.venue_budgets}
+        state_income = [0] * len(model.state_ids)
+        for asset, selection in zip(model.assets, choice):
+            if selection is None:
+                continue
+            rank, quantity = selection
+            prefix = asset.levels[:rank + 1]
+            if quantity > sum(level.depth for level in prefix):
+                raise AssertionError("exhaustive reference generated impossible depth")
+            debit = quantity * (asset.levels[rank].ask + max(level.fee_upper for level in prefix))
+            total_cost += debit
+            venue_cost[asset.venue] += debit
+            for state_index, payout in enumerate(asset.payoff):
+                state_income[state_index] += quantity * payout
+        if total_cost > model.budget or any(
+            venue_cost[v] > limit for v, limit in model.venue_budgets.items()
+        ):
             continue
-        if p.lower_floor > best.lower_floor:
-            best = p
-    return best
+        floor = min(state_income) - total_cost
+        if floor > best_floor:
+            best_floor, best_choice = floor, choice
+    final = _evaluate(model, best_choice, "EXACT_ENUMERATION")
+    if final.lower_floor != best_floor:
+        raise AssertionError("independent oracle and candidate re-evaluation disagree")
+    return final
 
 
 def top_of_book_equal_size_baseline(model: Model, *, max_assets: int = 12) -> Proposal:
