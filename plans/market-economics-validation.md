@@ -69,3 +69,20 @@ Add one research directory under research/payoff-economics/s2 and a bounded
 manual/capture workflow. Use the existing S1 proposer without changing its
 certificate authority. No new production service or persistent truth database.
 Stack the draft PR on codex/mutation-state-maximin, never merge main implicitly.
+
+## Follow-up protocol, declared after pilot and before second capture
+Pilot run 38140353386 exposed three over-size 100-event liquidity pages and
+16 binary controls concentrated in one event. Preserve that run and its
+exclusions; do not silently reclassify it as broad market coverage.
+
+The next bounded acquisition uses forty 10-event pages: liquidity offsets
+0..290 and recent offsets 0..90. No automatic retry loop and no larger response
+limit. Keep 12 snapshots, the same per-token caps, 8 small negative-risk groups
+and at most 16 binary controls, but allow only one control per distinct event
+and exclude events already represented by a selected group. Record remaining
+pagination errors. This is a second selected short sample, not an independent
+long-term out-of-sample profitability trial.
+
+Also retain a multi-level equal-quantity/all-subset baseline. Pilot improvement
+over a first-level baseline disappears against this stronger same-depth control.
+Do not attribute access to deeper orders to novel unequal-quantity alpha.
