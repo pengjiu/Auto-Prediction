@@ -32,12 +32,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p .offline-tools/pnpm
+          mkdir -p .offline-tools/pnpm_modules
           cp "$(command -v node)" .offline-tools/node
           PNPM_MAIN="$(readlink -f "$(command -v pnpm)")"
-          PNPM_PACKAGE="$(dirname "$(dirname "$PNPM_MAIN")")"
-          cp -a "$PNPM_PACKAGE"/. .offline-tools/pnpm/
-          ./.offline-tools/node .offline-tools/pnpm/bin/pnpm.cjs --version
+          PNPM_ROOT="$HOME/setup-pnpm/node_modules"
+          case "$PNPM_MAIN" in
+            "$PNPM_ROOT"/*) ;;
+            *) echo "pnpm resolved outside package root: $PNPM_MAIN"; exit 1 ;;
+          esac
+          PNPM_REL="$(realpath --relative-to="$PNPM_ROOT" "$PNPM_MAIN")"
+          cp -a "$PNPM_ROOT"/. .offline-tools/pnpm_modules/
+          printf '%s\n' "$PNPM_REL" > .offline-tools/pnpm-entry.txt
+          ./.offline-tools/node ".offline-tools/pnpm_modules/$PNPM_REL" --version
           echo "Node version: $(./.offline-tools/node --version)"
           echo "Workspace size:"
           du -sh node_modules .offline-tools || true
