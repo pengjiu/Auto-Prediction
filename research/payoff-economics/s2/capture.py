@@ -125,7 +125,8 @@ def main():
     cap = Capture(args.output)
     config = {"schema": "s2.public-capture.v1", "started_ns": time.time_ns(),
               "cycles": args.cycles, "interval_seconds": args.interval, "max_tokens": 96,
-              "catalog_scope": "first 300 liquidity-ranked + 100 recent open events; no claim of universe completeness",
+              "catalog_scope": "10-event pages: liquidity offsets 0..290 + recent offsets 0..90; incomplete on any failed page",
+              "catalog_page_size": 10, "catalog_request_budget": 40, "binary_controls_per_event": 1,
               "max_group_members": 6, "max_groups": 8, "max_binary_controls": 16,
               "authority": "READ_ONLY_RESEARCH", "value_moving_actions": False}
     cap.save("config.json", config)
@@ -133,8 +134,9 @@ def main():
     for path in docs:
         cap.get(f"https://docs.polymarket.com/{path}.md", "docs:" + path)
     events, catalogs = {}, []
-    for order, offset in (("liquidity", 0), ("liquidity", 100), ("liquidity", 200), ("id", 0)):
-        url = GAMMA + "/events?" + urlencode({"limit": 100, "offset": offset, "active": "true", "closed": "false", "order": order, "ascending": "false"})
+    pages = [("liquidity", offset) for offset in range(0, 300, 10)] + [("id", offset) for offset in range(0, 100, 10)]
+    for order, offset in pages:
+        url = GAMMA + "/events?" + urlencode({"limit": 10, "offset": offset, "active": "true", "closed": "false", "order": order, "ascending": "false"})
         rec, page = cap.get(url, f"catalog:{order}:{offset}")
         catalogs.append(rec["body_sha256"])
         if isinstance(page, list):
@@ -162,7 +164,10 @@ def main():
                          "markets": members, "semantic_admission": "COMPLETENESS_AND_SETTLEMENT_UNVERIFIED"})
         token_set.update(tokens); group_count += 1
     binaries = 0
+    represented_events = {str(f["event"]["id"]) for f in selected}
     for e in events.values():
+        if str(e["id"]) in represented_events:
+            continue
         for m in e.get("markets", []):
             try: tokens = market_tokens(m)
             except (TypeError, ValueError): continue
@@ -171,6 +176,8 @@ def main():
             selected.append({"kind": "BINARY_COMPLEMENT", "event": e, "markets": [m],
                              "semantic_admission": "SAME_CONDITION_COMPLEMENT_ASSUMPTION"})
             token_set.update(tokens); binaries += 1
+            represented_events.add(str(e["id"]))
+            break
     cap.save("selection.json", {"catalogs": catalogs, "catalog_events": len(events),
         "families": selected, "excluded": rejected, "tokens": sorted(token_set)})
     print(json.dumps({"events": len(events), "families": len(selected), "groups": group_count,
