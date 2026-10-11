@@ -1,0 +1,48 @@
+name: Mainline qualification
+on:
+  push:
+    branches: [main, codex/review-merge-publication]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: qualification-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  workspace:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.1'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check
+      - run: pnpm run build
+      - run: pnpm run test
+      - run: node research/payoff-economics/offline/run.mjs
+  research:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned optional research dependencies
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+      - run: python -m unittest discover -s research/payoff-economics/s1 -p 'test_*.py' -v
+      - run: python -m unittest discover -s research/payoff-economics/s2 -p 'test_*.py' -v
+      - run: python -m unittest discover -s research/payoff-economics/tests -v
+      - name: Research cannot mutate production sources
+        run: git diff --exit-code -- packages apps pnpm-lock.yaml package.json
