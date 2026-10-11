@@ -1,0 +1,19 @@
+{
+  "coverage": "ASSUMED_STATES_ONLY",
+  "evidence_id": "synthetic-unequal-quantities-no-real-market-claims",
+  "states": ["s0", "s1", "s2"],
+  "scale": 100,
+  "budget": 308,
+  "venue_budgets": {"paper-venue": 1300},
+  "assets": [
+    {"id": "a0", "venue": "paper-venue", "payoffs": {"s0": 0, "s1": 100, "s2": 100}, "asks": [
+      {"price": 44, "depth": 3, "fee_upper": 2}, {"price": 86, "depth": 1, "fee_upper": 1}
+    ]},
+    {"id": "a1", "venue": "paper-venue", "payoffs": {"s0": 0, "s1": 0, "s2": 100}, "asks": [
+      {"price": 44, "depth": 2, "fee_upper": 2}, {"price": 93, "depth": 2, "fee_upper": 3}
+    ]},
+    {"id": "a2", "venue": "paper-venue", "payoffs": {"s0": 100, "s1": 100, "s2": 0}, "asks": [
+      {"price": 11, "depth": 4, "fee_upper": 2}
+    ]}
+  ]
+}

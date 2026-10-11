@@ -1,0 +1,14 @@
+{
+  "algorithm": "HiGHS MILP one executable BUY limit per asset, integer quantity, conservatively full-at-limit cost",
+  "baseline": "all subsets equal share count at first ask, same states, fees and budget",
+  "capturable_execution_estimated": false,
+  "cases": 150,
+  "dataset": "SYNTHETIC_FINITE_PAYOFF_MODELS_ONLY",
+  "equal": 118,
+  "max_milp_ms": 261.064,
+  "median_equal_size_scan_ms": 0.494,
+  "median_milp_ms": 1.168,
+  "milp_strictly_stronger": 32,
+  "real_market_pnl_claimed": false,
+  "sum_objective_difference_ticks_across_unrelated_synthetic_cases_not_profit": 2025
+}
