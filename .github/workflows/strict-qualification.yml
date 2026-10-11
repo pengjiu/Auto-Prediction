@@ -1,0 +1,53 @@
+name: Strict workspace qualification
+
+on:
+  push:
+    branches:
+      - codex/mutation-payoff-economics
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retain portable source checkout for local reproduction
+        run: tar -czf "$RUNNER_TEMP/auto-prediction-source.tar.gz" --exclude=.git -C "$GITHUB_WORKSPACE" .
+      - name: Upload portable source checkout
+        uses: actions/upload-artifact@v4
+        with:
+          name: auto-prediction-source
+          path: ${{ runner.temp }}/auto-prediction-source.tar.gz
+          retention-days: 2
+      - name: Install pnpm from locked project version
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - name: Set up qualified Node.js runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.1'
+      - name: Print toolchain
+        run: |
+          node --version
+          pnpm --version
+      - name: Install lockfile dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
+      - name: Whole-workspace TypeScript checks
+        run: pnpm check
+      - name: Complete test suite
+        run: pnpm test
+      - name: Build every package
+        run: pnpm build
+      - name: Re-run focused regression
+        if: always()
+        run: |
+          node research/payoff-economics/offline/run.mjs
+          python3 -m unittest discover -s research/payoff-economics/tests -v
