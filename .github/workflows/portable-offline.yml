@@ -43,7 +43,7 @@ jobs:
           PNPM_REL="$(realpath --relative-to="$PNPM_ROOT" "$PNPM_MAIN")"
           cp -a "$PNPM_ROOT"/. .offline-tools/pnpm_modules/
           printf '%s\n' "$PNPM_REL" > .offline-tools/pnpm-entry.txt
-          ./.offline-tools/node ".offline-tools/pnpm_modules/$PNPM_REL" --version
+          PATH="$PWD/.offline-tools:$PATH" ".offline-tools/pnpm_modules/$PNPM_REL" --version
           echo "Node version: $(./.offline-tools/node --version)"
           echo "Workspace size:"
           du -sh node_modules .offline-tools || true
