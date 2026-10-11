@@ -20,7 +20,8 @@ jobs:
         with:
           python-version: '3.13'
       - name: Pinned optional research wheels
-        run: python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
       - name: Original S1 oracle regressions
         run: python -m unittest discover -s research/payoff-economics/s1 -p 'test_*.py' -v
       - name: S2 evidence, exact witness, baseline and sampled execution tests
