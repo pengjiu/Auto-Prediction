@@ -1,0 +1,55 @@
+name: Export portable offline test environment
+
+on:
+  push:
+    branches:
+      - codex/mutation-payoff-economics
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install pinned pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - name: Install pinned Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.1'
+      - name: Reproduce dependencies from lockfile
+        run: pnpm install --frozen-lockfile --reporter=append-only
+      - name: Bundle native-compatible Node and project dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .offline-tools/pnpm
+          cp "$(command -v node)" .offline-tools/node
+          PNPM_MAIN="$(readlink -f "$(command -v pnpm)")"
+          PNPM_PACKAGE="$(dirname "$(dirname "$PNPM_MAIN")")"
+          cp -a "$PNPM_PACKAGE"/. .offline-tools/pnpm/
+          ./.offline-tools/node .offline-tools/pnpm/bin/pnpm.cjs --version
+          echo "Node version: $(./.offline-tools/node --version)"
+          echo "Workspace size:"
+          du -sh node_modules .offline-tools || true
+          tar -czf "$RUNNER_TEMP/auto-prediction-offline-ready.tar.gz" \
+            --exclude=.git \
+            --exclude=.offline-tools/*.tar.gz \
+            -C "$GITHUB_WORKSPACE" .
+          du -h "$RUNNER_TEMP/auto-prediction-offline-ready.tar.gz"
+      - name: Upload full source, dependencies and runtime
+        uses: actions/upload-artifact@v4
+        with:
+          name: auto-prediction-offline-ready
+          path: ${{ runner.temp }}/auto-prediction-offline-ready.tar.gz
+          retention-days: 2
+          compression-level: 0
