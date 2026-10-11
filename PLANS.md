@@ -1,5 +1,16 @@
 # Plans
 
+P0 certified payoff economics mutation (draft PR #1, 2026-10-11): after repairing
+subset-only pruning and BUY limit-cost certification, exact Node 22.22.1 /
+pnpm 11.13.1 dependencies were restored locally and `pnpm run check`,
+`pnpm run test` (1,077/1,077), and `pnpm run build` all passed. Root harness
+process-group and environment-dependent test expectations were also repaired.
+This is a technical qualification of the research-only candidate, not evidence
+of executable profit or permission for live trading. The candidate remains
+HOLD pending actual synchronized order books, fee/execution qualification, and
+economic comparison. See `plans/certified-payoff-economics.md` and
+`research/payoff-economics/VALIDATION.md`.
+
 The canonical Auto Prediction product version is **0.1.2**. The root package,
 Harness manifest, private workspace packages, Studio, CLI, and
 Agent-runtime client identity carry the same version. Venue adapter identities

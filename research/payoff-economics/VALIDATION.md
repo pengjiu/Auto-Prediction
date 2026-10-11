@@ -3,7 +3,29 @@
 日期：2026-10-11。基线：`pengjiu/Auto-Prediction@d6c9447cab29898a6eb5fa06be3598b8474cc02f`。
 开发分支：`codex/mutation-payoff-economics`。设计先行提交：`e7ffd40cfde0d5fb39500231d2e7bd114716260b`。
 
-## 已实际运行
+## 本地完整验收（2026-10-11）
+
+在固定分支 `codex/mutation-payoff-economics` 上，将 GitHub Actions 按 `pnpm-lock.yaml` 生成的 Node 22.22.1、pnpm 11.13.1 和完整安装依赖打包恢复到本地容器后，**实际在本地进程中**运行以下检查：
+
+| 检查 | 本地结果 |
+|---|---|
+| `pnpm run check` | 20 个 workspace 的 TypeScript 检查通过 |
+| `pnpm run build` | 19 个工作区包及 Studio 完整构建通过；Vite 仅有包体积提示 |
+| `pnpm run test` | 28 项根级测试 + 1,049 项 workspace 测试，共 **1,077 通过、0 失败**，最终退出码 0 |
+| P0 原生回归 | 43 通过、0 失败 |
+| 补丁应用工具 | 8 通过、0 失败 |
+| 定向检查 | `premise-analysis.test.ts` + `server.test.ts` 共 44 通过、0 失败 |
+
+**发现并修复的测试问题（严格按先失败、后修复、再完整复跑执行）：**
+
+1. `scripts/studio-harness-smoke.test.mjs` 的清理函数只终止 detached pnpm 组内的父进程，导致 Studio 子进程孤儿化、端口不释放。现在对 POSIX 独立进程组发送 SIGTERM，并保留 Windows 分支。测试由端口泄漏失败转为 28 项根级测试全部通过。
+2. 同一测试直接对比含 ANSI 颜色码的 Vite 输出，可能把真实端口误判为缺失。测试断言先去掉 VT 控制码再比较。
+3. `premise-analysis.test.ts` 中两处 `portfolios.length === 1` 是不安全子集剪枝时代的旧期望；新模型输出 3 份正支付篮子。修改为检查全部保留的三个候选及正支付下界，不恢复旧剪枝。
+4. `server.test.ts` 隐含依赖本机 Codex 凭证缓存；干净环境合法阻断为 `credential unavailable`。现在仅允许该原因或 `preflight`，并仍要求 `dispatchEligibility: BLOCKED`，未注入任何真实凭证。
+
+以上属于**本地集成/单元/构建验收**，不证明现时市场的净盈利、真实多腿原子性、未模拟的撮合费用或当前 SDK 与匿名实时 API 的兼容性。无真实订单、签名、授权、资金移动。GitHub Actions 的源代码归档仅用于跨网络限制交付完整依赖，测试主体在本地执行。
+
+## 初始 P0 聚焦检查（提交前）
 
 | 检查 | 结果 | 范围 |
 |---|---|---|
@@ -44,19 +66,18 @@
 
 本目录保留原生离线测试、源码替换记录、基线验证器快照、补丁应用工具及其测试。编译产物、缓存、旧下载失败日志和临时压缩包不属于生产变更，没有提交。
 
-## 尚未运行 / 不得声称已完成
+## 仍未完成的外部与经济验收
 
-- 完整检出仓库上的全量 `pnpm check`、`pnpm test`、构建及端到端流程。
-- `compileResearchRelationPayoff` 全语义准入流程、完整 `exact-promotion` 和影子状态机集成回归。
+- 本地完整工作区测试已通过；外部真实平台 API 的端到端兼容性和市场执行仍未验证。
 - SDK/匿名实时 API 兼容性、连续盘口、执行延迟、真实成交概率与撮合拆分费用校准。
 - 任何真实下单、签名、资金移动或盈利验证。
 
 ## 环境与复现
 
-离线 Node 为 22.16.0，低于项目 >=22.19；TypeScript 5.8.3，不是项目锁定的完整环境。DNS 无法解析 GitHub/npm，所以聚焦代码通过不代表项目运行时与全仓依赖已经验收。GitHub 提交使用连接器，不依赖本地 Git 网络。
+最初离线聚焦测试使用 Node 22.16.0、TypeScript 5.8.3，因此当时不能声称全仓通过。后续使用 Node 22.22.1、pnpm 11.13.1 和锁文件依赖恢复到本地，并独立完成完整 `check`/`test`/`build`。本地仍无法解析 GitHub/npm，依赖下载发生在隔离 GitHub Actions runner；实际测试在本地容器执行。
 
 运行方法见 [README.md](README.md)。`evidence/validation-results.json` 为实际聚焦重跑结果；runner 的 `remote_commit` 为 `NOT_MEASURED_BY_OFFLINE_RUNNER`，防止把旧 403 或本地通过冒充远程状态。远程提交以分支和 PR 为准。每次重跑会产生完整 `evidence/native-tests.tap`。
 
 ## 选择结论
 
-**HOLD（等待全仓集成验收），不合并 main，不启用真实资金。** 本轮完成的是已授权的设计、P0 源码与聚焦验证交付，不是完整盈利策略。
+**HOLD（本地全仓静态、单元与模拟验收通过；待市场与经济性验证），不合并 main，不启用真实资金。** 本轮完成的是已授权的 P0 代码修复与严格本地测试，不是已验证盈利策略。
