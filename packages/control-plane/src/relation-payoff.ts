@@ -503,16 +503,11 @@ function compileReadyBody(input: {
         minimumPayoutUnits: minimumPayoutUnits.toString(),
       })];
     });
-  const portfolios = Object.freeze(guaranteed.filter((candidate) => {
-    const candidateLegs = new Set(candidate.legs.map((leg) =>
-      `${leg.listingRef}\u0000${leg.outcome}`
-    ));
-    return !guaranteed.some((other) =>
-      other.legs.length < candidate.legs.length && other.legs.every((leg) =>
-        candidateLegs.has(`${leg.listingRef}\u0000${leg.outcome}`)
-      )
-    );
-  }).sort((left, right) =>
+  // A positive-floor subset does not economically dominate its superset:
+  // three NOs of an exactly-one triple pay 2, whereas two NOs only floor at 1.
+  // At 2–4 listings the full enumeration is bounded by 80 raw selections.
+  // Preserve every guaranteed basket; cost/depth optimization happens later.
+  const portfolios = Object.freeze([...guaranteed].sort((left, right) =>
     left.legs.length - right.legs.length || left.portfolioId.localeCompare(right.portfolioId)
   ));
   if (portfolios.length === 0) {
@@ -854,14 +849,9 @@ export function assertResearchRelationPayoff(
         })
       ) throw new Error("research relation payoff v3 portfolio replay is inconsistent");
     }
-    for (const candidate of artifact.portfolios) {
-      const legs = new Set(candidate.legs.map((leg) => `${leg.listingRef}\u0000${leg.outcome}`));
-      if (artifact.portfolios.some((other) =>
-        other.legs.length < candidate.legs.length && other.legs.every((leg) =>
-          legs.has(`${leg.listingRef}\u0000${leg.outcome}`)
-        )
-      )) throw new Error("research relation payoff v3 retains a dominated portfolio");
-    }
+    // Do not reimpose subset minimality here. A larger basket may guarantee
+    // multiple payout units and be the only profitable basket at current asks.
+    // The loop above still independently recomputes every payout and identity.
   }
   return artifact;
 }

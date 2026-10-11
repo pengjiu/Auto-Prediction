@@ -1,4 +1,5 @@
 import { CapitalLedger, type VenueCapitalProjection } from "@pmh/capital";
+import { assertBuyOrderReplay } from "./buy-order-budget.js";
 import { divideCeil, hashCanonical, type Hash } from "@pmh/domain";
 import type { ArbitrageCertificate, CandidateLeg } from "@pmh/opportunity";
 import { RiskGovernor } from "@pmh/risk";
@@ -303,6 +304,20 @@ export function runCertificateBoundShadow(input: {
     ) {
       throw new Error("shadow observation diverges from its certificate intent");
     }
+    // Revalidate the generated order, not just the original VWAP simulation.
+    // A snapshot filled above this limit is not a fill of this order.
+    assertBuyOrderReplay({
+      action: intent.side,
+      quantity: intent.quantity,
+      quantityScale: intent.quantityScale,
+      reportQuantityScale: report.quantityScale,
+      collateralScale: report.collateralScale,
+      grossCollateral: report.grossCollateral,
+      netCollateral: report.netCollateral,
+      fills: report.fills,
+      limitPrice: intent.limitPrice,
+      maximumDebit: intent.maxDebit,
+    });
     engine.submit(plan.id, intent.id);
     engine.acknowledge(
       plan.id,

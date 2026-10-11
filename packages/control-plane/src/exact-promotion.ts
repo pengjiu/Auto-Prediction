@@ -1,10 +1,10 @@
 import {
-  divideCeil,
   hashCanonical,
   type Hash,
 } from "@pmh/domain";
 import {
   assertOpportunitySimulationBundle,
+  buildConservativeBuyBudget,
   type OpportunitySimulationBundle,
 } from "@pmh/execution";
 import {
@@ -70,11 +70,6 @@ function minimum(values: readonly bigint[]): bigint {
     (current, value) => (value < current ? value : current),
     first,
   );
-}
-
-function roundUpToTick(value: bigint, tick: bigint): bigint {
-  if (tick <= 0n) throw new Error("exact promotion price tick is invalid");
-  return divideCeil(value, tick) * tick;
 }
 
 function verificationContext(
@@ -227,6 +222,8 @@ function buildCandidate(input: {
       report.status !== "FULL" ||
       report.modelQualification !== "BOOK_EXACT_TAKER_WALK" ||
       request.model !== "CLOB_TAKER_V1" ||
+      request.side !== "BUY" ||
+      report.action !== "BUY" ||
       request.fee.model === "BINARY_PRICE_CURVE_V1" ||
       report.model !== "CLOB_TAKER_V1" ||
       report.venueId !== listing.venueId ||
@@ -246,13 +243,16 @@ function buildCandidate(input: {
       );
     }
     const priceTick = BigInt(listing.minPriceTick);
-    const conservativeAveragePrice = roundUpToTick(
-      divideCeil(
-        report.grossCollateral * report.quantityScale,
-        report.filledQuantity,
-      ),
+    const buyBudget = buildConservativeBuyBudget({
+      quantity: report.filledQuantity,
+      quantityScale: report.quantityScale,
+      collateralScale: report.collateralScale,
+      grossCollateral: report.grossCollateral,
+      netCollateral: report.netCollateral,
+      fills: report.fills,
       priceTick,
-    );
+      fee: request.fee,
+    });
     const binding = Object.freeze({
       legId: simulationLeg.legId,
       listingId: listing.listingRef,
@@ -280,7 +280,7 @@ function buildCandidate(input: {
         maxQuantity: report.filledQuantity,
         quantityScale: report.quantityScale,
         quantityTick: binding.quantityTick,
-        unitPrice: conservativeAveragePrice,
+        unitPrice: buyBudget.limitPrice,
         priceTick: binding.priceTick,
         fee: Object.freeze({
           flat: request.fee.flat,
@@ -328,7 +328,10 @@ function buildCandidate(input: {
       `MATERIALIZATION=${materialization.materializationId}`,
       "VISIBLE_PUBLIC_BOOK_DEPTH_ONLY",
       "CAPTURE_IDENTITY_USED_AS_BOOK_GENERATION",
-      "LIMIT_PRICE_ROUNDED_UP_FROM_AGGREGATE_GROSS",
+      "LIMIT_PRICE_ROUNDED_UP_FROM_WORST_PLANNED_FILL",
+      "COST_BOUND_USES_FULL_QUANTITY_AT_LIMIT",
+      "NO_MATCH_LEVEL_FEE_QUALIFICATION",
+      "NO_MULTI_LEG_ATOMICITY",
       "ONE_AGGREGATE_TAKER_FEE_PER_LEG",
       "NO_LATENCY_OR_ADVERSE_SELECTION",
     ]),

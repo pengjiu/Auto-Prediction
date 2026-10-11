@@ -1,0 +1,20 @@
+{
+  "scope": "focused TypeScript sources + retained original fixed-point/verifier + extracted production selection blocks",
+  "node": "v22.16.0",
+  "typescript": "5.8.3",
+  "original_source_blobs": {
+    "fixed.ts": "dcd8a1d88e1642e73fe55f7ae08187f8c0f7617a",
+    "identity.ts": "da06c22cdb8509e541977365d55e7ee6ce5ad6d5",
+    "types.ts": "626bb830ac241a2140bdc9db488374120c72832d",
+    "verifier.ts": "5bf79b1d6622be36ffeec44ccb5600adc3ddc3e7"
+  },
+  "full_repository_vitest": "NOT_RUN",
+  "full_workspace_typecheck": "NOT_RUN",
+  "remote_commit": "NOT_MEASURED_BY_OFFLINE_RUNNER",
+  "tests": 43,
+  "pass": 43,
+  "fail": 0,
+  "exit_code": 0,
+  "error": null,
+  "runner_adaptation": "Only vitest describe/it import changed to node:test; test bodies and production helper unchanged."
+}

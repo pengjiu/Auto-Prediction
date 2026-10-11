@@ -1,0 +1,13 @@
+test_apply_modifies_and_adds (test_patch_application.PatchTests.test_apply_modifies_and_adds) ... ok
+test_base_mismatch_fails_closed (test_patch_application.PatchTests.test_base_mismatch_fails_closed) ... ok
+test_change_after_preflight_refused (test_patch_application.PatchTests.test_change_after_preflight_refused) ... ok
+test_existing_added_file_not_overwritten (test_patch_application.PatchTests.test_existing_added_file_not_overwritten) ... ok
+test_nonunique_anchor (test_patch_application.PatchTests.test_nonunique_anchor) ... ok
+test_path_traversal (test_patch_application.PatchTests.test_path_traversal) ... ok
+test_symlink_refused (test_patch_application.PatchTests.test_symlink_refused) ... ok
+test_valid_preflight_does_not_write (test_patch_application.PatchTests.test_valid_preflight_does_not_write) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.004s
+
+OK
