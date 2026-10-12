@@ -1,0 +1,69 @@
+name: Bounded temporal evidence
+on:
+  push:
+    branches: [codex/mutation-temporal-relations]
+    paths: [.github/workflows/temporal-evidence.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  experiment:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install locked dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+      - name: Complete workspace and source tests before observing quotes
+        run: |
+          pnpm run check
+          pnpm run build
+          pnpm run test > "$RUNNER_TEMP/workspace-tests.log" 2>&1 || { tail -100 "$RUNNER_TEMP/workspace-tests.log"; exit 1; }
+          pnpm exec tsc --noEmit --strict --target es2022 --module esnext --moduleResolution bundler --allowImportingTsExtensions --types node --skipLibCheck research/payoff-economics/s5/export.ts research/payoff-economics/s5/test-export.ts
+          packages/control-plane/node_modules/.bin/tsx research/payoff-economics/s5/test-export.ts
+          for part in s1 s2 s3 s4 s5; do python -m unittest discover -s "research/payoff-economics/$part" -p 'test_*.py' -v; done
+          node research/payoff-economics/offline/run.mjs
+          python -m unittest discover -s research/payoff-economics/tests -v
+          git diff --exit-code
+      - name: One explicit fixed source-first capture
+        run: |
+          mkdir -p "$RUNNER_TEMP/temporal"
+          git rev-parse HEAD > "$RUNNER_TEMP/temporal/source-head.txt"
+          git archive --format=tar.gz HEAD > "$RUNNER_TEMP/temporal/source.tar.gz"
+          python research/payoff-economics/s5/campaign.py capture --root "$RUNNER_TEMP/temporal/capture"
+      - name: Analyze original source and quotes with unchanged controls
+        run: |
+          python research/payoff-economics/s5/campaign.py analyze --root "$RUNNER_TEMP/temporal/capture" --output "$RUNNER_TEMP/temporal/result.json"
+          python - <<'PY'
+          import json, os, pathlib
+          r=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'temporal/result.json').read_text())
+          s=r['summary']
+          assert s['attempted']==12 and s['admitted']+s['excluded']==12
+          assert r['live_execution'] is False and r['realized_profit'] is None
+          print(json.dumps(s,indent=2))
+          print('Protocol completed:',r['protocol_completed'])
+          # Unavailable sources/quotes are exclusions, not profitability or no-arbitrage.
+          PY
+          git diff --exit-code
+      - name: Retain raw bytes, exact source and logs including failed observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: temporal-evidence
+          retention-days: 30
+          path: |
+            ${{ runner.temp }}/temporal/
+            ${{ runner.temp }}/workspace-tests.log
