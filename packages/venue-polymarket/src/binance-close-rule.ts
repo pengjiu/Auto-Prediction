@@ -5,7 +5,7 @@
 import { z } from "zod";
 import { hashCanonical } from "@pmh/domain";
 
-export const BINANCE_CLOSE_RULE = "pmh.polymarket-binance-close-normal.v1";
+export const BINANCE_CLOSE_RULE = "pmh.polymarket-binance-close-normal.v2";
 const SOURCE = "https://www.binance.com/en/trade/BTC_USDT";
 const FIRST_ABOVE = 'This market will resolve to "Yes" if the Binance 1 minute candle for BTC/USDT closing at 12:00 in the ET timezone (noon) on the date specified in the title has a final "Close" price higher than the price specified in the title. Otherwise, this market will resolve to "No".';
 const FIRST_RANGE = 'This market will resolve according to the final "Close" price of the Binance 1 minute candle for BTC/USDT closing at 12:00 in the ET timezone (noon) on the date specified in the title. Otherwise, this market will resolve to "No".';
@@ -59,6 +59,23 @@ function rational(s: string): readonly [bigint,bigint] {
 function less(a: string, b: string): boolean {
   const [n,d]=rational(a),[nn,dd]=rational(b); return n*dd<nn*d;
 }
+/** Slug shorthand is redundant source identity, never an alternate price. */
+function slugValueEquals(text: string, value: string): boolean {
+  if (!/^\d+(?:\.\d{1,8})?k?$/u.test(text)) return false;
+  const kilo=text.endsWith('k'), [n,d]=rational(kilo?text.slice(0,-1):text);
+  const [vn,vd]=rational(value);
+  return n*(kilo?1000n:1n)*vd===vn*d;
+}
+function checkPriceSlug(slug: string, kind: 'ABOVE'|'RANGE'|'LESS',
+    lower: string, upper: string|null, suffix: string): void {
+  const price='(\\d+(?:\\.\\d{1,8})?k?)';
+  const prefix=kind==='ABOVE'?'bitcoin-above-':kind==='RANGE'?
+    'will-the-price-of-bitcoin-be-between-':'will-the-price-of-bitcoin-be-less-than-';
+  const match=new RegExp('^'+prefix+price+(kind==='RANGE'?'-'+price:'')+suffix+'$','u').exec(slug);
+  if(!match || !slugValueEquals(match[1]!,lower) ||
+      (kind==='RANGE' && (upper===null || !slugValueEquals(match[2]!,upper))))
+    throw new Error('slug price disagrees with complete question and group label');
+}
 /** Validate supplied venue instant against named-zone noon, including DST. */
 export function checkNoonET(value: string, day: string): string {
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.000)?Z$/u.test(value) || Number.isNaN(Date.parse(value)))
@@ -103,6 +120,8 @@ export function parseBinanceCloseRule(rawEvent: unknown, marketId: string): Bina
   const lower=decimal(q[1]!),upper=kind==='RANGE'?decimal(q[2]!):null;
   if(upper!==null && !less(lower,upper)) throw new Error('empty/reversed range');
   if(m.groupItemTitle!==(upper===null?q[1]:`${q[1]}-${q[2]}`)) throw new Error('question/group label disagreement');
+  const suffix=`-on-${slug[2]}-${date}-${slug[4]}`;
+  checkPriceSlug(m.slug,kind,lower,upper,suffix);
   const labels=z.tuple([z.literal('Yes'),z.literal('No')]).parse(JSON.parse(m.outcomes));
   const tokens=z.tuple([uint,uint]).parse(JSON.parse(m.clobTokenIds));
   if(labels.length!==2 || tokens[0]===tokens[1]) throw new Error('invalid native outcomes');
@@ -136,14 +155,16 @@ export function parseBinanceCloseRule(rawEvent: unknown, marketId: string): Bina
       if(expectedQuestion===null || other.question!==expectedQuestion ||
           (siblingRange && !less(decimal(siblingRange[1]!),decimal(siblingRange[2]!))))
         throw new Error('adjacent bracket question/label ambiguity');
-      boundarySupport.push({id:other.id,conditionId:other.conditionId,question:other.question,
+      if(siblingRange) checkPriceSlug(other.slug,'RANGE',decimal(siblingRange[1]!),decimal(siblingRange[2]!),suffix);
+      else checkPriceSlug(other.slug,'LESS',decimal(siblingLower![1]!),null,suffix);
+      boundarySupport.push({slug:other.slug,id:other.id,conditionId:other.conditionId,question:other.question,
         groupItemTitle:other.groupItemTitle,description:other.description,endDate:other.endDate,
         source:other.resolutionSource});
     }
   }
   const identity={parserIdentity:BINANCE_CLOSE_RULE,eventId:event.id,marketId:m.id,
     conditionId:m.conditionId,yesToken:tokens[0],noToken:tokens[1],observation,region,
-    marketRules:m.description,eventRules:event.description,question:m.question,groupLabel:m.groupItemTitle,
+    marketSlug:m.slug,eventSlug:event.slug,marketRules:m.description,eventRules:event.description,question:m.question,groupLabel:m.groupItemTitle,
     protocolVersion:m.version,negRisk:m.negRisk,boundarySupport};
   return Object.freeze({parserIdentity:BINANCE_CLOSE_RULE,eventId:event.id,marketId:m.id,
     conditionId:m.conditionId,yesToken:tokens[0],noToken:tokens[1],kind,observation,region,

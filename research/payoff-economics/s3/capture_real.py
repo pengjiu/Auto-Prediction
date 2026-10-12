@@ -20,24 +20,25 @@ def event_request(day, kind):
     return GAMMA + '/events?' + urlencode({'slug': slug}), slug
 
 
-def run(output: Path, *, cycles: int = 8):
+def experiment_config(cycles):
     if type(cycles) is not int or not 2 <= cycles <= 8:
         raise ValueError('bounded experiment requires 2..8 rounds')
-    cap = Capture(output)
-    cap.save('config.json', {'schema': 's3.real-binance-capture.v1',
+    return {'schema': 's3.real-binance-capture.v1',
         'dates': [d.isoformat() for d in DATES], 'cycles': cycles, 'interval_seconds': 1,
         'fixed_above': ['82,000', '84,000'],
         'fixed_ranges': [['80,000', '82,000'], ['82,000', '84,000']],
         'authority': 'READ_ONLY_RESEARCH', 'no_live_actions': True,
-        'selection_uses_prices': False})
-    for path in ('concepts/resolution', 'trading/fees'):
-        cap.get('https://docs.polymarket.com/' + path + '.md', 'docs:' + path)
+        'selection_uses_prices': False}
+
+
+def select_from_definitions(read):
+    """Replay the fixed population from raw definitions, not observed returns."""
     families, exclusions, selected_tokens = [], [], set()
     for day in DATES:
         chosen, definitions = [], []
         for kind in ('above', 'price'):
             url, slug = event_request(day, kind)
-            record, body = cap.get(url, 'before:' + slug)
+            record, body = read(url, 'before:' + slug)
             definitions.append({'slug': slug, 'label': record['label'], 'url': url})
             if not isinstance(body, list) or len(body) != 1 or body[0].get('slug') != slug:
                 exclusions.append({'date': day.isoformat(), 'slug': slug, 'reason': 'event_missing_or_bad_schema'})
@@ -64,7 +65,17 @@ def run(output: Path, *, cycles: int = 8):
                 chosen.append({'event_id': str(event['id']), 'market_id': str(market['id']),
                     'event_label': record['label'], 'tokens': tokens})
         families.append({'date': day.isoformat(), 'definitions': definitions, 'selected': chosen})
-    cap.save('selection.json', {'families': families, 'exclusions': exclusions})
+    return {'families': families, 'exclusions': exclusions}, selected_tokens
+
+
+def run(output: Path, *, cycles: int = 8):
+    config = experiment_config(cycles)
+    cap = Capture(output)
+    cap.save('config.json', config)
+    for path in ('concepts/resolution', 'trading/fees'):
+        cap.get('https://docs.polymarket.com/' + path + '.md', 'docs:' + path)
+    selected, selected_tokens = select_from_definitions(cap.get)
+    cap.save('selection.json', selected)
     for cycle in range(cycles):
         started = time.monotonic()
         with ThreadPoolExecutor(max_workers=8) as pool:

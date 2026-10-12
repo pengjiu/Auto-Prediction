@@ -42,6 +42,8 @@ describe('real Binance full-rule conditional adapter',()=>{
     expect(bindSettlementCondition(above.markets[0].description,{} as any).blocker).toBe('UNSUPPORTED_COMPLETE_RULE');
   });
   it.each([
+    ['mismatched slug threshold',(m:any)=>{m.slug=m.slug.replace('82k','84k');}],
+    ['unsupported slug price',(m:any)=>{m.slug=m.slug.replace('82k','unknown');}],
     ['source',(m:any)=>{m.resolutionSource='https://www.binance.com/en/trade/BTC_USDC';}],
     ['pair',(m:any)=>{m.description=m.description.replaceAll('BTC/USDT','BTC/USDC');}],
     ['trailing exception',(m:any)=>{m.description+='\n\nIf the exchange fails, all markets resolve Yes.';}],
@@ -70,6 +72,18 @@ describe('real Binance full-rule conditional adapter',()=>{
     e.markets.find((m:any)=>m.groupItemTitle==='84,000-86,000').question=
       'Will the price of Bitcoin be between $85,000 and $86,000 on October 12?';
     expect(()=>parseBinanceCloseRule(e,'5330053')).toThrow(/adjacent/);
+  });
+  it('rejects a selected range slug with different endpoints',()=>{
+    const e=structuredClone(ranges);
+    e.markets.find((m:any)=>m.id==='5330053').slug=
+      'will-the-price-of-bitcoin-be-between-80000-84000-on-october-12-2026';
+    expect(()=>parseBinanceCloseRule(e,'5330053')).toThrow(/slug/);
+  });
+  it('rejects an adjacent slug with a different bracket',()=>{
+    const e=structuredClone(ranges);
+    e.markets.find((m:any)=>m.groupItemTitle==='84,000-86,000').slug=
+      'will-the-price-of-bitcoin-be-between-85000-86000-on-october-12-2026';
+    expect(()=>parseBinanceCloseRule(e,'5330053')).toThrow(/slug/);
   });
   it('does not infer an inclusive terminal from a greater-than title',()=>{
     expect(()=>parseBinanceCloseRule(ranges,'5330063')).toThrow(/adjacent/);

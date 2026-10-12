@@ -32,3 +32,16 @@ and boundaries are in `research/payoff-economics/s3/REAL_FAMILY.md`. Current
 candidate is PARTIAL_ADOPT for conditional research, not automatic exactness or
 an adopted trading strategy. Publication capture is manual-only after the single
 predeclared run; no repeated monitoring is scheduled.
+
+## Resumed publication audit (2026-10-12)
+
+The interrupted publication had not applied its intended fixes. The resumed
+review first reproduced four price/slug counterexamples and 16 Python rejection
+subcases. Parser v2 now binds exact slug thresholds and adjacent brackets; the
+shared analysis checks policy receipt clocks and native quote URLs. Collection
+and replay share one fixed population selector; missing rounds remain excluded
+within the original denominator, never disappear. Full local check/build and
+1,144 Node tests plus S1/S2/S3 and the original real-capture CLI pass. This is
+retrospective validation of unchanged raw bytes, not a new market experiment.
+See `research/payoff-economics/s3/RESUME_VALIDATION.md`. Keep PR #6 separate from
+the already merged PR #5; no new live authority or profitability adoption.

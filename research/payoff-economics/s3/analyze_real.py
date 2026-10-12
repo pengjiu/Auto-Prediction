@@ -12,6 +12,7 @@ import json
 import tempfile
 import subprocess
 from bridge import Evidence, analyze_compiled, recompile, check_quote_urls
+from capture_real import experiment_config, select_from_definitions
 from economics import parse_book, verify_witness, nominal_rate, SCALE
 
 
@@ -81,15 +82,46 @@ def same_rules(before, after):
     return True
 
 
+def checked_capture(evidence):
+    """Bind selection to the declared experiment; missing rounds stay missing.
+
+    Replaying selection is an integrity check, not a signature on the capture.
+    The retained archive's external digest supplies its independent byte anchor.
+    """
+    config = json.loads((evidence.root/'config.json').read_text())
+    expected = experiment_config(config.get('cycles'))
+    canonical = lambda value: json.dumps(value, sort_keys=True, separators=(',', ':'))
+    if canonical(config) != canonical(expected):
+        raise ValueError('capture configuration differs from the predeclared experiment')
+    def retained(url, label):
+        record = evidence.by_label.get(label)
+        if record is None or record['url'] != url:
+            raise ValueError('fixed definition request missing or URL mismatch: ' + label)
+        if record['status'] != 200 or record['error'] is not None:
+            return record, None
+        return evidence.read(label)
+    selected, tokens = select_from_definitions(retained)
+    supplied = json.loads((evidence.root/'selection.json').read_text())
+    if canonical(supplied) != canonical(selected):
+        raise ValueError('selection differs from fixed titles/native tokens in original definitions')
+    allowed_books = {f'book:{i}:{t}' for i in range(config['cycles']) for t in tokens}
+    observed_books = {k for k in evidence.by_label if k.startswith('book:')}
+    if not observed_books <= allowed_books:
+        raise ValueError('undeclared cycle/token observation')
+    # Subsets are permitted only as missing evidence, never a shorter denominator.
+    return selected, config['cycles']
+
+
 def analyze_capture(root: Path):
     evidence = Evidence(root)
-    selection = json.loads((root/'selection.json').read_text())
+    selection, cycles = checked_capture(evidence)
     result = {'authority':'RESEARCH_PROPOSAL_ONLY', 'evidence_identity':evidence.digest,
         'scope':'RETROSPECTIVE_BOUNDED_CAPTURE_NOT_CONTINUOUS_OR_EXECUTED',
         'realized_profit':None, 'model_calls':0, 'families':[], 'selection_exclusions':selection['exclusions']}
     with tempfile.TemporaryDirectory(prefix='pmh-real-close-') as tmp:
         for index, family in enumerate(selection['families']):
-            report = {'date':family['date'], 'selected':len(family['selected']), 'rows':[], 'blocker':None}
+            report = {'date':family['date'], 'selected':len(family['selected']),
+                'rows':[{'cycle':i,'admitted':False,'excluded':'SOURCE_NOT_ADMITTED'} for i in range(cycles)], 'blocker':None}
             result['families'].append(report)
             if len(family['selected']) != 4 or len({s['event_id'] for s in family['selected']}) != 2:
                 report['blocker']='PREDECLARED_CROSS_GROUP_SET_INCOMPLETE';continue
@@ -112,7 +144,6 @@ def analyze_capture(root: Path):
                     phase+':'+d['slug']: evidence.by_label[phase+':'+d['slug']].get('headers',{}).get('age')
                     for phase in ('before','after') for d in family['definitions']}})
             tokens=[a['id'] for a in exported['assets']]
-            cycles=sorted({int(k.split(':')[1]) for k in evidence.by_label if k.startswith('book:')})
             markets={}
             for d in family['definitions']:
                 _, page=evidence.read('before:'+d['slug'])
@@ -121,9 +152,9 @@ def analyze_capture(root: Path):
             # This interpretation is diagnostic only. Missing/conflicting rates block it.
             rates=[nominal_rate(m) for m in selected_markets]
             report['nominal_rates']=[str(r) if r is not None else None for r in rates]
-            for cycle in cycles:
-                row={'cycle':cycle,'admitted':False}
-                report['rows'].append(row)
+            for cycle in range(cycles):
+                row=report['rows'][cycle]
+                row.pop('excluded',None)
                 try:
                     quotes={t:evidence.read(f'book:{cycle}:'+t) for t in tokens}
                     check_quote_urls(quotes)
