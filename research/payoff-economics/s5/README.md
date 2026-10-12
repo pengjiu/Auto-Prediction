@@ -77,3 +77,18 @@ rewritten evidence chain. Files are create-only at the public output boundary.
 
 Selection: research candidate only, no new service/SDK/production dependency,
 no LLM-provider call, no trading authority and no automatic merge.
+
+## Observed completion
+The preregistered real capture is complete: 3 full scopes, 12/12 admitted snapshots,
+2 scopes with a genuine conditional higher-order cover, but zero positive gross
+baskets and zero semantic/solver increments. Four rounds per scope share the
+same numeric model; they are not independent opportunities. See `VALIDATION.md`
+and `observations.json` for exact scope, failures, clocks and remaining assumptions.
+
+Replay original bytes without network:
+```sh
+python research/payoff-economics/s5/replay.py --output /new/path/temporal-result.json
+```
+The smaller committed ZIP retains every capture byte; `fixtures/index.json` binds
+it to the original full Actions artifact and inventories every file. This is not
+a new capture, semantic certificate or actual trading result.

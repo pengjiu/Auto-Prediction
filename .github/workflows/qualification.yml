@@ -44,6 +44,8 @@ jobs:
           python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
       - name: Recompile full real source and analyze original captured bytes
         run: python research/payoff-economics/s3/replay_real_fixture.py --output "$RUNNER_TEMP/real-family-replay.json"
+      - name: Replay the pinned complete temporal capture without network
+        run: python research/payoff-economics/s5/replay.py --output "$RUNNER_TEMP/temporal-replay.json"
       - name: Tests cannot rewrite tracked source or historical evidence
         run: git diff --exit-code
   research:

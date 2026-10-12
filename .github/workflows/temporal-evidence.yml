@@ -1,8 +1,5 @@
 name: Bounded temporal evidence
 on:
-  push:
-    branches: [codex/mutation-temporal-relations]
-    paths: [.github/workflows/temporal-evidence.yml]
   workflow_dispatch:
 permissions:
   contents: read
