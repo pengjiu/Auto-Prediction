@@ -20,6 +20,9 @@ from zoneinfo import ZoneInfo
 MAX_BYTES = 3_000_000
 PROBE_DAY = date(2026, 10, 11)
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
+UNRESOLVED_ASSUMPTIONS = ('CONTRACT_UI_TO_API_CANDLE_MAPPING', 'FINAL_VALUE_REVISION_CUTOFF',
+    'UNAVAILABLE_SOURCE_FALLBACK', 'ONCHAIN_ANCILLARY_AND_CLARIFICATION_MATCH',
+    'INDEPENDENT_ORACLE_OUTCOMES', 'COLLATERAL_REDEMPTION_TIMING', 'MATCH_LEVEL_FEE_DEBIT')
 DOC_URLS = {
     'binance-rest': 'https://raw.githubusercontent.com/binance/binance-spot-api-docs/master/rest-api.md',
     'polymarket-resolution': 'https://docs.polymarket.com/concepts/resolution.md',
@@ -141,6 +144,9 @@ def audit(root: Path):
         raise ValueError('source evidence population mismatch')
     expected, by_label = requests_by_label(), {}
     for record in records:
+        if (not isinstance(record, dict) or 'error' not in record or
+                record['error'] is not None and not isinstance(record['error'], str)):
+            raise ValueError('source receipt schema/error status missing')
         label, digest = record.get('label'), record.get('body_sha256')
         if label not in expected or label in by_label or record.get('url') != expected[label] or record.get('method') != 'GET':
             raise ValueError('source request identity mismatch')
@@ -161,9 +167,7 @@ def audit(root: Path):
         'documents': [{**by_label[label][0], 'interpretation': 'RETAINED_DOCUMENT_NOT_SEMANTIC_AUTHORITY'} for label in DOC_URLS],
         'probe_day': PROBE_DAY.isoformat(), 'candle_probe': None,
         'contract_final_value': None, 'realized_profit': None,
-        'unresolved': ['CONTRACT_UI_TO_API_CANDLE_MAPPING', 'FINAL_VALUE_REVISION_CUTOFF',
-            'UNAVAILABLE_SOURCE_FALLBACK', 'ONCHAIN_ANCILLARY_AND_CLARIFICATION_MATCH',
-            'INDEPENDENT_ORACLE_OUTCOMES', 'COLLATERAL_REDEMPTION_TIMING', 'MATCH_LEVEL_FEE_DEBIT'],
+        'unresolved': list(UNRESOLVED_ASSUMPTIONS),
         'certificate_authority': False, 'live_execution': False}
     record, body = by_label['binance-candles']
     result['probe_receipt'] = record
@@ -171,7 +175,10 @@ def audit(root: Path):
         if record['status'] != 200 or record.get('error') is not None:
             raise ValueError('source API unavailable: ' + str(record['status']) + ':' + str(record.get('error')))
         parsed = json.loads(body, parse_float=str, parse_constant=lambda s: (_ for _ in ()).throw(ValueError(s)))
-        result['candle_probe'] = validate_candles(parsed, noon_ms(PROBE_DAY), record['received_ns'] // 1_000_000)
+        # A response can arrive after candle close even when the server read an
+        # unfinished interval. Both intervals must have ended before the request.
+        # This still does NOT prove that historical values can never be revised.
+        result['candle_probe'] = validate_candles(parsed, noon_ms(PROBE_DAY), record['started_ns'] // 1_000_000)
     except (ValueError, UnicodeDecodeError) as exc:
         result['candle_probe'] = {'status': 'NOT_ESTABLISHED', 'reason': str(exc), 'selected_contract_value': None}
     return result
