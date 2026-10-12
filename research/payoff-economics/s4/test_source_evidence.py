@@ -228,8 +228,10 @@ class PopulationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / 'campaign.json').write_text(json.dumps(campaign.campaign_config()))
-            with patch.object(campaign, 'Evidence', side_effect=FileNotFoundError('missing raw')),
-                 patch.object(campaign, 'audit_source', return_value={'candle_probe': {'status': 'NOT_ESTABLISHED'}}):
+            with (
+                patch.object(campaign, 'Evidence', side_effect=FileNotFoundError('missing raw')),
+                patch.object(campaign, 'audit_source', return_value={'candle_probe': {'status': 'NOT_ESTABLISHED'}}),
+            ):
                 result = campaign.analyze(root)
             self.assertEqual(result['summary']['group_rounds_attempted'], 96)
             self.assertEqual(result['summary']['group_rounds_admitted'], 0)
