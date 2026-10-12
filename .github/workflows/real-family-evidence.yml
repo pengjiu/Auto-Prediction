@@ -1,8 +1,5 @@
 name: Real rule family evidence
 on:
-  push:
-    branches: [codex/mutation-real-rule-family]
-    paths: [.github/workflows/real-family-evidence.yml]
   workflow_dispatch:
 permissions:
   contents: read
