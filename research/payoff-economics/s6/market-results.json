@@ -1,0 +1,115 @@
+{
+  "schema": "s6.actual-factor-observation.v1",
+  "source_commit": "0fc88ad116cc7f07f89cff2d75e4b765035f0ba8",
+  "capture_run": 38295747235,
+  "artifact_id": 11768477410,
+  "artifact_sha256": "ef1bc729907a8805bd07af01ab40e86c4cda2d1de395066ebc20d6b63300ceef",
+  "artifact_expiry_utc": "2026-11-11T19:12:33Z",
+  "requests": 40,
+  "http_errors": 0,
+  "observation_start_utc": "2026-10-12T19:12:24.562338635Z",
+  "observation_end_utc": "2026-10-12T19:12:31.715311207Z",
+  "duration_ns": 7152972572,
+  "summary": {
+    "attempted": 4,
+    "admitted": 4,
+    "excluded": 0,
+    "positive_gross": 0,
+    "algorithm_improvements": 0,
+    "semantic_improvements": 0,
+    "gross_witnesses": 4
+  },
+  "protocol_completed": true,
+  "local_exact_replay_equal": true,
+  "manifest_sha256": "f5497c537715c35dfab55a1052d0b90d3a58aad830d4ad68a3346d656aceb59e",
+  "result_sha256": "7a36fe415840017bf4829d28bb40dab50c0a330e8143e244b24577af9469c997",
+  "quote_span_ns": [
+    328676162,
+    466140544
+  ],
+  "nominal_fee_witnesses": 4,
+  "first_round_asks": [
+    "16/25",
+    "37/100",
+    "91/100",
+    "1/10",
+    "31/50",
+    "39/100",
+    "9/1000",
+    "124/125"
+  ],
+  "normal_latent_states": 9,
+  "distinct_traded_states": 5,
+  "pairwise_states": 6,
+  "conjunction_hedge": {
+    "buys": [
+      "NO_SENATE_D",
+      "NO_HOUSE_D",
+      "YES_JOINT_DD"
+    ],
+    "minimum_conditional_payoff": "1",
+    "ask_cost": "109/100",
+    "gross_floor": "-9/100"
+  },
+  "realized_profit": null,
+  "live_execution": false,
+  "provider_model_calls": 0,
+  "semantic_independent_review": false,
+  "distinct_numeric_models": 1,
+  "initial_rule_http_age_seconds": [
+    138,
+    106,
+    239
+  ],
+  "policy_http_age_seconds": [
+    4160,
+    4174
+  ],
+  "nominal_fee_qualification": false,
+  "marked_missing_round_test": {
+    "attempted": 4,
+    "admitted": 3,
+    "excluded": 1,
+    "protocol_completed": false,
+    "not_a_network_capture": true
+  },
+  "local_validation": {
+    "node_workspace": 1144,
+    "s1": 16,
+    "s2": 32,
+    "s3": 24,
+    "s4": 31,
+    "s5_python": 20,
+    "s6_python": 24,
+    "s6_typescript": 18,
+    "offline": 43,
+    "patch": 8,
+    "check_exit": 0,
+    "build_exit": 0,
+    "test_exit": 0,
+    "overlapping_coverage": true,
+    "new_network_calls_by_provider_llm": 0
+  },
+  "local_log_sha256": {
+    "full-build.log": "1303d50ef0e9cc3fa7d21cc8d00218453e7f04ee46a29ccc3436da63ec5aa35e",
+    "full-check.log": "5f80a9a87bf3a962cd9e03d0ec824f5d622d276c61f40dc096beb4e01ea0b53e",
+    "full-test.log": "912c0c6dc2ab0cd239b1f79ae2df5c27b4a4f95c5a84c9ea54ea2c30d377383b",
+    "offline.log": "c325e39ed169be06c7d2b8ed69283fd9e004e1d52e3e6491b34f32fb17a2db33",
+    "old-s3-replay.log": "f305edccd973cc6121fd2ba518af900f9b0d75782d0722815a3580ff9b9484ae",
+    "old-s5-replay.log": "cfaa0cb581d30e15df368ed048b6546bc10fc6c8c7aca462d542ef77b855bed3",
+    "patch-tests.log": "8bacdc6e1cd6a0ad451cdfc205ef84669e686e8b2bd35827179ac7b7fe711fad",
+    "runner.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "s1.log": "134c8c4382d53d1e45cd12ce9b51fa3a8252fdfa020dbe0d90fe5254f5b932e1",
+    "s2.log": "9f1b74c1374291c2d39393034468fc8913d3ef2e0f4756372ba0cd178e40e640",
+    "s3.log": "19b6bb73c3a4f26c83cd693948ced9a6644b806d63a9442a95cc21357b27b1cc",
+    "s4.log": "09345b6c88568948ebb72ebda6caa7f748c8053c297dcf9b1640b989d384a457",
+    "s5.log": "a37f7b7249947dd4400f3756c4eb686b5ba509fc27f4720a6efeaa463be94f45",
+    "s6-campaign-tests-final.log": "965066db2abc6c20d0c7231cc0df0f72300511bef0d4fdb1ef556478805374d4",
+    "s6-campaign-tests.log": "0a80f4acece4ee26705be006cc852d3ff4af8dfa2c6935a5fb8ad63c7931e328",
+    "s6-local-replay.log": "58edf271d386aeba7d4b9f400108a9cee38dc4dd6069aa79b528cad5983f04cc",
+    "s6-missing-round.log": "6cc97078bcb43d3e7adfcda1003cb61a1fa66a10e398f5854e3038412f9daa70",
+    "s6-tests-initial.log": "8c7d62660411d5e8842a29d184ed9cc0589f4f7678ba994a2433831ddaf8fdce",
+    "s6-ts-initial.log": "19cac101c7758342f82fa7ebfc8e54358539aafac9c809f231f56275413937d5",
+    "s6.log": "aeac8e7351ff1167d95d9038c1673a7a7879d5a56fefa8cd717710b1de1110e4"
+  }
+}

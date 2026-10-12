@@ -1,8 +1,5 @@
 name: Bounded joint-marginal evidence
 on:
-  push:
-    branches: [codex/mutation-temporal-relations]
-    paths: [.github/workflows/coverage-evidence.yml]
   workflow_dispatch:
 permissions:
   contents: read

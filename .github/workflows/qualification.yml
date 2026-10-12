@@ -31,6 +31,10 @@ jobs:
         run: |
           pnpm exec tsc --noEmit --strict --target es2022 --module esnext --moduleResolution bundler --allowImportingTsExtensions --types node --skipLibCheck research/payoff-economics/s5/export.ts research/payoff-economics/s5/test-export.ts
           packages/control-plane/node_modules/.bin/tsx research/payoff-economics/s5/test-export.ts
+      - name: Strict coverage source and composition regressions
+        run: |
+          pnpm exec tsc --noEmit --strict --target es2022 --module esnext --moduleResolution bundler --allowImportingTsExtensions --types node --skipLibCheck research/payoff-economics/s6/export.ts research/payoff-economics/s6/test-export.ts
+          packages/control-plane/node_modules/.bin/tsx research/payoff-economics/s6/test-export.ts
       - run: node research/payoff-economics/offline/run.mjs
       - name: Recompile source through the actual semantic export CLI
         run: |
@@ -66,6 +70,7 @@ jobs:
       - run: python -m unittest discover -s research/payoff-economics/s3 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/s4 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/s5 -p 'test_*.py' -v
+      - run: python -m unittest discover -s research/payoff-economics/s6 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/tests -v
       - name: Research cannot mutate production sources or historical evidence
         run: git diff --exit-code
