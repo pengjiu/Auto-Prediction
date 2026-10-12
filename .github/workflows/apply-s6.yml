@@ -1,0 +1,46 @@
+name: Publish verified coverage research source
+on:
+  push:
+    branches: [codex/mutation-temporal-relations]
+    paths: [.github/workflows/apply-s6.yml]
+permissions:
+  contents: write
+jobs:
+  publish:
+    if: github.repository == 'pengjiu/Auto-Prediction' && github.ref == 'refs/heads/codex/mutation-temporal-relations'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check local patch and exact resulting source blobs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64, hashlib, os, pathlib, subprocess, zlib
+          root=pathlib.Path('research/payoff-economics')
+          labels=['0','1a','1b','1c','2a','2b','2c']
+          parts=[root/('s6-transfer-'+key+'.b64') for key in labels]
+          expected=['b85c87828a881014743b92851dd5557c6fa6fa7c','8889406486bb1616ebf6f1b6466dc566a03809dc','65e056d725523c4d157eb2e98e7be9ac43d77672','13bfe335624ed47a4a26890b18c2ec7a84365439','8c7e1dc4c178eb57ab5c9cef8f1062ca49c52d1d','f63a895e671fe6143fe86bd26c1fa144be4159fb','b69ccda007ab6d8fa340a8daca8828b31bcd8a20']
+          changed=set(subprocess.check_output(['git','diff','--name-only','a88c08ad5ba7fe29f90fb58a2564055d95bd350f','HEAD'],text=True).splitlines())
+          assert changed=={str(p) for p in parts}|{str(root/'s6-transfer-1.b64'),'.github/workflows/apply-s6.yml'},changed
+          for p,want in zip(parts,expected):
+              assert subprocess.check_output(['git','hash-object',str(p)],text=True).strip()==want,str(p)
+          # The rejected long segment is never decoded or executed.
+          data=zlib.decompress(base64.b64decode(''.join(p.read_text().strip() for p in parts),validate=True))
+          assert len(data)==53713 and hashlib.sha256(data).hexdigest()=='57d103df97ae4804d5b6474425a5af1846beb0fb698ff5bfed6cb2775583b668'
+          patch=pathlib.Path(os.environ['RUNNER_TEMP'])/'source.patch';patch.write_bytes(data)
+          subprocess.run(['git','apply','--index','--check',str(patch)],check=True)
+          subprocess.run(['git','apply','--index',str(patch)],check=True)
+          files={'campaign.py':'e6295127809026dec245968383ca6e20942be8d0','census.py':'29f8d0e9a51788d9ba1605c5d48426e83fdb2c89','export.ts':'d86b252558a9fa54fa8296b189bf756a9837656f','factor.py':'ca32f77276666efb52fccc04c9397911299679b8','reviewed-factor.json':'8809bc7e9c1ecc54b574d864c628e69259861040','test-export.ts':'0d94c29751f7a81c0e316c9d97e9ee0ed23946f1','test_campaign.py':'75698ad876e7b8d13fcbfb2df3eb188bb30018cf','test_census.py':'87abb0b409c7755f34d2e6a2a17ec71b61043145','test_factor.py':'9978b99635576e89b7aeb826b5a72d10f7309f05'}
+          assert set(subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines())=={str(root/'s6'/p) for p in files}
+          for p,want in files.items():
+              assert subprocess.check_output(['git','hash-object',str(root/'s6'/p)],text=True).strip()==want,p
+          PY
+          git diff --cached --check
+          test "$(git ls-remote origin refs/heads/codex/mutation-temporal-relations | cut -f1)" = "$GITHUB_SHA"
+          git config user.name 'Auto Prediction research'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat(research): measure rule-block discovery and evaluate fixed joint-marginal claims' -m 'All nine source blobs equal locally tested files. Preserves Other outcomes; no exact semantic or execution authority. Full local check/build/1144 Node tests and S6 Python24/TypeScript18 passed. Original catalog coverage is retrospective and not independent precision/recall.'
+          git push origin HEAD:refs/heads/codex/mutation-temporal-relations
