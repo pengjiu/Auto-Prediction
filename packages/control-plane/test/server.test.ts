@@ -2657,7 +2657,9 @@ describe("control-plane HTTP surface", () => {
       item.executionProfileId === discoveryRoute?.executionProfileId
     )).toMatchObject({
       dispatchEligibility: "BLOCKED",
-      diagnostic: expect.stringContaining("preflight"),
+      // Both missing credentials and absent preflight must block dispatch;
+      // tests cannot depend on the developer having a local Codex auth cache.
+      diagnostic: expect.stringMatching(/preflight|credential unavailable/),
     });
     expect(agentConsole.runs).toHaveLength(0);
     expect(agentConsole.modelInvocations).toHaveLength(0);
@@ -2677,7 +2679,9 @@ describe("control-plane HTTP surface", () => {
       model: { model: "gpt-5.6-terra" },
       capability: {
         dispatchEligibility: "BLOCKED",
-        diagnostic: expect.stringContaining("preflight"),
+        // Both missing credentials and absent preflight must block dispatch;
+      // tests cannot depend on the developer having a local Codex auth cache.
+      diagnostic: expect.stringMatching(/preflight|credential unavailable/),
       },
       providerRequestsStarted: 0,
       modelInvocationsStarted: 0,

@@ -8,6 +8,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import test from "node:test";
+import { stripVTControlCharacters } from "node:util";
 
 const repositoryRoot = new URL("..", import.meta.url);
 const surfaceHost = "oa-surface-0123456789abcdef01234567.localhost";
@@ -226,7 +227,16 @@ async function waitForExit(launch, timeout = 10_000) {
 }
 
 async function stopCapability(launch) {
-  if (launch.child.exitCode === null && launch.child.signalCode === null) {
+  // The manifest launches pnpm as a detached process-group leader. Signalling
+  // only its shell process orphans the Studio supervisor and leaves ports bound.
+  // A capability host terminates the entire launched process group.
+  if (process.platform !== "win32" && launch.child.pid !== undefined) {
+    try {
+      process.kill(-launch.child.pid, "SIGTERM");
+    } catch (error) {
+      if (error?.code !== "ESRCH") throw error;
+    }
+  } else if (launch.child.exitCode === null && launch.child.signalCode === null) {
     launch.child.kill("SIGTERM");
   }
   try {
@@ -360,7 +370,7 @@ test("managed manifest command serves the complete same-origin surface on exact 
     websocket.socket.destroy();
 
     await assert.rejects(access(openerSentinel));
-    const output = launch.output.join("");
+    const output = stripVTControlCharacters(launch.output.join(""));
     assert.match(output, new RegExp(`127\\.0\\.0\\.1:${httpPort}`));
     assert.doesNotMatch(output, /Local:\s+http:\/\/127\.0\.0\.1:517[3-9]/u);
   } finally {

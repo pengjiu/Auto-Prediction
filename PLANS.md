@@ -1,5 +1,23 @@
 # Plans
 
+## Selected research mainline continuation (2026-10-12)
+
+The operator authorized review, repair and merge of all unmerged research work.
+The review in [plans/pre-merge-review.md](plans/pre-merge-review.md) supersedes
+previous HOLD decisions **for technical inclusion of research-only tooling**.
+It does not promote a profitable strategy or expand live trading authority.
+All P0/S1/S2 branch tips are retained in the publication ancestry. Repairs bind
+materialization to its exact simulation plan, replay later shadow observations
+against old limits and identities, include native minimum sizes and explicit
+units, reject truncated inputs/contradictory fees, and prevent false depth reuse.
+
+One qualification workflow covers main and pull requests. Public market capture
+is manual only. Historical raw evidence and pre-repair reports are retained as
+history; retrospective recomputation is separately identified in the review.
+Next research requires independent settlement evidence and executable net value
+against same-depth controls; do not add solver complexity or enable real orders
+on the strength of synthetic results or successful software tests.
+
 The canonical Auto Prediction product version is **0.1.2**. The root package,
 Harness manifest, private workspace packages, Studio, CLI, and
 Agent-runtime client identity carry the same version. Venue adapter identities

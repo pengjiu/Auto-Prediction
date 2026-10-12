@@ -1,0 +1,3 @@
+.offline-build/
+__pycache__/
+*.pyc

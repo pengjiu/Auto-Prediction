@@ -357,7 +357,10 @@ describe("Agent-native hidden premise analysis", () => {
       artifactHash: hashCanonical(withoutSource),
     })).toThrow(/source attribution/);
     expect(payoff.canonicalStates).toHaveLength(6);
-    expect(payoff.portfolios).toHaveLength(1);
+    // The compiler now preserves economically meaningful supersets rather than
+    // discarding them solely because a smaller portfolio also has a payout floor.
+    expect(payoff.portfolios).toHaveLength(3);
+    expect(payoff.portfolios.every((portfolio) => BigInt(portfolio.minimumPayoutUnits) >= 1n)).toBe(true);
     now += 1_000;
   });
 
@@ -677,7 +680,8 @@ describe("Agent-native hidden premise analysis", () => {
     });
     expect(qualification.listingBindings).toHaveLength(3);
     expect(qualification.canonicalStates).toHaveLength(6);
-    expect(qualification.portfolios).toHaveLength(1);
+    expect(qualification.portfolios).toHaveLength(3);
+    expect(qualification.portfolios.every((portfolio) => BigInt(portfolio.minimumPayoutUnits) >= 1n)).toBe(true);
     expect(qualification.portfolios[0]!.legs.map((leg) => leg.listingRef).sort())
       .toEqual([refs[1], refs[2]].sort());
     const {

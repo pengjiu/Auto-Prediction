@@ -438,7 +438,8 @@ function anonymousSimulationMaterialization(
     sourceId: hashCanonical(sourceBody),
   };
   const recordBody = {
-    schemaVersion: "pmh.anonymous-simulation-materialization.v1" as const,
+    schemaVersion: "pmh.anonymous-simulation-materialization.v2" as const,
+    simulationPlanHash: null,
     opportunityId: `opportunity:${completedAt}`,
     relationConstraintHash: hashCanonical({ relation: completedAt }),
     semanticDecisionId: hashCanonical({ decision: completedAt }),

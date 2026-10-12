@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "repository": "pengjiu/Auto-Prediction",
+  "base_commit": "d6c9447cab29898a6eb5fa06be3598b8474cc02f",
+  "authority": "SOURCE_AND_OFFLINE_TESTS_ONLY",
+  "edits": [
+    {
+      "path": "packages/control-plane/src/relation-payoff.ts",
+      "expected_blob": "b8100682f5328fc898d859bddb663242e6bf84de",
+      "replacements": [
+        {
+          "old": "  const portfolios = Object.freeze(guaranteed.filter((candidate) => {\n    const candidateLegs = new Set(candidate.legs.map((leg) =>\n      `${leg.listingRef}\\u0000${leg.outcome}`\n    ));\n    return !guaranteed.some((other) =>\n      other.legs.length < candidate.legs.length && other.legs.every((leg) =>\n        candidateLegs.has(`${leg.listingRef}\\u0000${leg.outcome}`)\n      )\n    );\n  }).sort((left, right) =>\n    left.legs.length - right.legs.length || left.portfolioId.localeCompare(right.portfolioId)\n  ));",
+          "new": "  // A positive-floor subset does not economically dominate its superset:\n  // three NOs of an exactly-one triple pay 2, whereas two NOs only floor at 1.\n  // At 2–4 listings the full enumeration is bounded by 80 raw selections.\n  // Preserve every guaranteed basket; cost/depth optimization happens later.\n  const portfolios = Object.freeze([...guaranteed].sort((left, right) =>\n    left.legs.length - right.legs.length || left.portfolioId.localeCompare(right.portfolioId)\n  ));"
+        },
+        {
+          "old": "    for (const candidate of artifact.portfolios) {\n      const legs = new Set(candidate.legs.map((leg) => `${leg.listingRef}\\u0000${leg.outcome}`));\n      if (artifact.portfolios.some((other) =>\n        other.legs.length < candidate.legs.length && other.legs.every((leg) =>\n          legs.has(`${leg.listingRef}\\u0000${leg.outcome}`)\n        )\n      )) throw new Error(\"research relation payoff v3 retains a dominated portfolio\");\n    }",
+          "new": "    // Do not reimpose subset minimality here. A larger basket may guarantee\n    // multiple payout units and be the only profitable basket at current asks.\n    // The loop above still independently recomputes every payout and identity."
+        }
+      ]
+    },
+    {
+      "path": "packages/execution/src/index.ts",
+      "expected_blob": "f2b6c74d1015721321e3fe4a92eace77e145fbc8",
+      "replacements": [
+        {
+          "old": "export * from \"./order-machine.js\";",
+          "new": "export * from \"./buy-order-budget.js\";\nexport * from \"./order-machine.js\";"
+        }
+      ]
+    },
+    {
+      "path": "packages/control-plane/src/exact-promotion.ts",
+      "expected_blob": "8be84b5003d77178820c444ae4e2701350b662e8",
+      "replacements": [
+        { "old": "  divideCeil,\n", "new": "" },
+        {
+          "old": "  assertOpportunitySimulationBundle,\n",
+          "new": "  assertOpportunitySimulationBundle,\n  buildConservativeBuyBudget,\n"
+        },
+        {
+          "old": "function roundUpToTick(value: bigint, tick: bigint): bigint {\n  if (tick <= 0n) throw new Error(\"exact promotion price tick is invalid\");\n  return divideCeil(value, tick) * tick;\n}\n\n",
+          "new": ""
+        },
+        {
+          "old": "      request.model !== \"CLOB_TAKER_V1\" ||\n",
+          "new": "      request.model !== \"CLOB_TAKER_V1\" ||\n      request.side !== \"BUY\" ||\n      report.action !== \"BUY\" ||\n"
+        },
+        {
+          "old": "    const priceTick = BigInt(listing.minPriceTick);\n    const conservativeAveragePrice = roundUpToTick(\n      divideCeil(\n        report.grossCollateral * report.quantityScale,\n        report.filledQuantity,\n      ),\n      priceTick,\n    );",
+          "new": "    const priceTick = BigInt(listing.minPriceTick);\n    const buyBudget = buildConservativeBuyBudget({\n      quantity: report.filledQuantity,\n      quantityScale: report.quantityScale,\n      collateralScale: report.collateralScale,\n      grossCollateral: report.grossCollateral,\n      netCollateral: report.netCollateral,\n      fills: report.fills,\n      priceTick,\n      fee: request.fee,\n    });"
+        },
+        { "old": "unitPrice: conservativeAveragePrice,", "new": "unitPrice: buyBudget.limitPrice," },
+        {
+          "old": "\"LIMIT_PRICE_ROUNDED_UP_FROM_AGGREGATE_GROSS\",",
+          "new": "\"LIMIT_PRICE_ROUNDED_UP_FROM_WORST_PLANNED_FILL\",\n      \"COST_BOUND_USES_FULL_QUANTITY_AT_LIMIT\",\n      \"NO_MATCH_LEVEL_FEE_QUALIFICATION\",\n      \"NO_MULTI_LEG_ATOMICITY\","
+        }
+      ]
+    },
+    {
+      "path": "packages/execution/src/certificate-shadow.ts",
+      "expected_blob": "cc433f44b1cd960ca94f04b8796c5bab80f59cb0",
+      "replacements": [
+        {
+          "old": "import { CapitalLedger, type VenueCapitalProjection } from \"@pmh/capital\";",
+          "new": "import { CapitalLedger, type VenueCapitalProjection } from \"@pmh/capital\";\nimport { assertBuyOrderReplay } from \"./buy-order-budget.js\";"
+        },
+        {
+          "old": "    engine.submit(plan.id, intent.id);\n    engine.acknowledge(",
+          "new": "    // Revalidate the generated order, not just the original VWAP simulation.\n    // A snapshot filled above this limit is not a fill of this order.\n    assertBuyOrderReplay({\n      action: intent.side,\n      quantity: intent.quantity,\n      quantityScale: intent.quantityScale,\n      reportQuantityScale: report.quantityScale,\n      collateralScale: report.collateralScale,\n      grossCollateral: report.grossCollateral,\n      netCollateral: report.netCollateral,\n      fills: report.fills,\n      limitPrice: intent.limitPrice,\n      maximumDebit: intent.maxDebit,\n    });\n    engine.submit(plan.id, intent.id);\n    engine.acknowledge("
+        }
+      ]
+    }
+  ]
+}

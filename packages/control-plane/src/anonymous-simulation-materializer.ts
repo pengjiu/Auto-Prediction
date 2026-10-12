@@ -83,8 +83,9 @@ export type AnonymousMaterializationLeg = Readonly<{
 }>;
 
 export type AnonymousSimulationMaterializationRecord = Readonly<{
-  schemaVersion: "pmh.anonymous-simulation-materialization.v1";
+  schemaVersion: "pmh.anonymous-simulation-materialization.v2";
   materializationId: Hash;
+  simulationPlanHash: Hash | null;
   opportunityId: string;
   relationConstraintHash: Hash;
   semanticDecisionId: Hash;
@@ -357,8 +358,9 @@ export function assertAnonymousSimulationMaterializationRecord(
   }
   const record = value as Partial<AnonymousSimulationMaterializationRecord>;
   if (
-    record.schemaVersion !== "pmh.anonymous-simulation-materialization.v1" ||
+    record.schemaVersion !== "pmh.anonymous-simulation-materialization.v2" ||
     !isHash(record.materializationId) ||
+    (record.status === "READY" ? !isHash(record.simulationPlanHash) : record.simulationPlanHash !== null) ||
     typeof record.opportunityId !== "string" ||
     record.opportunityId === "" ||
     !isHash(record.relationConstraintHash) ||
@@ -1381,12 +1383,13 @@ export class AnonymousSimulationMaterializerDesk {
         : ("BLOCKED" as const);
       const completedAt = this.#now().toISOString();
       const body = Object.freeze({
-        schemaVersion: "pmh.anonymous-simulation-materialization.v1" as const,
+        schemaVersion: "pmh.anonymous-simulation-materialization.v2" as const,
         opportunityId: input.qualification.opportunityId,
         relationConstraintHash: input.qualification.artifactHash,
         semanticDecisionId: input.qualification.semanticDecisionId,
         portfolioId: portfolio.portfolioId,
         requestedQuantity: input.requestedQuantity,
+        simulationPlanHash: plan === null ? null : hashCanonical(plan),
         attemptedAt,
         completedAt,
         status,

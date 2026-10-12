@@ -1,4 +1,5 @@
 import { CapitalLedger, type VenueCapitalProjection } from "@pmh/capital";
+import { assertBuyOrderReplay } from "./buy-order-budget.js";
 import { divideCeil, hashCanonical, type Hash } from "@pmh/domain";
 import type { ArbitrageCertificate, CandidateLeg } from "@pmh/opportunity";
 import { RiskGovernor } from "@pmh/risk";
@@ -56,16 +57,22 @@ export type ShadowMarketDivergenceReason =
   | "QUANTITY_MISMATCH"
   | "COST_EXCEEDS_CERTIFICATE_BOUND"
   | "MODEL_NOT_EXACT"
-  | "NON_POSITIVE_PORTFOLIO_FLOOR";
+  | "NON_POSITIVE_PORTFOLIO_FLOOR"
+  | "ORDER_LIMIT_EXCEEDED"
+  | "ORDER_REPLAY_INVALID"
+  | "FEE_SCHEDULE_CHANGED"
+  | "NON_LATER_OBSERVATION";
 
 export type CertificateBoundShadowMarketObservation = Readonly<{
-  schemaVersion: "pmh.certificate-bound-shadow-market-observation.v1";
+  schemaVersion: "pmh.certificate-bound-shadow-market-observation.v2";
   artifactHash: Hash;
   opportunityId: string;
   baselineShadowArtifactHash: Hash;
   certificateId: Hash;
   baselineSimulationBundleHash: Hash;
   sourceMaterializationId: Hash;
+  baselineShadow: CertificateBoundShadowRun;
+  baselineSimulationBundle: OpportunitySimulationBundle;
   observedSimulationBundle: OpportunitySimulationBundle;
   observedAtEpochMs: bigint;
   status: "MATCHED_BOUNDS" | "DIVERGED";
@@ -303,6 +310,20 @@ export function runCertificateBoundShadow(input: {
     ) {
       throw new Error("shadow observation diverges from its certificate intent");
     }
+    // Revalidate the generated order, not just the original VWAP simulation.
+    // A snapshot filled above this limit is not a fill of this order.
+    assertBuyOrderReplay({
+      action: intent.side,
+      quantity: intent.quantity,
+      quantityScale: intent.quantityScale,
+      reportQuantityScale: report.quantityScale,
+      collateralScale: report.collateralScale,
+      grossCollateral: report.grossCollateral,
+      netCollateral: report.netCollateral,
+      fills: report.fills,
+      limitPrice: intent.limitPrice,
+      maximumDebit: intent.maxDebit,
+    });
     engine.submit(plan.id, intent.id);
     engine.acknowledge(
       plan.id,
@@ -375,10 +396,24 @@ function sameShadowScope(
       legId: item.legId,
       payoutPerWinningUnit: item.payoutPerWinningUnit,
       venueId: item.request.venueId,
+      instrumentId: item.request.instrumentId,
+      model: item.request.model,
+      quantityScale: item.request.quantityScale,
+      collateralScale: item.request.collateralScale,
+      side: item.request.model === "CLOB_TAKER_V1" ? item.request.side : item.request.action,
+      fillPolicy: item.request.model === "CLOB_TAKER_V1" ? item.request.fillPolicy : null,
+      quantity: item.request.model === "CLOB_TAKER_V1" ? item.request.requestedQuantity : item.request.outcomeQuantity,
     }))) === hashCanonical(observed.plan.legs.map((item) => ({
       legId: item.legId,
       payoutPerWinningUnit: item.payoutPerWinningUnit,
       venueId: item.request.venueId,
+      instrumentId: item.request.instrumentId,
+      model: item.request.model,
+      quantityScale: item.request.quantityScale,
+      collateralScale: item.request.collateralScale,
+      side: item.request.model === "CLOB_TAKER_V1" ? item.request.side : item.request.action,
+      fillPolicy: item.request.model === "CLOB_TAKER_V1" ? item.request.fillPolicy : null,
+      quantity: item.request.model === "CLOB_TAKER_V1" ? item.request.requestedQuantity : item.request.outcomeQuantity,
     })))
   );
 }
@@ -386,113 +421,30 @@ function sameShadowScope(
 export function assertCertificateBoundShadowMarketObservation(
   value: unknown,
 ): CertificateBoundShadowMarketObservation {
-  if (value === null || typeof value !== "object") {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
     throw new Error("certificate-bound shadow market observation is malformed");
   }
   const observation = value as CertificateBoundShadowMarketObservation;
-  const observedBundle = assertOpportunitySimulationBundle(
-    observation.observedSimulationBundle,
-  );
-  const observedReportsByLeg = new Map(
-    observedBundle.plan.legs.map((leg, index) => [
-      leg.legId,
-      observedBundle.reports[index]!,
-    ] as const),
-  );
-  const latestObservedAt = observedBundle.reports.reduce(
-    (latest, report) =>
-      report.observedAtEpochMs > latest ? report.observedAtEpochMs : latest,
-    0n,
-  );
   const { artifactHash, ...body } = observation;
-  const reasonSet = new Set<ShadowMarketDivergenceReason>([
-    "PLAN_SCOPE_CHANGED",
-    "INCOMPLETE_FILL",
-    "QUANTITY_MISMATCH",
-    "COST_EXCEEDS_CERTIFICATE_BOUND",
-    "MODEL_NOT_EXACT",
-    "NON_POSITIVE_PORTFOLIO_FLOOR",
-  ]);
-  if (
-    observation.schemaVersion !==
-      "pmh.certificate-bound-shadow-market-observation.v1" ||
-    !HASH_PATTERN.test(artifactHash) ||
-    artifactHash !== hashCanonical(body) ||
-    observation.opportunityId.trim() === "" ||
-    observation.opportunityId !== observedBundle.opportunityId ||
-    !HASH_PATTERN.test(observation.baselineShadowArtifactHash) ||
-    !HASH_PATTERN.test(observation.certificateId) ||
-    !HASH_PATTERN.test(observation.baselineSimulationBundleHash) ||
-    !HASH_PATTERN.test(observation.sourceMaterializationId) ||
-    observation.observedAtEpochMs !== latestObservedAt ||
-    !["MATCHED_BOUNDS", "DIVERGED"].includes(observation.status) ||
-    !Array.isArray(observation.reasons) ||
-    observation.reasons.some((reason) => !reasonSet.has(reason)) ||
-    new Set(observation.reasons).size !== observation.reasons.length ||
-    !Array.isArray(observation.legs) ||
-    observation.legs.length === 0 ||
-    observation.legs.length > 20 ||
-    new Set(observation.legs.map((leg) => leg.intentId)).size !==
-      observation.legs.length ||
-    new Set(observation.legs.map((leg) => leg.certificateLegId)).size !==
-      observation.legs.length ||
-    observation.legs.some((leg) => {
-      const report = observedReportsByLeg.get(leg.certificateLegId);
-      return leg.intentId.trim() === "" ||
-      leg.certificateLegId.trim() === "" ||
-      leg.venueId.trim() === "" ||
-      leg.plannedQuantity <= 0n ||
-      leg.observedQuantity < 0n ||
-      leg.plannedMaxDebit <= 0n ||
-      leg.observedDebit < 0n ||
-      !HASH_PATTERN.test(leg.sourceSimulationReportHash) ||
-      !["MATCHED_BOUNDS", "DIVERGED"].includes(leg.status) ||
-      !Array.isArray(leg.reasons) ||
-      leg.reasons.some(
-        (reason: ShadowMarketDivergenceReason) => !reasonSet.has(reason),
-      ) ||
-      new Set(leg.reasons).size !== leg.reasons.length ||
-      leg.reasons.some((reason: ShadowMarketDivergenceReason) =>
-        !observation.reasons.includes(reason)
-      ) ||
-      (leg.status === "MATCHED_BOUNDS" && leg.reasons.length !== 0) ||
-      (leg.status === "DIVERGED" && leg.reasons.length === 0) ||
-      (report === undefined
-        ? !leg.reasons.includes("PLAN_SCOPE_CHANGED") ||
-          leg.observedQuantity !== 0n ||
-          leg.observedDebit !== 0n ||
-          leg.sourceSimulationReportHash !== observedBundle.artifactHash
-        : leg.venueId !== report.venueId ||
-          leg.observedQuantity !== report.filledQuantity ||
-          leg.observedDebit !== report.netCollateral ||
-          leg.sourceSimulationReportHash !== report.artifactHash);
-    }) ||
-    (observation.status === "MATCHED_BOUNDS" &&
-      (observation.reasons.length !== 0 ||
-        observation.legs.some((leg) => leg.status !== "MATCHED_BOUNDS"))) ||
-    (observation.status === "DIVERGED" && observation.reasons.length === 0) ||
-    observation.comparison.priorSimulationReused !== false ||
-    observation.comparison.publicMarketEvidenceOnly !== true ||
-    observation.comparison.actualOrderObserved !== false ||
-    observation.comparison.certificateReverificationRequired !== true ||
-    observation.gatewayCalls !== 0 ||
-    observation.authority !== "FIRST_PARTY_SHADOW_OBSERVER" ||
-    observation.executionAuthority !== false ||
-    observation.effects.externalWrites !== false ||
-    observation.effects.valueMovingActions !== false ||
-    observation.effects.liveExecutionEnabled !== false
-  ) {
-    throw new Error("certificate-bound shadow market observation violates its contract");
+  const expected = buildShadowMarketObservation({
+    baselineShadow: observation.baselineShadow,
+    baselineSimulationBundle: observation.baselineSimulationBundle,
+    observedSimulationBundle: observation.observedSimulationBundle,
+    sourceMaterializationId: observation.sourceMaterializationId,
+  });
+  if (!HASH_PATTERN.test(String(artifactHash)) || artifactHash !== hashCanonical(body) ||
+      artifactHash !== hashCanonical(expected)) {
+    throw new Error("certificate-bound shadow observation does not replay its exact inputs");
   }
   return observation;
 }
 
-export function observeCertificateBoundShadowMarket(input: {
+function buildShadowMarketObservation(input: {
   baselineShadow: CertificateBoundShadowRun;
   baselineSimulationBundle: OpportunitySimulationBundle;
   observedSimulationBundle: OpportunitySimulationBundle;
   sourceMaterializationId: Hash;
-}): CertificateBoundShadowMarketObservation {
+}): Omit<CertificateBoundShadowMarketObservation, "artifactHash"> {
   const baselineShadow = assertCertificateBoundShadowRun(input.baselineShadow);
   const baseline = assertOpportunitySimulationBundle(
     input.baselineSimulationBundle,
@@ -515,6 +467,9 @@ export function observeCertificateBoundShadowMarket(input: {
   const baselineByLeg = new Map(
     baseline.plan.legs.map((leg, index) => [leg.legId, baseline.reports[index]!] as const),
   );
+  const baselineLatest = baseline.reports.reduce(
+    (latest, report) => report.observedAtEpochMs > latest ? report.observedAtEpochMs : latest, 0n,
+  );
   const globalReasons: ShadowMarketDivergenceReason[] = [];
   if (!scopeMatches) globalReasons.push("PLAN_SCOPE_CHANGED");
   if (observed.status !== "POSITIVE_SIMULATED_FLOOR") {
@@ -528,6 +483,13 @@ export function observeCertificateBoundShadowMarket(input: {
       reasons.push("PLAN_SCOPE_CHANGED");
     }
     if (report !== undefined) {
+      if (report.fills.some((fill) => fill.price > intent.limitPrice)) {
+        reasons.push("ORDER_LIMIT_EXCEEDED");
+      }
+      if (report.observedAtEpochMs <= baselineLatest) reasons.push("NON_LATER_OBSERVATION");
+      if (baselineReport !== undefined && report.feeScheduleHash !== baselineReport.feeScheduleHash) {
+        reasons.push("FEE_SCHEDULE_CHANGED");
+      }
       if (report.status !== "FULL") reasons.push("INCOMPLETE_FILL");
       if (report.filledQuantity !== intent.quantity) reasons.push("QUANTITY_MISMATCH");
       if (report.netCollateral > intent.maxDebit) {
@@ -535,6 +497,19 @@ export function observeCertificateBoundShadowMarket(input: {
       }
       if (report.modelQualification !== "BOOK_EXACT_TAKER_WALK") {
         reasons.push("MODEL_NOT_EXACT");
+      }
+      if (report.status === "FULL" && scopeMatches && report.filledQuantity === intent.quantity) {
+        try {
+          assertBuyOrderReplay({ action: report.action, quantity: intent.quantity,
+            quantityScale: intent.quantityScale, reportQuantityScale: report.quantityScale,
+            collateralScale: report.collateralScale, grossCollateral: report.grossCollateral,
+            netCollateral: report.netCollateral, fills: report.fills,
+            limitPrice: intent.limitPrice, maximumDebit: intent.maxDebit });
+        } catch {
+          if (!reasons.includes("ORDER_LIMIT_EXCEEDED") && !reasons.includes("COST_EXCEEDS_CERTIFICATE_BOUND")) {
+            reasons.push("ORDER_REPLAY_INVALID");
+          }
+        }
       }
     }
     const uniqueReasons = Object.freeze([...new Set(reasons)].sort());
@@ -561,12 +536,14 @@ export function observeCertificateBoundShadowMarket(input: {
   for (const leg of legs) globalReasons.push(...leg.reasons);
   const reasons = Object.freeze([...new Set(globalReasons)].sort());
   const body = Object.freeze({
-    schemaVersion: "pmh.certificate-bound-shadow-market-observation.v1" as const,
+    schemaVersion: "pmh.certificate-bound-shadow-market-observation.v2" as const,
     opportunityId: baselineShadow.opportunityId,
     baselineShadowArtifactHash: baselineShadow.artifactHash,
     certificateId: baselineShadow.certificateId,
     baselineSimulationBundleHash: baseline.artifactHash,
     sourceMaterializationId: input.sourceMaterializationId,
+    baselineShadow,
+    baselineSimulationBundle: baseline,
     observedSimulationBundle: observed,
     observedAtEpochMs: observed.reports.reduce(
       (latest, report) => report.observedAtEpochMs > latest ? report.observedAtEpochMs : latest,
@@ -590,8 +567,12 @@ export function observeCertificateBoundShadowMarket(input: {
       liveExecutionEnabled: false as const,
     }),
   });
-  return assertCertificateBoundShadowMarketObservation({
-    ...body,
-    artifactHash: hashCanonical(body),
-  });
+  return body;
+}
+
+export function observeCertificateBoundShadowMarket(
+  input: Parameters<typeof buildShadowMarketObservation>[0],
+): CertificateBoundShadowMarketObservation {
+  const body = buildShadowMarketObservation(input);
+  return Object.freeze({ ...body, artifactHash: hashCanonical(body) });
 }
