@@ -1,0 +1,29 @@
+name: Review source handoff
+on:
+  push:
+    branches: [codex/review-merge-publication]
+    paths: [.github/workflows/review-source.yml]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Archive source and commit ancestry without credentials
+        run: |
+          git archive --format=tar.gz HEAD > "$RUNNER_TEMP/review-source.tar.gz"
+          git bundle create "$RUNNER_TEMP/review-history.bundle" --all
+          git rev-parse HEAD > "$RUNNER_TEMP/review-head.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: review-source
+          retention-days: 2
+          path: |
+            ${{ runner.temp }}/review-source.tar.gz
+            ${{ runner.temp }}/review-history.bundle
+            ${{ runner.temp }}/review-head.txt
