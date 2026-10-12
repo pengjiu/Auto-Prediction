@@ -178,7 +178,7 @@ class ExecutionTests(unittest.TestCase):
 
     def test_account_no_double_count_and_no_invented_profit(self):
         # S1 source model uses SCALE=100 here; replay requires 1e6 model.
-        pays=[(F(1),F(0)),(F(0),F(1))];books=[{'hash':str(i),'asks':((F('.4'),F(10)),)} for i in range(2)]
+        pays=[(F(1),F(0)),(F(0),F(1))];books=[{'asset_id':['a','b'][i], 'hash':str(i),'min_order_size':F(1),'tick_size':F('.01'),'asks':((F('.4'),F(10)),)} for i in range(2)]
         m=model_from_books('test',['A','B'],['a','b'],pays,books,budget_units=10*SCALE)
         p=solve_maximin(m);ledger=SampledLedger(F(10));by=dict(zip(['a','b'],books))
         result=ledger.apply('f',p,by);self.assertEqual(result['status'],'ALL_FILLED');self.assertIsNone(result['realized_profit'])
@@ -186,15 +186,15 @@ class ExecutionTests(unittest.TestCase):
         rich=SampledLedger(F(100));rich.apply('f',p,by);self.assertEqual(rich.apply('different',p,by)['status'],'REUSED_DEPTH')
 
     def test_independent_fok_can_leave_partial_inventory(self):
-        pays=[(F(1),F(0)),(F(0),F(1))];books=[{'hash':str(i),'asks':((F('.4'),F(10)),)} for i in range(2)]
+        pays=[(F(1),F(0)),(F(0),F(1))];books=[{'asset_id':['a','b'][i], 'hash':str(i),'min_order_size':F(1),'tick_size':F('.01'),'asks':((F('.4'),F(10)),)} for i in range(2)]
         p=solve_maximin(model_from_books('test',['A','B'],['a','b'],pays,books,budget_units=10*SCALE))
-        books[1]={'hash':'new','asks':((F('.6'),F(10)),)};ledger=SampledLedger(F(10))
+        books[1]={'asset_id':'b','hash':'new','min_order_size':F(1),'tick_size':F('.01'),'asks':((F('.6'),F(10)),)};ledger=SampledLedger(F(10))
         result=ledger.apply('f',p,dict(zip(['a','b'],books)))
         self.assertEqual(result['status'],'PARTIAL');self.assertEqual(ledger.inventory,{'a':10});self.assertEqual(ledger.cash,6)
 
 
     def test_account_queue_is_chronological_and_reserves_inflight(self):
-        pays=[(F(1),F(0)),(F(0),F(1))];books=[{'hash':str(i),'asks':((F('.4'),F(10)),)} for i in range(2)]
+        pays=[(F(1),F(0)),(F(0),F(1))];books=[{'asset_id':['a','b'][i], 'hash':str(i),'min_order_size':F(1),'tick_size':F('.01'),'asks':((F('.4'),F(10)),)} for i in range(2)]
         p=solve_maximin(model_from_books('test',['A','B'],['a','b'],pays,books,budget_units=10*SCALE))
         rows=[{},{}]
         early={'name':'s1','family_id':'a','proposal':p,'books':dict(zip(['a','b'],books)),
@@ -206,7 +206,7 @@ class ExecutionTests(unittest.TestCase):
         self.assertEqual(accounts['s1'].cash,992)
 
     def test_account_rejection_is_transactional(self):
-        pays=[(F(1),F(0)),(F(0),F(1))];books=[{'hash':str(i),'asks':((F('.4'),F(10)),)} for i in range(2)]
+        pays=[(F(1),F(0)),(F(0),F(1))];books=[{'asset_id':['a','b'][i], 'hash':str(i),'min_order_size':F(1),'tick_size':F('.01'),'asks':((F('.4'),F(10)),)} for i in range(2)]
         p=solve_maximin(model_from_books('test',['A','B'],['a','b'],pays,books,budget_units=10*SCALE))
         bad=replace(p,buys=(replace(p.buys[0],conservative_debit=1),p.buys[1]),capital_required=1+p.buys[1].conservative_debit)
         ledger=SampledLedger(F(10))

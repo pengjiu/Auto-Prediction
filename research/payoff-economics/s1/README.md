@@ -1,5 +1,13 @@
 # S1: Conditional payoff maximin — bounded research specimen
 
+## Post-review status (2026-10-12)
+
+Approved for research-only mainline inclusion after the all-branch audit, not
+for trading deployment. Proposals now carry their scale; native order minima
+are modeled rather than checked only after optimization. Retained old benchmark
+and market reports remain historical evidence, not post-review measurements.
+See `../review/VALIDATION.md` and `plans/pre-merge-review.md` from the repo root.
+
 This is a **new, isolated mutation candidate**, based on the P0 economics work in `codex/mutation-payoff-economics`. It does **not** change application trading paths, the existing verifier, market adapters, or any service configuration. This is a concrete algorithm and reproducible tests rather than a placeholder package.
 
 ## Thesis and adoption criteria

@@ -1,0 +1,102 @@
+{
+  "review_date": "2026-10-12",
+  "review_source_base": "4dcef72b7969927fb2d415147666fc779a9561d8",
+  "reviewed_heads": {
+    "main": "d6c9447cab29898a6eb5fa06be3598b8474cc02f",
+    "P0": "8394e819c929e5ea896f4059d2d39fbf24577c4a",
+    "S1": "e5109f5c4fcbeac4928d9109cc6b040efee893fd",
+    "S2": "c43f9a643a2dddfea299f7d6068931d417742396"
+  },
+  "local_toolchain": {
+    "node": "22.22.1",
+    "pnpm": "11.13.1",
+    "typescript": "5.9.3",
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "workspace": {
+    "check": {
+      "exit": 0,
+      "seconds": 18.152
+    },
+    "build": {
+      "exit": 0,
+      "seconds": 2.379
+    },
+    "test": {
+      "exit": 0,
+      "seconds": 54.98
+    }
+  },
+  "node_tests": 1086,
+  "s1_tests": 16,
+  "s2_tests": 32,
+  "p0_offline_tests": 43,
+  "patch_tool_tests": 8,
+  "red_regressions": {
+    "shadow": 5,
+    "source_binding": 4,
+    "S1": 3,
+    "S2": 8
+  },
+  "tests_skipped_to_get_green": false,
+  "live_execution_enabled": false,
+  "profitability_verified": false,
+  "raw_reanalysis": {
+    "pilot": {
+      "manifest_sha256": "3f20c2f132d3beba5cb2dcfee6bda890df11ac5e570ab8701649728d96288134",
+      "counts": {
+        "analyzed": 132,
+        "attempted_family_snapshots": 288,
+        "excluded:HTTP_EVIDENCE_UNAVAILABLE:404:HTTP_404": 24,
+        "excluded:empty ask book; never substitute a last price": 132,
+        "gross_baseline_positive": 0,
+        "gross_s1_positive": 12,
+        "gross_witnesses": 120,
+        "nominal_curve_witnesses": 132,
+        "s1_improved_gross": 12,
+        "s1_improved_vs_depth_baseline": 0
+      }
+    },
+    "followup": {
+      "manifest_sha256": "2675989c14a6f014707ca65fe6cf4119d5ae4c94b2812fdb336cb0cc882c5d88",
+      "counts": {
+        "analyzed": 181,
+        "attempted_family_snapshots": 288,
+        "excluded:empty ask book; never substitute a last price": 24,
+        "excluded:server book timestamp outside freshness window": 83,
+        "gross_baseline_positive": 0,
+        "gross_s1_positive": 0,
+        "gross_witnesses": 181,
+        "nominal_curve_witnesses": 181,
+        "s1_improved_gross": 0,
+        "s1_improved_vs_depth_baseline": 0
+      }
+    }
+  },
+  "log_sha256": {
+    "check-execution.log": "09f124dfb170f19e67ad3b55fdb6891868bda5b0d4442c15e1de65e33244837f",
+    "final-offline.log": "4bfb11c215f59bf6d2cabc1e0d3fd0ffb777ed2422976d05ff10cee247f0a1df",
+    "final-patch-tests.log": "37e9cf56a8d5bdd3077021625c8e16eba28d29e0b9fb1ae1c76a03a9adc780fd",
+    "final-s1.log": "9eb9106f152403c372045eda2b2c9d463d88167a76c61e556a7b3610856c9b2a",
+    "final-s2.log": "76cabcd198fa3ee9c59356e9660d91ec8f9415c87526e572629b48ab7faf3263",
+    "first-workspace-test-failure.log": "cc112ddcd891602022a38e31e1c36f64d5c725b52f4f14de934b946d317ad459",
+    "git-import.log": "abb188e9c0c2f93d143e32d226edbef8375bb8bd806dfd9a13f3d66c7dd15386",
+    "green-binding.log": "638991417301741c51b2468404da1a5c5f268afe18b8117302160bc74d9d3b57",
+    "green-execution.log": "2f69dd63487bf2a8c6ed0f76162c45cb1d96f2f56e8546d73c96fecd12a67386",
+    "green-s1.log": "c1726501d70f4530c0ff5d17a9ec91216aefa69a1def807764edf17af7eb2e8b",
+    "green-s2.log": "9cccb37ca322c7db14c20bc3e0db561f12735ddee2165d1e36c5efd316caff47",
+    "reanalyzed-followup.log": "51b7d4c327611599643522abd45f1bc5bf16802d6bee92e3701d8afbd6124ff4",
+    "reanalyzed-pilot.log": "7342670e98e7383d79dd6a7d84cc4e827f53745863e33449349cbd94a51c23b7",
+    "red-binding.log": "7fb67fc56b1cf6c6d2c9089e482c5aff87dfc39164dca4ce2bd3ca6a5611fc4c",
+    "red-s1.log": "4dc2db4bf611ff9273f432d0caba4c3166ab32482c9ac1cd2088408ffbbd3275",
+    "red-s2.log": "4ef3ea0aac23f59449cbed581d29e2d04dcdedc12d8af8fcb11eeaf9bd3b90ca",
+    "red-shadow.log": "7ba075223da0882288d24bd3895c6d674672898907ff305f7dd2ff8892938509",
+    "runner-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "runner.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workspace-build.log": "cbdb7ce34aa79d22f685c87328877dd19d5e2bd00c81dd3cdc3eb9ee71777e96",
+    "workspace-check.log": "ce5a7312e5ffc7f128455321351ee9245fbc5d4b25fde9b968c0f9b336eb6666",
+    "workspace-test.log": "3905b622f4dcd9e720471ba3ad604624ccfcef786d5136064e2e277de9a9a143"
+  }
+}

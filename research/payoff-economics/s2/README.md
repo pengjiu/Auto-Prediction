@@ -1,5 +1,13 @@
 # S2: Public-data economic audit, not a trading strategy release
 
+## Post-review status (2026-10-12)
+
+Approved for research-only mainline inclusion after the all-branch audit, not
+for trading deployment. Proposals now carry their scale; native order minima
+are modeled rather than checked only after optimization. Retained old benchmark
+and market reports remain historical evidence, not post-review measurements.
+See `../review/VALIDATION.md` and `plans/pre-merge-review.md` from the repo root.
+
 This isolated research mutation is stacked on S1 (`e5109f5...`). It does not
 change production code, fee admission, certificate authority, credentials,
 orders, signatures, approvals or funds. Decision: **HOLD**. A short pilot is

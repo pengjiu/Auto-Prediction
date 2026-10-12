@@ -15,7 +15,7 @@ from urllib.parse import parse_qs, urlparse
 from capture import allowed_url, json_array, market_tokens
 from economics import (SCALE, SampledLedger, alignment, canonical_hash, fee_posture,
     model_from_books, parse_book, partial_fill_floor, partition_witness, rational,
-    rule_identity, solve_maximin, equal_size_frontier, equal_size_depth_frontier, nominal_fees_for_buys, verify_witness)
+    rule_identity, nominal_rate, solve_maximin, equal_size_frontier, equal_size_depth_frontier, nominal_fees_for_buys, verify_witness)
 
 
 class Evidence:
@@ -55,11 +55,19 @@ class Evidence:
             eid = str(f['event']['id'])
             if canonical_hash(f['event']) != canonical_hash(catalog_events.get(eid)):
                 raise ValueError('selection event not in raw catalog')
-            raw_by_id = {str(m['id']):m for m in f['event']['markets']}
+            raw_members = f['event']['markets']
+            raw_by_id = {str(m['id']):m for m in raw_members}
+            selected_ids = [str(m['id']) for m in f['markets']]
+            if (not selected_ids or len(set(selected_ids)) != len(selected_ids) or
+                    len(raw_by_id) != len(raw_members)):
+                raise ValueError('duplicate/empty event members')
+            tokens = [t for m in f['markets'] for t in market_tokens(m)]
+            if len(set(tokens)) != len(tokens):
+                raise ValueError('duplicate native token')
             if any(canonical_hash(m) != canonical_hash(raw_by_id.get(str(m['id']))) for m in f['markets']):
                 raise ValueError('selection market not evidence-bound')
             if f['kind'] == 'NEG_RISK_ASSUMED_EXHAUSTIVE':
-                if len(f['markets']) != len(raw_by_id) or f['event'].get('negRiskAugmented') is True:
+                if set(selected_ids) != set(raw_by_id) or f['event'].get('negRiskAugmented') is True:
                     raise ValueError('incomplete or augmented group admitted')
                 if f['event'].get('negRisk') is not True and f['event'].get('enableNegRisk') is not True:
                     raise ValueError('group not explicitly negative-risk')
@@ -70,22 +78,19 @@ class Evidence:
 
 def payoff_matrix(family):
     n = len(family['markets'])
+    if not 1 <= n <= 6:
+        raise ValueError("invalid payment-family size")
     if n == 1:
         return ['YES','NO'], [(F(1),F(0)),(F(0),F(1))]
     return [f'WIN_{i}' for i in range(n)], [tuple(F(int((k==i)==yes)) for k in range(n)) for i in range(n) for yes in (True,False)]
 
 
 def nominal_fee_asks(markets, asks):
-    effective = []
-    for m, yes, no in zip(markets, asks[::2], asks[1::2]):
-        fee = m.get('feeSchedule')
-        if m.get('feesEnabled') is False:
-            r = F(0)
-        elif isinstance(fee,dict) and fee.get('exponent') == 1 and fee.get('takerOnly') is True:
-            r = rational(fee['rate'])
-        else: return None
-        effective.extend(p+r*p*(1-p) for p in (yes,no))
-    return effective
+    if not markets or len(asks) != 2*len(markets) or any(not isinstance(p,F) or not 0 <= p <= 1 for p in asks):
+        raise ValueError("nominal fee dimensions or prices invalid")
+    rates = [nominal_rate(m) for m in markets]
+    if any(rate is None for rate in rates): return None
+    return [p + rates[i//2]*p*(1-p) for i,p in enumerate(asks)]
 
 
 def process_replays(queue):
@@ -125,7 +130,9 @@ def analyze(root):
             ids_scope = mids if f['kind']=='BINARY_COMPLEMENT' else None
             signatures = [rule_identity(f['event'],ids_scope)]
             for phase in ('before','after'):
-                _, event = ev.read(f'rules-{phase}:{eid}')
+                record, event = ev.read(f'rules-{phase}:{eid}')
+                if urlparse(record['url']).path != '/events/' + eid or str(event.get('id')) != eid:
+                    raise ValueError('rule request/event identity mismatch')
                 signatures.append(rule_identity(event,ids_scope))
             if len(set(signatures)) != 1: raise ValueError('RULES_OR_FEE_METADATA_CHANGED')
             fs['rules_identity'] = signatures[0]
@@ -161,12 +168,15 @@ def analyze(root):
                 row['fee_qualification'] = fs['fees']['status']
                 evidence_id = canonical_hash({'rules':fs['rules_identity'],'quotes':row['book_body_sha256s']})
                 model = model_from_books(evidence_id,states,tokens,payoffs,books)
+                compute_started=perf_counter_ns()
                 t=perf_counter_ns(); s1=solve_maximin(model); row['s1_ns']=perf_counter_ns()-t
                 t=perf_counter_ns(); base=equal_size_frontier(model); row['baseline_ns']=perf_counter_ns()-t
                 t=perf_counter_ns(); deep=equal_size_depth_frontier(model); row['depth_baseline_ns']=perf_counter_ns()-t
                 if s1.lower_floor < deep.lower_floor or deep.lower_floor < base.lower_floor: raise AssertionError('S1 weaker on same model')
                 if w is not None and (s1.lower_floor>0 or base.lower_floor>0): raise AssertionError('solver contradicts exact dual witness')
+                alignment(records,books, max_age_ns=120_000_000_000-(perf_counter_ns()-compute_started))
                 row['s1'] = asdict(s1); row['baseline'] = asdict(base); row['depth_baseline']=asdict(deep)
+                decision_done = row['decision_observed_ns'] + (perf_counter_ns()-compute_started)
                 row['status']='ANALYZED_GROSS_ONLY'
                 for name,prop in (('s1',s1),('baseline',base),('depth_baseline',deep)):
                     if prop.lower_floor <= 0: continue
@@ -183,7 +193,6 @@ def analyze(root):
                             later=[ev.read(f'book:{cycle+1}:{t}') for t in tokens]
                             later_books=[parse_book(b,t,c) for (_,b),t,c in zip(later,tokens,conditions)]
                             alignment([r for r,_ in later],later_books)
-                            decision_done = row['decision_observed_ns']+row[name+'_ns']
                             if min(r['started_ns'] for r,_ in later) <= decision_done:
                                 raise ValueError('later books were not acquired after decision')
                             if any(b['timestamp_ns']<row['decision_observed_ns'] for b in later_books):

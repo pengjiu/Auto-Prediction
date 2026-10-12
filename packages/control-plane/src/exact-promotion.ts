@@ -148,7 +148,8 @@ function buildCandidate(input: {
     qualification.artifactHash !== materialization.relationConstraintHash ||
     qualification.semanticDecisionId !== bundle.semanticDecisionId ||
     qualification.semanticDecisionId !== materialization.semanticDecisionId ||
-    bundle.portfolioId !== materialization.portfolioId
+    bundle.portfolioId !== materialization.portfolioId ||
+    materialization.simulationPlanHash !== hashCanonical(bundle.plan)
   ) {
     throw new Error(
       "exact promotion requires one positive, materialized, qualification-bound simulation",
@@ -236,6 +237,10 @@ function buildCandidate(input: {
       report.filledQuantity <= 0n ||
       report.quantityScale !== request.quantityScale ||
       report.collateralScale !== request.collateralScale ||
+      simulationLeg.payoutPerWinningUnit !== report.collateralScale ||
+      BigInt(listing.priceScale) !== report.collateralScale ||
+      BigInt(listing.quantityScale) !== report.quantityScale ||
+      report.instrumentId !== (portfolioLeg.outcome === "TRUE" ? listing.trueOutcome.venueOutcomeId : listing.falseOutcome.venueOutcomeId) ||
       BigInt(materialization.requestedQuantity) !== request.requestedQuantity
     ) {
       throw new Error(
@@ -307,11 +312,10 @@ function buildCandidate(input: {
   if (new Set(bindings.map((binding) => binding.listingId)).size !== bindings.length) {
     throw new Error("exact promotion listing identities must be unique");
   }
-  const expiresAtEpochMs = minimum(
-    bundle.reports.map(
-      (report) => report.observedAtEpochMs + input.maxEvidenceAgeMs,
-    ),
-  );
+  const expiresAtEpochMs = minimum([
+    ...bundle.reports.map(report => report.observedAtEpochMs + input.maxEvidenceAgeMs),
+    ...materialization.sources.map(source => BigInt(Date.parse(source.receivedAt)) + input.maxEvidenceAgeMs),
+  ]);
   const candidate = Object.freeze({
     classification: "VENUE_BOUNDED_ARBITRAGE" as const,
     claimGraphHash: qualification.artifactHash,
@@ -440,7 +444,10 @@ export function verifyMaterializedOpportunity(input: {
   maxEvidenceAgeMs?: bigint;
 }): ExactOpportunityVerificationRecord {
   const nowEpochMs = input.nowEpochMs ?? BigInt(Date.now());
-  if (nowEpochMs < 0n) throw new Error("exact verifier time is invalid");
+  if (nowEpochMs < 0n || nowEpochMs > MAX_DATE_EPOCH_MS) throw new Error("exact verifier time is invalid");
+  if (input.bundle.reports.some(report => report.observedAtEpochMs > nowEpochMs)) {
+    throw new Error("exact verification cannot precede its quote evidence");
+  }
   const { candidate, bindings } = buildCandidate({
     qualification: input.qualification,
     materialization: input.materialization,

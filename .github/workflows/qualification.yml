@@ -28,6 +28,8 @@ jobs:
       - run: pnpm run build
       - run: pnpm run test
       - run: node research/payoff-economics/offline/run.mjs
+      - name: Tests cannot rewrite tracked source or historical evidence
+        run: git diff --exit-code
   research:
     runs-on: ubuntu-24.04
     timeout-minutes: 15

@@ -26,6 +26,7 @@ class Asset:
     venue: str
     payoff: tuple[int, ...]  # payment per whole share, in price-scale integer ticks
     levels: tuple[Level, ...]
+    min_quantity: int = 1  # whole shares; native fractional minimum rounds UP
 
 
 @dataclass(frozen=True)
@@ -59,6 +60,7 @@ class Proposal:
     snapshot_floor: int
     capital_required: int
     numeric_solver_status: str
+    scale: int
     authority: str = "RESEARCH_PROPOSAL_ONLY"
 
 
@@ -87,7 +89,9 @@ def parse_model(data: dict) -> Model:
     raw_budgets = data.get("venue_budgets")
     if not isinstance(raw_budgets, dict):
         raise ValueError("explicit per-venue budgets required")
-    venue_budgets = {str(k): _integer(v, "venue budget") for k, v in raw_budgets.items()}
+    if not raw_budgets or any(not isinstance(k, str) or not k.strip() for k in raw_budgets):
+        raise ValueError("venue budget identifiers must be nonempty strings")
+    venue_budgets = {k: _integer(v, "venue budget") for k, v in raw_budgets.items()}
     raw_assets = data.get("assets")
     if not isinstance(raw_assets, list) or not 1 <= len(raw_assets) <= 16:
         raise ValueError("must have 1..16 assets")
@@ -125,7 +129,10 @@ def parse_model(data: dict) -> Model:
             prev = ask
             levels.append(Level(ask, depth, fee))
             total_upper += depth * (scale + fee)
-        assets.append(Asset(ident, venue, payoff, tuple(levels)))
+        minimum = _integer(record.get("min_quantity", 1), "minimum quantity", minimum=1)
+        if minimum >= (1 << 52):
+            raise ValueError("minimum quantity outside numerical qualification")
+        assets.append(Asset(ident, venue, payoff, tuple(levels), minimum))
     # SciPy/HiGHS works in floats. Refuse unsafe-sized models before solving,
     # even though final PnL is independently evaluated as arbitrary-size int.
     if max(total_upper, budget, *venue_budgets.values()) >= (1 << 52):
@@ -163,10 +170,12 @@ def _model_hash(model: Model) -> str:
         "evidence_id": model.evidence_id,
         "states": model.state_ids,
         "scale": model.scale,
+        "coverage": model.coverage,
         "budget": model.budget,
         "venue_budgets": model.venue_budgets,
         "assets": [
             {"id": a.asset_id, "venue": a.venue, "payoff": a.payoff,
+             "minimum": a.min_quantity,
              "asks": [(l.ask, l.depth, l.fee_upper) for l in a.levels]}
             for a in model.assets
         ],
@@ -186,7 +195,7 @@ def _evaluate(model: Model, choice: tuple[tuple[int, int] | None, ...], status: 
         if selected is None:
             continue
         r, quantity = selected
-        if not isinstance(r, int) or not isinstance(quantity, int) or quantity <= 0:
+        if type(r) is not int or type(quantity) is not int or quantity < asset.min_quantity:
             raise ValueError("integer limit selection and positive quantity required")
         candidates = _asset_candidates(asset)
         if r < 0 or r >= len(candidates):
@@ -210,7 +219,7 @@ def _evaluate(model: Model, choice: tuple[tuple[int, int] | None, ...], status: 
     lower_floor = payouts[worst_idx] - total_debit
     snapshot_floor = min(payouts) - total_snapshot
     return Proposal(_model_hash(model), tuple(buys), model.state_ids[worst_idx], lower_floor,
-                    snapshot_floor, total_debit, status)
+                    snapshot_floor, total_debit, status, model.scale)
 
 
 def solve_maximin(model: Model, *, time_limit: float = 5.0) -> Proposal:
@@ -251,6 +260,12 @@ def solve_maximin(model: Model, *, time_limit: float = 5.0) -> Proposal:
         row = np.zeros(size)
         row[k] = 1
         row[n + k] = -cap
+        rows.append(row)
+        limits.append(0)
+        # A selected tier must meet the native minimum, or select no order.
+        row = np.zeros(size)
+        row[k] = -1
+        row[n + k] = model.assets[tiers[k][0]].min_quantity
         rows.append(row)
         limits.append(0)
     # One price cap for each asset, or no order at all.
@@ -302,21 +317,27 @@ def solve_maximin(model: Model, *, time_limit: float = 5.0) -> Proposal:
     # only for the DECLARED finite payment states, not true contract semantics.
     if proposal.lower_floor < 0:
         raise RuntimeError("MILP candidate is worse than admissible no-trade control")
+    if proposal.lower_floor == 0:
+        return _evaluate(model, tuple(None for _ in model.assets), "NO_POSITIVE_FLOOR")
     return proposal
 
 
 def exact_bruteforce(model: Model, *, max_candidates: int = 100_000) -> Proposal:
     """Independent exhaustive reference for tiny models. Never use at scale."""
-    options = []
+    _integer(max_candidates, "max candidates", minimum=1)
+    # Count before allocation; depth can be enormous even for a single token.
     total = 1
+    for a in model.assets:
+        total *= 1 + sum(max(0, cap - a.min_quantity + 1)
+                         for _, cap, _ in _asset_candidates(a))
+        if total > max_candidates:
+            raise ValueError(f"exhaustive gold reference needs {total} combinations")
+    options = []
     for a in model.assets:
         all_options = [None]
         for r, (_, capacity, _) in enumerate(_asset_candidates(a)):
-            all_options.extend((r, q) for q in range(1, capacity + 1))
+            all_options.extend((r, q) for q in range(a.min_quantity, capacity + 1))
         options.append(all_options)
-        total *= len(all_options)
-    if total > max_candidates:
-        raise ValueError(f"exhaustive gold reference needs {total} combinations")
     # Independent reference arithmetic: do not call the proposal evaluator
     # while searching. This catches both MILP formulation mistakes and errors in
     # the optimized candidate's quantity/cost/state cash-flow evaluation.
@@ -362,7 +383,7 @@ def top_of_book_equal_size_baseline(model: Model, *, max_assets: int = 12) -> Pr
     for mask in range(1, 1 << len(model.assets)):
         eligible = [i for i in range(len(model.assets)) if mask & (1 << i)]
         cap = min(model.assets[i].levels[0].depth for i in eligible)
-        for q in range(1, cap + 1):
+        for q in range(max(model.assets[i].min_quantity for i in eligible), cap + 1):
             choice = tuple((0, q) if i in eligible else None for i in range(len(model.assets)))
             try:
                 p = _evaluate(model, choice, "EQUAL_SIZE_TOP_BOOK")
@@ -377,6 +398,7 @@ def proposal_json(p: Proposal) -> dict:
     return {
         "schema_version": "pmh.research-limit-maximin.v1",
         "model_hash": p.model_hash,
+        "scale": p.scale,
         "authority": p.authority,
         "numeric_solver_status": p.numeric_solver_status,
         "limiting_state": p.worst_state,

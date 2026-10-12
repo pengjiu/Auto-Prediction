@@ -43,9 +43,11 @@ observations and historical evidence; do not rewrite them as post-fix results.
 
 ## Acceptance
 - Keep exact rule/payoff checks, fee qualification and all live-effect guards.
-- Counterexamples must fail before fixes and pass afterwards. Baseline local
-  tests passed (74 execution, 11 S1, 21 S2); new counterexamples initially failed
-  (5 shadow, 10 research). Store exact logs with the final report.
+- Counterexamples must fail before fixes and pass afterwards. The resumed audit
+  independently reproduced 5 shadow failures, 4 exact-promotion source-binding
+  failures, 3 S1 failures/errors and 8 S2 failures. One no-trade tie control already
+  passed. Preserve actual logs; earlier interrupted-session counts are not new
+  execution evidence.
 - Run complete pinned Node 22.22.1 / pnpm 11.13.1 check, build and tests; optional
   Python 3.13 / NumPy 2.3.5 / SciPy 1.17.0 research, independent integer oracles,
   P0 offline regression and patch-tool tests.
@@ -54,3 +56,50 @@ observations and historical evidence; do not rewrite them as post-fix results.
 - Publish only reviewed files; verify remote blobs against locally tested bytes.
 - Merge the tested ancestry into main using an expected-head check. Recheck main
   and all prior branch tips. Report any actual remaining verification gap.
+
+## Resumed implementation and decisions
+
+The publication branch initially contained only the review plan and CI, not the
+interrupted session's code. The resumed run restored the exact source/history
+from commit 4dcef72b7969927fb2d415147666fc779a9561d8 and replayed fresh counterexamples.
+
+- **P0:** materialization v2 binds the complete normalized simulation plan. A
+  rehashed bundle cannot substitute payment scale, cheaper book levels, fee
+  parameters or a newer clock while reusing the original materialization record.
+  Binary payment and price/quantity units are checked against listing bindings.
+  Future quote timestamps are rejected; fee evidence also limits expiry.
+- **P0:** observation v2 retains bounded original inputs and derives its result
+  again on read. Above-limit fills, changed native identity/scale/fee and earlier
+  observations cannot pass by recomputing only a content hash. This is model
+  consistency, not proof that natural-language settlement assumptions are true.
+- **S1:** native whole-share minima are constraints in both MILP and the exhaustive
+  oracle; guards run before allocating oracle arrays. Zero-floor ties return
+  no-trade. Proposals and identity hashes include units and minimum quantities.
+  A test previously demanded one arbitrary allocation among tied optima; it now
+  checks objective equality with the independent oracle and unequal quantities.
+- **S2:** lengths, exact representability, native asset/constraint metadata and
+  event-member uniqueness are mandatory. Event-level rule changes invalidate
+  grouping. Fee diagnostics share one conflict-checking interpretation.
+- **S2:** freshness is measured at the common decision time; retrospective
+  compute delay is charged before later observations are eligible. Sampled
+  orders use proposal units and current tick/minimum constraints. A changed
+  hash is not replenishment: tokens are conservatively consumed once per account
+  run, pending separately evidenced replenishment. This can undercount fills;
+  it must not be presented as a calibrated fill model.
+- **CI:** branch-specific qualification is replaced by one main/PR gate. The
+  anonymous capture workflow is manual, never triggered by merge or a schedule.
+
+Historical reanalysis retained the exact original raw bytes and found unchanged
+headline counts: pilot 132 analyzed, 120 gross witnesses, 12 repeated positive
+snapshots of one family, zero S1 improvements over the same-depth baseline;
+follow-up 181 analyzed, 181 gross witnesses, zero positive S1 proposals. These
+remain short selected samples with assumed states and unqualified execution.
+
+New v2 normalized records intentionally reject old records that lack binding
+information. Re-materialize/replay from retained original evidence rather than
+silently upgrading an old approval. Raw fixtures and historical observations are
+not rewritten or treated as current certificates.
+
+Final verification details and content identities are in
+`research/payoff-economics/review/VALIDATION.md`. Adoption here concerns tested,
+research-only software; live orders, signing, credentials and funds stay disabled.

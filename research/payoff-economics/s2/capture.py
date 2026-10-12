@@ -23,8 +23,13 @@ MAX_BYTES = 12_000_000
 
 
 def allowed_url(url: str) -> bool:
-    p = urlparse(url)
-    if p.scheme != "https" or p.hostname not in HOSTS or p.port not in (None, 443):
+    try:
+        if not isinstance(url, str): return False
+        p = urlparse(url)
+        port = p.port
+    except ValueError:
+        return False
+    if p.scheme != "https" or p.hostname not in HOSTS or port not in (None, 443):
         return False
     if p.username or p.password or p.fragment:
         return False

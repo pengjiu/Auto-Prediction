@@ -402,6 +402,7 @@ describe("opportunity lifecycle desk", () => {
       reasons: [
         "COST_EXCEEDS_CERTIFICATE_BOUND",
         "NON_POSITIVE_PORTFOLIO_FLOOR",
+        "ORDER_LIMIT_EXCEEDED",
       ],
       gatewayCalls: 0,
       comparison: {

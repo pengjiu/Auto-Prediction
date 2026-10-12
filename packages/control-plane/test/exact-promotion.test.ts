@@ -212,3 +212,25 @@ describe("materialized opportunity exact promotion", () => {
     ).toThrow(/violates its contract/);
   });
 });
+
+describe("review: exact promotion source binding", () => {
+  it.each(["payout", "book", "fee", "clock"])("refuses a rehashed simulation with substituted %s", async (kind) => {
+    const { qualified, materialized, bundle } = await evidence();
+    const plan = { ...bundle.plan, legs: bundle.plan.legs.map((leg, i) => {
+      if (i !== 0) return leg;
+      const request = leg.request;
+      if (request.model !== "CLOB_TAKER_V1") throw new Error("fixture requires CLOB");
+      return { ...leg,
+        payoutPerWinningUnit: kind === "payout" ? leg.payoutPerWinningUnit * 2n : leg.payoutPerWinningUnit,
+        request: { ...request,
+          levels: kind === "book" ? request.levels.map(l => ({ ...l, price: l.price / 2n })) : request.levels,
+          fee: kind === "fee" ? { ...request.fee, rateScale: request.fee.rateScale * 2n } : request.fee,
+          observedAtEpochMs: kind === "clock" ? request.observedAtEpochMs + 1n : request.observedAtEpochMs,
+        } };
+    }) };
+    const altered = runOpportunitySimulation(plan);
+    expect(() => verifyMaterializedOpportunity({ qualification: qualified,
+      materialization: materialized.record, bundle: altered,
+      nowEpochMs: BigInt(Date.parse("2026-08-01T08:00:00.100Z")) })).toThrow();
+  });
+});

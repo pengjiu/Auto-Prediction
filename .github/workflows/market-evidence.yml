@@ -1,10 +1,5 @@
 name: Bounded public market evidence
 on:
-  push:
-    branches: [codex/mutation-market-economics]
-    paths:
-      - research/payoff-economics/s2/capture.py
-      - .github/workflows/market-evidence.yml
   workflow_dispatch:
 permissions:
   contents: read

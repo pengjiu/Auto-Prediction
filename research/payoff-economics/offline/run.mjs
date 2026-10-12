@@ -17,6 +17,9 @@ const typeRoots = nodeTypesCandidates.filter((p) => fs.existsSync(path.join(p, '
 if (!typeRoots.length) throw new Error('Node type declarations unavailable; set NODE_TYPES_PATH to an @types directory.');
 const build = path.join(root, '.offline-build');
 fs.mkdirSync(path.join(build, 'src'), { recursive: true });
+// Fresh executions must not overwrite the retained historical validation evidence.
+const output = path.join(build, 'results');
+fs.mkdirSync(output, { recursive: true });
 const hashes = {
   'fixed.ts':'dcd8a1d88e1642e73fe55f7ae08187f8c0f7617a',
   'identity.ts':'da06c22cdb8509e541977365d55e7ee6ce5ad6d5',
@@ -53,7 +56,7 @@ const diagnostics = ts.getPreEmitDiagnostics(program);
 const log = ts.formatDiagnosticsWithColorAndContext(diagnostics, {
   getCurrentDirectory: () => build, getCanonicalFileName: (f) => f, getNewLine: () => '\n'
 });
-fs.writeFileSync(path.join(root,'evidence/typecheck.log'), log || `PASS: focused source + identical test bodies; TypeScript ${ts.version}\n`);
+fs.writeFileSync(path.join(output,'typecheck.log'), log || `PASS: focused source + identical test bodies; TypeScript ${ts.version}\n`);
 if (diagnostics.length) { console.error(log); process.exit(1); }
 program.emit();
 for (const name of ['domain','opportunity']) {
@@ -63,7 +66,7 @@ for (const name of ['domain','opportunity']) {
   fs.writeFileSync(path.join(moduleDir, 'index.js'), `export * from '../../../${name}-index.js';\n`);
 }
 const results = spawnSync(process.execPath, ['--test','--test-reporter=tap',path.join(build,'dist/buy-order-budget.test.js'),path.join(root,'offline/payoff-selection.test.mjs')], { encoding:'utf8', timeout:120000 });
-fs.writeFileSync(path.join(root,'evidence/native-tests.tap'), (results.stdout || '') + (results.stderr || ''));
+fs.writeFileSync(path.join(output,'native-tests.tap'), (results.stdout || '') + (results.stderr || ''));
 process.stdout.write(results.stdout || ''); process.stderr.write(results.stderr || '');
 const count = (key) => Number(new RegExp(`# ${key} (\\d+)`).exec(results.stdout || '')?.[1] || 0);
 const status = { scope:'focused TypeScript sources + retained original fixed-point/verifier + extracted production selection blocks',
@@ -72,5 +75,5 @@ const status = { scope:'focused TypeScript sources + retained original fixed-poi
   tests:count('tests'), pass:count('pass'), fail:count('fail'), exit_code:results.status,
   error:results.error?.message || null,
   runner_adaptation:'Only vitest describe/it import changed to node:test; test bodies and production helper unchanged.' };
-fs.writeFileSync(path.join(root,'evidence/validation-results.json'),JSON.stringify(status,null,2)+'\n');
+fs.writeFileSync(path.join(output,'validation-results.json'),JSON.stringify(status,null,2)+'\n');
 process.exit(results.status ?? 1);

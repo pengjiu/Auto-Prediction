@@ -1,15 +1,22 @@
 # Plans
 
-P0 certified payoff economics mutation (draft PR #1, 2026-10-11): after repairing
-subset-only pruning and BUY limit-cost certification, exact Node 22.22.1 /
-pnpm 11.13.1 dependencies were restored locally and `pnpm run check`,
-`pnpm run test` (1,077/1,077), and `pnpm run build` all passed. Root harness
-process-group and environment-dependent test expectations were also repaired.
-This is a technical qualification of the research-only candidate, not evidence
-of executable profit or permission for live trading. The candidate remains
-HOLD pending actual synchronized order books, fee/execution qualification, and
-economic comparison. See `plans/certified-payoff-economics.md` and
-`research/payoff-economics/VALIDATION.md`.
+## Selected research mainline continuation (2026-10-12)
+
+The operator authorized review, repair and merge of all unmerged research work.
+The review in [plans/pre-merge-review.md](plans/pre-merge-review.md) supersedes
+previous HOLD decisions **for technical inclusion of research-only tooling**.
+It does not promote a profitable strategy or expand live trading authority.
+All P0/S1/S2 branch tips are retained in the publication ancestry. Repairs bind
+materialization to its exact simulation plan, replay later shadow observations
+against old limits and identities, include native minimum sizes and explicit
+units, reject truncated inputs/contradictory fees, and prevent false depth reuse.
+
+One qualification workflow covers main and pull requests. Public market capture
+is manual only. Historical raw evidence and pre-repair reports are retained as
+history; retrospective recomputation is separately identified in the review.
+Next research requires independent settlement evidence and executable net value
+against same-depth controls; do not add solver complexity or enable real orders
+on the strength of synthetic results or successful software tests.
 
 The canonical Auto Prediction product version is **0.1.2**. The root package,
 Harness manifest, private workspace packages, Studio, CLI, and
