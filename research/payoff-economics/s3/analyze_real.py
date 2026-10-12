@@ -5,14 +5,14 @@ certificate. No network, model invocation or money movement occurs here.
 """
 from __future__ import annotations
 import argparse
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from fractions import Fraction as F
 from pathlib import Path
 import json
 import tempfile
 import subprocess
 from bridge import Evidence, analyze_compiled, recompile, check_quote_urls
-from capture_real import experiment_config, select_from_definitions
+from capture_real import experiment_config, select_from_definitions, checked_protocol
 from economics import parse_book, verify_witness, nominal_rate, SCALE
 
 
@@ -27,8 +27,7 @@ def source_from_evidence(evidence, family, phase):
     if phase not in ('before', 'after'):
         raise ValueError('unknown source phase')
     def wrap(label):
-        # Evidence already checked all original bytes. Documentation is Markdown,
-        # not JSON; do not send a raw text receipt through Evidence.read().
+        # Documentation is Markdown, not JSON. Preserve the actual original bytes.
         record = evidence.by_label[label]
         if record['status'] != 200 or record['error'] is not None:
             raise ValueError(f"HTTP_EVIDENCE_UNAVAILABLE:{record['status']}:{record['error']}")
@@ -77,19 +76,19 @@ def same_rules(before, after):
     if policies(before) != policies(after):
         raise ValueError('policy evidence changed')
     # A price-only raw-body revision may change source hashes, not rule identity.
-    # The current experiment retains one policy receipt, not repeated proof that
-    # platform-wide rules remained unchanged. That limitation stays explicit.
+    # One policy receipt is not proof of continuous rule invariance.
     return True
 
 
-def checked_capture(evidence):
-    """Bind selection to the declared experiment; missing rounds stay missing.
+def checked_capture(evidence, *, expected_config=None):
+    """Reconstruct the declared population. Recorded metadata is NOT authority.
 
-    Replaying selection is an integrity check, not a signature on the capture.
-    The retained archive's external digest supplies its independent byte anchor.
+    A new experiment must pass its separately preregistered expected_config.
+    Omitting it deliberately selects the original experiment, not the manifest.
     """
     config = json.loads((evidence.root/'config.json').read_text())
-    expected = experiment_config(config.get('cycles'))
+    expected = (experiment_config(config.get('cycles')) if expected_config is None
+                else checked_protocol(expected_config))
     canonical = lambda value: json.dumps(value, sort_keys=True, separators=(',', ':'))
     if canonical(config) != canonical(expected):
         raise ValueError('capture configuration differs from the predeclared experiment')
@@ -100,21 +99,21 @@ def checked_capture(evidence):
         if record['status'] != 200 or record['error'] is not None:
             return record, None
         return evidence.read(label)
-    selected, tokens = select_from_definitions(retained)
+    dates = tuple(date.fromisoformat(d) for d in expected['dates'])
+    selected, tokens = select_from_definitions(retained, dates=dates)
     supplied = json.loads((evidence.root/'selection.json').read_text())
     if canonical(supplied) != canonical(selected):
         raise ValueError('selection differs from fixed titles/native tokens in original definitions')
-    allowed_books = {f'book:{i}:{t}' for i in range(config['cycles']) for t in tokens}
+    allowed_books = {f'book:{i}:{t}' for i in range(expected['cycles']) for t in tokens}
     observed_books = {k for k in evidence.by_label if k.startswith('book:')}
     if not observed_books <= allowed_books:
         raise ValueError('undeclared cycle/token observation')
-    # Subsets are permitted only as missing evidence, never a shorter denominator.
-    return selected, config['cycles']
+    return selected, expected['cycles']
 
 
-def analyze_capture(root: Path):
+def analyze_capture(root: Path, *, expected_config=None):
     evidence = Evidence(root)
-    selection, cycles = checked_capture(evidence)
+    selection, cycles = checked_capture(evidence, expected_config=expected_config)
     result = {'authority':'RESEARCH_PROPOSAL_ONLY', 'evidence_identity':evidence.digest,
         'scope':'RETROSPECTIVE_BOUNDED_CAPTURE_NOT_CONTINUOUS_OR_EXECUTED',
         'realized_profit':None, 'model_calls':0, 'families':[], 'selection_exclusions':selection['exclusions']}
@@ -149,7 +148,6 @@ def analyze_capture(root: Path):
                 _, page=evidence.read('before:'+d['slug'])
                 for m in page[0]['markets']:markets[str(m['id'])]=m
             selected_markets=[markets[s['marketId']] for s in exported['sources']]
-            # This interpretation is diagnostic only. Missing/conflicting rates block it.
             rates=[nominal_rate(m) for m in selected_markets]
             report['nominal_rates']=[str(r) if r is not None else None for r in rates]
             for cycle in range(cycles):
