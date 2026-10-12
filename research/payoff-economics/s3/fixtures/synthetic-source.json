@@ -1,0 +1,221 @@
+{
+  "corpus": {
+    "sourceSetIdentity": "sha256:f35cb4ed38c57f00fcbdf305be7505e2b60c1a0aa9693aaf6a34bfc9d83ca4d5",
+    "eligibleSourceCount": 1,
+    "excludedSourceCount": 0,
+    "listings": [
+      {
+        "listingRef": "fixture:threshold-0",
+        "venueId": "fixture",
+        "venueInstrumentId": "condition-0",
+        "title": "Synthetic threshold 25",
+        "description": "TEST FIXTURE, NOT REAL MARKET",
+        "status": "OPEN",
+        "mechanism": "CENTRALIZED_ORDER_BOOK",
+        "closesAt": "2026-10-20T23:59:59.999Z",
+        "rulesText": "Resolves Yes if station Alpha daily maximum temperature exceeds 25 Celsius as reported by \"https://example.test/Observation\" from 2026-10-20T00:00:00.000Z through 2026-10-20T23:59:59.999Z. Otherwise resolves No.",
+        "rulesTextPosture": "COMPLETE",
+        "rulesTextSourceCharacterCount": 211,
+        "outcomes": [
+          {
+            "venueOutcomeId": "token-0-yes",
+            "label": "Yes",
+            "indicativePrice": "0.5"
+          },
+          {
+            "venueOutcomeId": "token-0-no",
+            "label": "No",
+            "indicativePrice": "0.5"
+          }
+        ],
+        "priceScale": "1000000",
+        "quantityScale": "1000000",
+        "minPriceTick": "1000",
+        "sourceKind": "VERIFIED_FIXTURE",
+        "sourceReceivedAt": "2026-10-12T00:00:00.000Z",
+        "sourceRawHash": "sha256:b24ae42500a73790e83d6597e4fc67e76cfd01076cb1d5eea6757fb9f83d8dd5",
+        "protocolIdentity": "fixture:v1"
+      },
+      {
+        "listingRef": "fixture:threshold-1",
+        "venueId": "fixture",
+        "venueInstrumentId": "condition-1",
+        "title": "Synthetic threshold 30",
+        "description": "TEST FIXTURE, NOT REAL MARKET",
+        "status": "OPEN",
+        "mechanism": "CENTRALIZED_ORDER_BOOK",
+        "closesAt": "2026-10-20T23:59:59.999Z",
+        "rulesText": "Resolves Yes if station Alpha daily maximum temperature exceeds 30 Celsius as reported by \"https://example.test/Observation\" from 2026-10-20T00:00:00.000Z through 2026-10-20T23:59:59.999Z. Otherwise resolves No.",
+        "rulesTextPosture": "COMPLETE",
+        "rulesTextSourceCharacterCount": 211,
+        "outcomes": [
+          {
+            "venueOutcomeId": "token-1-yes",
+            "label": "Yes",
+            "indicativePrice": "0.5"
+          },
+          {
+            "venueOutcomeId": "token-1-no",
+            "label": "No",
+            "indicativePrice": "0.5"
+          }
+        ],
+        "priceScale": "1000000",
+        "quantityScale": "1000000",
+        "minPriceTick": "1000",
+        "sourceKind": "VERIFIED_FIXTURE",
+        "sourceReceivedAt": "2026-10-12T00:00:00.000Z",
+        "sourceRawHash": "sha256:e7f82200569e7c9eccf0dba7acfc84a2c03f0d09f35f89bd00f6213c7bb2fb07",
+        "protocolIdentity": "fixture:v1"
+      }
+    ]
+  },
+  "predicates": [
+    {
+      "schemaVersion": "pmh.world-predicate.v1",
+      "predicateId": "sha256:beff828ec0f2506395ad03f2c80b3734d7ded18915030ecf5706f9c0f97b8ab5",
+      "semantic": {
+        "operatorKind": "THRESHOLD",
+        "subjects": [
+          {
+            "canonicalLabel": "station Alpha",
+            "entityType": "PLACE"
+          }
+        ],
+        "verbPhrase": "daily maximum temperature",
+        "timeScope": {
+          "startsAt": "2026-10-20T00:00:00.000Z",
+          "endsAt": "2026-10-20T23:59:59.999Z",
+          "precision": "EXACT_INTERVAL"
+        },
+        "parameters": [
+          {
+            "name": "comparison",
+            "value": "GT",
+            "unit": null
+          },
+          {
+            "name": "source",
+            "value": "https://example.test/Observation",
+            "unit": null
+          },
+          {
+            "name": "threshold",
+            "value": "25",
+            "unit": "Celsius"
+          }
+        ],
+        "polarity": "POSITIVE"
+      },
+      "observability": "DERIVED",
+      "epistemicPosture": "EVIDENCE_BOUND_PROPOSITION",
+      "evidenceBindings": [
+        {
+          "listingRef": "fixture:threshold-0",
+          "nodeId": "sha256:a01cea6c47f5cb94d733c448e60bf67db9fb3ad9eb60a5a750ec07067c70489f",
+          "worldFacetId": "sha256:57d2195fef4ff72a7d466543231da72f23f252350f1ab0b428db86846c2c0dea",
+          "sourceRawHash": "sha256:b24ae42500a73790e83d6597e4fc67e76cfd01076cb1d5eea6757fb9f83d8dd5",
+          "protocolIdentity": "fixture:v1"
+        }
+      ],
+      "ambiguityNotes": [],
+      "counterworlds": [],
+      "source": {
+        "sourceOntologyIdentities": [
+          "sha256:fcdc0a8c70cd435c9ae6bb6a7b22f905edfba2ea8f272eef9372a1fde891a497"
+        ],
+        "sourceSnapshotIdentities": [
+          "sha256:fd092f8a22b954e3908fdef0fb7473a9a224f2da982ec1830fcb57efd8e408f3"
+        ],
+        "sourceAgentRunIds": [
+          "sha256:564a9150cf4850f126798541608983bcfbdba137a0cd4f01d00bb01081a1022d"
+        ],
+        "sourceToolEffectIds": []
+      },
+      "proposedAt": "2026-10-12T00:00:00.000Z",
+      "authority": "WORLD_PREDICATE_RESEARCH_ONLY",
+      "semanticDecisionAuthority": false,
+      "probabilityAuthority": false,
+      "certificateAuthority": false,
+      "executionAuthority": false,
+      "externalWriteAuthority": false,
+      "valueMovingAuthority": false,
+      "artifactHash": "sha256:e3eec9887bab735b0203176060debb617148a9f340ec1a9c2657e52674053e2d"
+    },
+    {
+      "schemaVersion": "pmh.world-predicate.v1",
+      "predicateId": "sha256:5ebe3b1428c05417381c499ee36d516fd417439ab2bf037752a44d1636751ca2",
+      "semantic": {
+        "operatorKind": "THRESHOLD",
+        "subjects": [
+          {
+            "canonicalLabel": "station Alpha",
+            "entityType": "PLACE"
+          }
+        ],
+        "verbPhrase": "daily maximum temperature",
+        "timeScope": {
+          "startsAt": "2026-10-20T00:00:00.000Z",
+          "endsAt": "2026-10-20T23:59:59.999Z",
+          "precision": "EXACT_INTERVAL"
+        },
+        "parameters": [
+          {
+            "name": "comparison",
+            "value": "GT",
+            "unit": null
+          },
+          {
+            "name": "source",
+            "value": "https://example.test/Observation",
+            "unit": null
+          },
+          {
+            "name": "threshold",
+            "value": "30",
+            "unit": "Celsius"
+          }
+        ],
+        "polarity": "POSITIVE"
+      },
+      "observability": "DERIVED",
+      "epistemicPosture": "EVIDENCE_BOUND_PROPOSITION",
+      "evidenceBindings": [
+        {
+          "listingRef": "fixture:threshold-1",
+          "nodeId": "sha256:0bec7f50f7dc1bbbc7ecb816e5ff86058c6db0e8f015088e9fb9ca5e8f4e0936",
+          "worldFacetId": "sha256:d6affe4616ab6f6486c65ac765c8678eb188f0b7c9384780f695940658a0e323",
+          "sourceRawHash": "sha256:e7f82200569e7c9eccf0dba7acfc84a2c03f0d09f35f89bd00f6213c7bb2fb07",
+          "protocolIdentity": "fixture:v1"
+        }
+      ],
+      "ambiguityNotes": [],
+      "counterworlds": [],
+      "source": {
+        "sourceOntologyIdentities": [
+          "sha256:fcdc0a8c70cd435c9ae6bb6a7b22f905edfba2ea8f272eef9372a1fde891a497"
+        ],
+        "sourceSnapshotIdentities": [
+          "sha256:fd092f8a22b954e3908fdef0fb7473a9a224f2da982ec1830fcb57efd8e408f3"
+        ],
+        "sourceAgentRunIds": [
+          "sha256:564a9150cf4850f126798541608983bcfbdba137a0cd4f01d00bb01081a1022d"
+        ],
+        "sourceToolEffectIds": []
+      },
+      "proposedAt": "2026-10-12T00:00:00.000Z",
+      "authority": "WORLD_PREDICATE_RESEARCH_ONLY",
+      "semanticDecisionAuthority": false,
+      "probabilityAuthority": false,
+      "certificateAuthority": false,
+      "executionAuthority": false,
+      "externalWriteAuthority": false,
+      "valueMovingAuthority": false,
+      "artifactHash": "sha256:7f457b182fe5d3512b817dd02927ff20fa39b2d0a9deb5be7742fb27e5b97499"
+    }
+  ],
+  "listingRefs": [
+    "fixture:threshold-0",
+    "fixture:threshold-1"
+  ]
+}

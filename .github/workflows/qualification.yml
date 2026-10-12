@@ -28,6 +28,10 @@ jobs:
       - run: pnpm run build
       - run: pnpm run test
       - run: node research/payoff-economics/offline/run.mjs
+      - name: Recompile source through the actual semantic export CLI
+        run: |
+          packages/control-plane/node_modules/.bin/tsx research/payoff-economics/s3/export.ts research/payoff-economics/s3/fixtures/synthetic-source.json "$RUNNER_TEMP/semantic-export.json"
+          node --input-type=module -e 'import fs from "node:fs"; import assert from "node:assert/strict"; assert.deepEqual(JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/semantic-export.json")), JSON.parse(fs.readFileSync("research/payoff-economics/s3/fixtures/synthetic-export.json")));'
       - name: Tests cannot rewrite tracked source or historical evidence
         run: git diff --exit-code
   research:
@@ -45,6 +49,7 @@ jobs:
           python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
       - run: python -m unittest discover -s research/payoff-economics/s1 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/s2 -p 'test_*.py' -v
+      - run: python -m unittest discover -s research/payoff-economics/s3 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/tests -v
       - name: Research cannot mutate production sources
         run: git diff --exit-code -- packages apps pnpm-lock.yaml package.json

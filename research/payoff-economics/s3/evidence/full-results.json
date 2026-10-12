@@ -1,0 +1,111 @@
+[
+  {
+    "check": "check",
+    "command": [
+      "pnpm",
+      "run",
+      "check"
+    ],
+    "code": 0,
+    "seconds": 21.449,
+    "log_sha256": "ec0eefdfa35b97289e832a18e1f56445e91210a273a16a52726ea86d18eee831"
+  },
+  {
+    "check": "build",
+    "command": [
+      "pnpm",
+      "run",
+      "build"
+    ],
+    "code": 0,
+    "seconds": 2.28,
+    "log_sha256": "483d6beea106c3f3d314f5350f2d9830bbfc4c2683b12e4d6bbde27763809c16"
+  },
+  {
+    "check": "test",
+    "command": [
+      "pnpm",
+      "run",
+      "test"
+    ],
+    "code": 0,
+    "seconds": 57.391,
+    "log_sha256": "c2ca62d5343c71eed81e9336201b848bfb1be75df66e2fa6daef75375d0ae0a5"
+  },
+  {
+    "check": "s1",
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "research/payoff-economics/s1",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "code": 0,
+    "seconds": 1.392,
+    "log_sha256": "69de4eb9aa556f15a7bdfbff43a2c1c83aac6a04222faa649a01404ebdf23f69"
+  },
+  {
+    "check": "s2",
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "research/payoff-economics/s2",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "code": 0,
+    "seconds": 1.225,
+    "log_sha256": "aaf6d92dcf51bd51d8d383b3a466cc65e5705c5a9a862c505d9b743fd32fb11d"
+  },
+  {
+    "check": "s3",
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "research/payoff-economics/s3",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "code": 0,
+    "seconds": 0.927,
+    "log_sha256": "40309f9e8eb9c27e257add72e208b45c4c90760ff023d0b37521fc7b1930ef05"
+  },
+  {
+    "check": "offline",
+    "command": [
+      "node",
+      "research/payoff-economics/offline/run.mjs"
+    ],
+    "code": 0,
+    "seconds": 1.218,
+    "log_sha256": "ab8216be11762eb9153a105ec720ebcdebb38657f8671f21724b4598a45393e9"
+  },
+  {
+    "check": "patch",
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "research/payoff-economics/tests",
+      "-v"
+    ],
+    "code": 0,
+    "seconds": 0.668,
+    "log_sha256": "1a87cc469194b555e57d786c81e7fd70ae3b4efa7bdc3be33c4eea9a7422a2e0"
+  }
+]

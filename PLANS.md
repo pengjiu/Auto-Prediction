@@ -1,5 +1,20 @@
 # Plans
 
+## Semantic precision candidate (2026-10-12)
+
+The operator approved the next correctness-first step. The isolated
+`codex/mutation-semantic-binding` candidate is governed by
+`plans/semantic-binding-validation.md`. Main's lexical exactness admitted six
+wrong-condition counterexamples. The candidate consumes complete supported
+conditions, preserves polarity and numerical observation dimensions, rejects
+stale exact projections, and connects source-recompiled numeric payment tables
+to the unchanged S1/same-depth S2 research controls. No model or trade is called.
+A retrospective syntax-only census of 16,611 retained market descriptions found
+zero supported complete rule envelopes; do not present synthetic positive tests
+as real-market coverage or profit. Real rule-family/exception admission remains
+the next unresolved observation. Candidate decision is PARTIAL_ADOPT for review,
+not automatic mainline adoption; see research/payoff-economics/s3/README.md.
+
 ## Selected research mainline continuation (2026-10-12)
 
 The operator authorized review, repair and merge of all unmerged research work.

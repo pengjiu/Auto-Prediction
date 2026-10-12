@@ -14,7 +14,7 @@ import {
 const at = "2026-08-14T00:00:00.000Z";
 const hash = (label: string) => hashCanonical({ label });
 
-function fixture(exact = true) {
+function fixture(exact = true, inverted = false) {
   const predicate = (label: string) => buildWorldPredicateArtifact({
     semantic: { operatorKind: "OCCURRENCE",
       subjects: [{ canonicalLabel: "Republican Party", entityType: "ORGANIZATION" }],
@@ -62,16 +62,17 @@ function fixture(exact = true) {
       listing("fixture:national", "0.507", "0.494")] });
   const projection = (predicateArtifact: typeof alaska, listingRef: string): SettlementProjection => {
     const predicateId = predicateArtifact.predicateId;
+    const inverse = inverted && predicateArtifact.predicateId === alaska.predicateId;
     return buildSettlementProjection({
       listing: { listingRef, listingHash: hash(`${listingRef}:listing`), venueId: "fixture",
         venueInstrumentId: listingRef, protocolIdentity: "fixture:v1",
         sourceRawHash: hash("shared-raw"), sourceReceivedAt: at },
       predicateArtifacts: [predicateArtifact], predicateIds: [predicateId],
       truthStates: [{ stateId: "F", truthByPredicateId: { [predicateId]: false },
-        listingTruth: exact ? false : null, disposition: exact ? "RESOLVES" as const :
+        listingTruth: exact ? inverse : null, disposition: exact ? "RESOLVES" as const :
           "UNRESOLVED" as const, rationale: "fixture", ruleEvidenceHashes: [hash("rule")] },
       { stateId: "T", truthByPredicateId: { [predicateId]: true },
-        listingTruth: exact ? true : null, disposition: exact ? "RESOLVES" as const :
+        listingTruth: exact ? !inverse : null, disposition: exact ? "RESOLVES" as const :
           "UNRESOLVED" as const, rationale: "fixture", ruleEvidenceHashes: [hash("rule")] }],
       mappingPosture: exact ? "TOTAL_EXACT" as const : "VOIDABLE_OVERRIDE" as const,
       ambiguityNotes: exact ? [] : ["venue discretion"],
@@ -119,6 +120,16 @@ describe("world relation shadow trade hypotheses", () => {
         "NON_POSITIVE_INDICATIVE_FAILURE_BUDGET"],
       guaranteedProfit: false, verifierEligible: false,
     });
+  });
+
+  it("uses projected listing truth rather than predicate truth for inverse settlement", () => {
+    const work = fixture(true, true);
+    const [result] = compileWorldRelationShadowTradeHypotheses({ experiment: work.experiment,
+      inputRevision: work.assignment.inputRevision, corpus: work.corpus, projections: work.projections });
+    expect(result!.adverseListingStateId).toBe("FF");
+    expect(result!.legs.map(leg => leg.outcome)).toEqual(["TRUE", "TRUE"]);
+    expect(result!.payoffShape.totalIndicativeCostUnits).toBe("977000");
+    expect(result!.guaranteedProfit).toBe(false);
   });
 
   it("keeps non-exact settlement mapping as an independent blocker", () => {

@@ -39,7 +39,7 @@ export type WorldRelationShadowTradeHypothesis = Readonly<{
     listingRef: string;
     projectionId: Hash;
     predicateId: Hash;
-    adverseTruth: boolean;
+    adverseTruth: boolean; // adverse LISTING truth after the settlement projection
     outcome: "TRUE" | "FALSE";
     indicativeAskUnits: string | null;
     priceScale: string;
@@ -161,7 +161,8 @@ export function compileWorldRelationShadowTradeHypotheses(input: Readonly<{
   if (projections.some((item) => item.predicateIds.length !== 1)) {
     globalBlockers.push("PROJECTION_NOT_SINGLE_PREDICATE");
   }
-  if (projections.some((item) => item.compilerAdmission !== "EXACT_BINARY_ELIGIBLE")) {
+  if (projections.some((item) => item.compilerAdmission !== "EXACT_BINARY_ELIGIBLE" ||
+      item.truthStates.length !== 2 || new Set(item.truthStates.map(state => state.listingTruth)).size !== 2)) {
     globalBlockers.push("NON_EXACT_SETTLEMENT_PROJECTION");
   }
   const candidates = new Map<string, WorldRelationShadowTradeHypothesis>();
@@ -172,7 +173,10 @@ export function compileWorldRelationShadowTradeHypotheses(input: Readonly<{
       const quoteListing = quoteListingByRef.get(projection.listing.listingRef);
       if (predicateId === undefined || semanticListing === undefined ||
           adverse.truthByPredicateId[predicateId] === undefined) return [];
-      const adverseTruth = adverse.truthByPredicateId[predicateId]!;
+      const predicateTruth = adverse.truthByPredicateId[predicateId]!;
+      const settlement = projection.truthStates.find(state => state.stateId === (predicateTruth ? "T" : "F"));
+      if (settlement?.disposition !== "RESOLVES" || typeof settlement.listingTruth !== "boolean") return [];
+      const adverseTruth = settlement.listingTruth;
       const outcome = adverseTruth ? "FALSE" as const : "TRUE" as const;
       const price = quoteListing === undefined ? null : outcomePrice(quoteListing, outcome);
       const observedListing = quoteListing ?? semanticListing;

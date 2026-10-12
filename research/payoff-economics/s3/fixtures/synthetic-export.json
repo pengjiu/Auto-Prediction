@@ -1,0 +1,189 @@
+{
+  "schemaVersion": "pmh.numeric-payoff-research.v1",
+  "compilerIdentity": "sha256:cdad21947aba8a43d9c5a01ec8ed15627c713c72fc4134cf6422588fe0822acb",
+  "coverage": "ASSUMED_STATES_ONLY",
+  "authority": "RESEARCH_EXPORT_ONLY",
+  "assumption": "SHARED_OBSERVATION_AND_CONSISTENT_RESOLUTION",
+  "certificateAuthority": false,
+  "executionAuthority": false,
+  "corpusIdentity": "sha256:fd092f8a22b954e3908fdef0fb7473a9a224f2da982ec1830fcb57efd8e408f3",
+  "sources": [
+    {
+      "listingRef": "fixture:threshold-0",
+      "listingHash": "sha256:334993e67c7cc8141427aaf22590acf90e6b861c82e54087e33375cab76f3f4d",
+      "sourceRawHash": "sha256:b24ae42500a73790e83d6597e4fc67e76cfd01076cb1d5eea6757fb9f83d8dd5",
+      "sourceReceivedAt": "2026-10-12T00:00:00.000Z",
+      "protocolIdentity": "fixture:v1",
+      "predicateId": "sha256:beff828ec0f2506395ad03f2c80b3734d7ded18915030ecf5706f9c0f97b8ab5",
+      "predicateArtifactHash": "sha256:f4d441f96d3525461467ad3b9318ada1c432e85371a0332612cb5f175bf0160a",
+      "projectionHash": "sha256:c4b1be109bb2fcda56875f18954db01fe3cc6b8a8ebbfa28a33c73b1b849fb05",
+      "condition": {
+        "atom": {
+          "kind": "NUMBER",
+          "subject": "station Alpha",
+          "metric": "daily maximum temperature",
+          "comparison": "GT",
+          "threshold": "25",
+          "unit": "Celsius",
+          "source": "https://example.test/Observation",
+          "startsAt": "2026-10-20T00:00:00.000Z",
+          "endsAt": "2026-10-20T23:59:59.999Z"
+        },
+        "negated": false
+      }
+    },
+    {
+      "listingRef": "fixture:threshold-1",
+      "listingHash": "sha256:81c49ec940846617188d5887aab964d33d85eb1ea50bbbf391bd920e23e550c0",
+      "sourceRawHash": "sha256:e7f82200569e7c9eccf0dba7acfc84a2c03f0d09f35f89bd00f6213c7bb2fb07",
+      "sourceReceivedAt": "2026-10-12T00:00:00.000Z",
+      "protocolIdentity": "fixture:v1",
+      "predicateId": "sha256:5ebe3b1428c05417381c499ee36d516fd417439ab2bf037752a44d1636751ca2",
+      "predicateArtifactHash": "sha256:80b2f2016694779fb41871ad49a0836a8cf7bc41d25bb0f730e5ad832c4a19da",
+      "projectionHash": "sha256:784bbec958581c6e5397be81770556604e1ea4fb019647b0201ce1fef9977d10",
+      "condition": {
+        "atom": {
+          "kind": "NUMBER",
+          "subject": "station Alpha",
+          "metric": "daily maximum temperature",
+          "comparison": "GT",
+          "threshold": "30",
+          "unit": "Celsius",
+          "source": "https://example.test/Observation",
+          "startsAt": "2026-10-20T00:00:00.000Z",
+          "endsAt": "2026-10-20T23:59:59.999Z"
+        },
+        "negated": false
+      }
+    }
+  ],
+  "states": [
+    "below",
+    "at_0",
+    "between_0",
+    "at_1",
+    "above"
+  ],
+  "cells": [
+    {
+      "id": "below",
+      "numerator": "24",
+      "denominator": "1"
+    },
+    {
+      "id": "at_0",
+      "numerator": "25",
+      "denominator": "1"
+    },
+    {
+      "id": "between_0",
+      "numerator": "55",
+      "denominator": "2"
+    },
+    {
+      "id": "at_1",
+      "numerator": "30",
+      "denominator": "1"
+    },
+    {
+      "id": "above",
+      "numerator": "31",
+      "denominator": "1"
+    }
+  ],
+  "assets": [
+    {
+      "id": "token-0-yes",
+      "venue": "fixture",
+      "listingRef": "fixture:threshold-0",
+      "instrumentId": "condition-0",
+      "outcome": "YES",
+      "payoffs": {
+        "below": "0",
+        "at_0": "0",
+        "between_0": "1",
+        "at_1": "1",
+        "above": "1"
+      },
+      "stressPayoffs": {
+        "independent_0": "0",
+        "independent_1": "1",
+        "independent_2": "0",
+        "independent_3": "1",
+        "all_half": "0.5"
+      }
+    },
+    {
+      "id": "token-0-no",
+      "venue": "fixture",
+      "listingRef": "fixture:threshold-0",
+      "instrumentId": "condition-0",
+      "outcome": "NO",
+      "payoffs": {
+        "below": "1",
+        "at_0": "1",
+        "between_0": "0",
+        "at_1": "0",
+        "above": "0"
+      },
+      "stressPayoffs": {
+        "independent_0": "1",
+        "independent_1": "0",
+        "independent_2": "1",
+        "independent_3": "0",
+        "all_half": "0.5"
+      }
+    },
+    {
+      "id": "token-1-yes",
+      "venue": "fixture",
+      "listingRef": "fixture:threshold-1",
+      "instrumentId": "condition-1",
+      "outcome": "YES",
+      "payoffs": {
+        "below": "0",
+        "at_0": "0",
+        "between_0": "0",
+        "at_1": "0",
+        "above": "1"
+      },
+      "stressPayoffs": {
+        "independent_0": "0",
+        "independent_1": "0",
+        "independent_2": "1",
+        "independent_3": "1",
+        "all_half": "0.5"
+      }
+    },
+    {
+      "id": "token-1-no",
+      "venue": "fixture",
+      "listingRef": "fixture:threshold-1",
+      "instrumentId": "condition-1",
+      "outcome": "NO",
+      "payoffs": {
+        "below": "1",
+        "at_0": "1",
+        "between_0": "1",
+        "at_1": "1",
+        "above": "0"
+      },
+      "stressPayoffs": {
+        "independent_0": "1",
+        "independent_1": "1",
+        "independent_2": "0",
+        "independent_3": "0",
+        "all_half": "0.5"
+      }
+    }
+  ],
+  "stressStates": [
+    "independent_0",
+    "independent_1",
+    "independent_2",
+    "independent_3",
+    "all_half"
+  ],
+  "stressAssumption": "INDEPENDENT_BINARY_RESOLUTIONS_PLUS_ALL_HALF_NOT_EXHAUSTIVE",
+  "exportId": "sha256:4715e10ead8640ecb311cc154fa12dceb9ed991ec85d782c2310b7cac8849b39"
+}
