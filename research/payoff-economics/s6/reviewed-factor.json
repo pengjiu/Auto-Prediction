@@ -1,0 +1,107 @@
+{
+  "schema": "s6.reviewed-factor.v1",
+  "scope": [
+    {
+      "id": "32224",
+      "title": "Which party will win the Senate in 2026?",
+      "description": "This market will resolve according to the party that wins control of the United States Senate in the 2026 United States midterm election.\n\nA party wins control of the United States Senate if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the party that wins control of the chamber is the party that wins half of the voting seats and holds the Vice Presidency. If the outcome remains ambiguous after applying the above criteria, the chamber will be deemed controlled by the party with which the first selected President Pro Tempore of the Congress that convenes after the specified election is affiliated.\n\nThe following rules govern the counting of seats for determining which party wins control of the chamber.\n\nAll regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026 are included. Runoffs for qualifying elections will determine attribution of the relevant seat, even if they take place after November 2026. Vacant seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected.\n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, a party are included in that party’s count. If the caucus decisions of members of the Senate elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
+      "endDate": "2026-11-04T04:59:00Z",
+      "resolutionSource": "",
+      "version": "v1",
+      "negRisk": true,
+      "negRiskAugmented": true,
+      "members": [
+        {
+          "id": "562793",
+          "question": "Will the Democratic Party control the Senate after the 2026 Midterm elections?",
+          "slug": "will-the-democratic-party-control-the-senate-after-the-2026-midterm-elections",
+          "createdAt": "2025-07-11T19:22:46.116532Z",
+          "endDate": "2026-11-04T04:59:00Z",
+          "groupItemTitle": "Democratic Party",
+          "conditionId": "0x307a1ed89d60b61002dd5bbf00e1408c5ed2ab3fcdb056191ca7ef9bc34d38f3",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"113287701564209339913693347405685749986285999146352375265161592243948562084773\", \"107118433685650702332040991454078902188473746599223732907923581436160160612542\"]",
+          "resolutionSource": "",
+          "version": "v1",
+          "negRisk": true,
+          "negRiskOther": false
+        }
+      ],
+      "historical_source": "S2_FOLLOWUP_2026_10_11_NOT_FRESH_QUOTE"
+    },
+    {
+      "id": "32225",
+      "title": "Which party will win the House in 2026?",
+      "description": "This market will resolve according to the party that wins control of the United States House of Representatives in the 2026 United States midterm election.\n\nA party wins control of the United States House of Representatives if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the chamber will be deemed controlled by the party with which the first elected Speaker of the House of the Congress that convenes after the 2026 midterm election is affiliated.\n\nThe following rules govern the counting of seats for determining which party wins control of the chamber.\n\nAll House elections in the 2026 United States midterm election that elect voting members and determine representation in the upcoming 120th Congress are included. Where a seat is decided by a runoff, the runoff result will determine attribution of that seat.\n\nSeats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected.\n\nHouse members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, a party are included in that party’s count. If the caucus decisions of members of the House elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
+      "endDate": "2026-11-04T04:59:00Z",
+      "resolutionSource": "",
+      "version": "v1",
+      "negRisk": true,
+      "negRiskAugmented": true,
+      "members": [
+        {
+          "id": "562802",
+          "question": "Will the Democratic Party control the House after the 2026 Midterm elections?",
+          "slug": "will-the-democratic-party-control-the-house-after-the-2026-midterm-elections",
+          "createdAt": "2025-07-11T19:29:37.755178Z",
+          "endDate": "2026-11-04T04:59:00Z",
+          "groupItemTitle": "Democratic Party",
+          "conditionId": "0xd5d9fc47718bd553592d126b1fa5e87183d27f3936975b0c04cc0f2dec1f1bb4",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"83247781037352156539108067944461291821683755894607244160607042790356561625563\", \"33156410999665902694791064431724433042010245771106314074312009703157423879038\"]",
+          "resolutionSource": "",
+          "version": "v1",
+          "negRisk": true,
+          "negRiskOther": false
+        }
+      ],
+      "historical_source": "S2_FOLLOWUP_2026_10_11_NOT_FRESH_QUOTE"
+    },
+    {
+      "id": "32228",
+      "title": "Balance of Power: 2026 Midterms",
+      "description": "This market will resolve according to the party that wins control of the United States Senate and the party that wins control of the United States House of Representatives in the 2026 United States midterm election.\n\nA party wins control of the United States Senate if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the party that wins control of the chamber is the party that wins half of the voting seats and holds the Vice Presidency. If the outcome remains ambiguous after applying the above criteria, the chamber will be deemed controlled by the party with which the first selected President Pro Tempore of the Congress that convenes after the specified election is affiliated.\n\nA party wins control of the United States House of Representatives if it wins a majority of the chamber’s voting seats. If no party wins a majority of voting seats, the chamber will be deemed controlled by the party with which the first elected Speaker of the House of the Congress that convenes after the 2026 midterm election is affiliated.\n\nThe following rules govern the counting of seats for determining which party wins control of the chambers.\n\nFor determining Senate control, all regular and special Senate elections that determine representation in the upcoming 120th Congress and are scheduled to take place in November 2026 as of October 31, 2026 are included. Vacant Senate seats for which no election or special election to fill the seat is scheduled to take place in November 2026 as of October 31, 2026 will be treated as held by the party affiliation of the most recent member to hold that seat. For determining House control, all House elections in the 2026 United States midterm election that elect voting members and determine representation in the upcoming 120th Congress are included. Where a Senate or House seat is decided by a runoff, the runoff result will determine attribution of that seat, even if it takes place after November 2026.\n\nFor seats contested in the specified election, seats are attributed to the party under which the member was elected. If a member-elect changes party affiliation, or vacates their seat, between election day and the formal organization of Congress, the seat is attributed to the party under which the member was elected. \n\nFor seats not contested in the specified election, seats are attributed to the party that holds the seat as of the date of the election. If a current sitting member of the U.S. Senate who is not up for election changes party affiliation or vacates their seat after the date of the election, the seat is attributed to the party under which the member was affiliated at the time of the election.\n\nSenate and House members elected as independents who formally caucus with, or, for newly elected members, who announce their intent to caucus with, a party are included in that party’s count. If the caucus decisions of members of the Senate or House elected as independents cannot be determined on the date of the election, this market may remain open until the earlier of (i) an announcement from the relevant members of their intents to caucus, or (ii) January 4th, 11:59 PM ET of the following calendar year. If no such announcement is made by January 4th, 11:59 PM ET of the following calendar year, the member will not count towards the seat count of any party.\n\nThe resolution sources for this market will be official information from relevant state electoral authorities, the United States Congress, and a consensus of credible reporting.",
+      "endDate": "2026-11-04T04:59:00Z",
+      "resolutionSource": "",
+      "version": "v1",
+      "negRisk": true,
+      "negRiskAugmented": false,
+      "members": [
+        {
+          "id": "562828",
+          "question": "2026 Balance of Power: D Senate, D House",
+          "slug": "2026-balance-of-power-d-senate-d-house-949",
+          "createdAt": "2025-07-11T20:47:53.368542Z",
+          "endDate": "2026-11-04T04:59:00Z",
+          "groupItemTitle": "Democrats Sweep",
+          "conditionId": "0x16c63b7cc37f012b9f59ee164ec03877914c701d06d48291ae8d6fc08a088b0d",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"34722410608062854697106861099776685947172185964394483545370684749662285977831\", \"24483563228660028121020430722896740519524131851526579619586176931221901842798\"]",
+          "resolutionSource": "",
+          "version": "v1",
+          "negRisk": true,
+          "negRiskOther": false
+        },
+        {
+          "id": "562829",
+          "question": "2026 Balance of Power: D Senate, R House",
+          "slug": "2026-balance-of-power-d-senate-r-house-692",
+          "createdAt": "2025-07-11T20:47:54.232841Z",
+          "endDate": "2026-11-04T04:59:00Z",
+          "groupItemTitle": "D Senate, R House",
+          "conditionId": "0x0808de4f0cfd47947f2d1be51f9a9c52ea0fec76f73a75cfbe79ddec98d8a908",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"70997927349469817841862065582625658840347600365813612622959588796331622340305\", \"45720947308530468765087874228584729250108790729495800420104302263408503667446\"]",
+          "resolutionSource": "",
+          "version": "v1",
+          "negRisk": true,
+          "negRiskOther": false
+        }
+      ],
+      "historical_source": "S2_FOLLOWUP_2026_10_11_NOT_FRESH_QUOTE"
+    }
+  ],
+  "review": "IN_SESSION_ASSISTANT_CONDITIONAL_NOT_INDEPENDENT",
+  "model": "SENATE_HOUSE_JOINT_MARGINAL_WITH_OTHER",
+  "certificateAuthority": false
+}
