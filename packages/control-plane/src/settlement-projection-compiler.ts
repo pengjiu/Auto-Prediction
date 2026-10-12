@@ -8,22 +8,24 @@ import type { MarketOntologySnapshot } from "./market-ontology.js";
 import type { DiscoveryCatalogListing } from "./types.js";
 import type { OperationalStorageProjection } from "./types.js";
 import {
-  assertWorldRelationEntityRoleAssertion,
   type WorldRelationEntityRoleAssertion,
 } from "./world-relation-entity-role-evidence.js";
 import {
+  assertWorldPredicateArtifact,
   buildSettlementProjection,
   buildWorldPredicateArtifact,
   type SettlementProjection,
   type WorldPredicateArtifact,
 } from "./world-history-ontology.js";
 
+import { bindSettlementCondition } from "./settlement-condition.js";
+
 export const SETTLEMENT_PROJECTION_COMPILER_IDENTITY = hashCanonical({
-  schemaVersion: "pmh.first-party-settlement-projection-compiler.v2",
-  affirmativeDialect: "resolves-yes-if|if-then-resolves-yes",
-  negativeDialect: "otherwise-no|no-otherwise|and-to-no-otherwise",
-  termNormalization: "win-family|control-family",
-  supplementalEntityRoleEvidence: true,
+  schemaVersion: "pmh.first-party-settlement-projection-compiler.v3",
+  admission: "complete-condition-identity-or-exact-typed-numeric",
+  polarity: "explicit-inverse-truth-table",
+  unsupported: "research-only-no-lexical-upgrade",
+  evidence: "current-native-binding-and-complete-referenced-policy",
 });
 
 export const SETTLEMENT_PROJECTION_BLOCKERS = Object.freeze([
@@ -37,6 +39,11 @@ export const SETTLEMENT_PROJECTION_BLOCKERS = Object.freeze([
   "MISSING_AFFIRMATIVE_RESOLUTION_CLAUSE",
   "MISSING_NEGATIVE_RESOLUTION_CLAUSE",
   "PREDICATE_TERMS_NOT_GROUNDED",
+  "UNSUPPORTED_COMPLETE_RULE",
+  "UNSUPPORTED_PREDICATE_STRUCTURE",
+  "CONDITION_MISMATCH",
+  "PREDICATE_AMBIGUITY",
+  "MISSING_OR_INCOMPLETE_VENUE_POLICY",
 ] as const);
 export type SettlementProjectionBlocker =
   (typeof SETTLEMENT_PROJECTION_BLOCKERS)[number];
@@ -55,7 +62,8 @@ export type SettlementProjectionObservation = Readonly<{
   projectionArtifactHash: Hash | null;
   observedAt: string;
   compiler: "FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V1" |
-    "FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V2";
+    "FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V2" |
+    "FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V3";
   authority: "SETTLEMENT_PROJECTION_OBSERVATION_ONLY";
   semanticDecisionAuthority: false;
   probabilityAuthority: false;
@@ -104,50 +112,6 @@ const VOID_OR_DISCRETION = /\b(?:void|voided|refund|refunded|cancel(?:led|ed)?|i
 const VENUE_SETTLEMENT_DISCRETION = /\b(?:prior\s+to\s+settlement[\s\S]{0,800}(?:sole|full)\s+discretion|(?:sole|full)\s+discretion[\s\S]{0,800}(?:settlement|final\s+outcome)|full\s+discretion\s+in\s+reviewing\s+markets)\b/iu;
 const AFFIRMATIVE = /\b(?:resolve(?:s|d)?|settle(?:s|d)?)\s+(?:to\s+)?(?:the\s+)?["']?yes["']?\s+if\b|\bif\b[\s\S]{1,500}?\bthen\s+(?:this\s+)?(?:market|contract)\s+(?:resolve(?:s|d)?|settle(?:s|d)?)\s+(?:to\s+)?["']?yes["']?\b/iu;
 const NEGATIVE = /\botherwise\b[^.]{0,160}\b(?:no|resolve(?:s|d)?\s+(?:to\s+)?(?:the\s+)?["']?no)\b|\bresolve(?:s|d)?\s+(?:to\s+)?(?:the\s+)?["']?no["']?\s+(?:if|otherwise)\b|\b(?:and\s+)?to\s+["']?no["']?\s+otherwise\b/iu;
-const STOP = new Set(["will", "would", "could", "does", "the", "and", "that", "this",
-  "with", "from", "into", "than", "then", "have", "has", "had", "is", "are", "was",
-  "were", "be", "been", "being", "on", "in", "at", "to", "of", "a", "an", "or"]);
-
-function terms(value: string): readonly string[] {
-  return Object.freeze([...new Set(value.normalize("NFKC").toLowerCase()
-    .match(/[\p{L}\p{N}]+/gu)?.map((item) => {
-      if (["winner", "wins", "winning"].includes(item)) return "win";
-      if (["controls", "controlled", "controlling"].includes(item)) return "control";
-      return item;
-    }).filter((item) => item.length >= 3 && !STOP.has(item)) ?? [])]
-    .sort());
-}
-
-function grounded(predicate: WorldPredicateArtifact, listing: DiscoveryCatalogListing,
-  assertions: readonly WorldRelationEntityRoleAssertion[]): boolean {
-  const required = terms([
-    ...predicate.semantic.subjects.map((item) => item.canonicalLabel),
-    predicate.semantic.verbPhrase,
-    ...predicate.semantic.parameters.flatMap((item) => [item.name, item.value]),
-  ].join(" "));
-  const evidence = new Set(terms(`${listing.title} ${listing.rulesText ?? ""}`));
-  if (required.length > 0 && required.every((item) => evidence.has(item))) return true;
-  const subjects = new Set(terms(predicate.semantic.subjects
-    .map((item) => item.canonicalLabel).join(" ")));
-  const eventTerms = required.filter((item) => !subjects.has(item));
-  return eventTerms.length >= 2 && eventTerms.every((item) => evidence.has(item)) &&
-    (predicate.supplementalEvidenceBindings ?? []).some((binding) => {
-      if (binding.kind !== "ENTITY_ROLE_ASSERTION" ||
-          binding.listingRef !== listing.listingRef) return false;
-      return assertions.map(assertWorldRelationEntityRoleAssertion).some((assertion) =>
-        assertion.assertionId === binding.assertionId &&
-        assertion.requirementId === binding.requirementId &&
-        assertion.source.documentId === binding.sourceDocumentId &&
-        assertion.source.rawHash === binding.sourceRawHash &&
-        assertion.source.textHash === binding.sourceTextHash &&
-        assertion.disposition === "SUPPORTED" &&
-        predicate.semantic.subjects.some((subject) =>
-          subject.entityType === "ORGANIZATION" &&
-          subject.canonicalLabel.toLowerCase() ===
-            assertion.organizationLabel.toLowerCase()));
-    });
-}
-
 function exactBlockers(input: Readonly<{
   listing: DiscoveryCatalogListing;
   outcomeShape: string;
@@ -160,8 +124,12 @@ function exactBlockers(input: Readonly<{
   if (input.listing.rulesText === null || input.listing.rulesText.trim() === "") {
     blockers.push("MISSING_RULE_EVIDENCE");
   } else {
-    if (input.listing.rulesTextPosture !== undefined &&
-        input.listing.rulesTextPosture !== "COMPLETE") blockers.push("INCOMPLETE_RULE_EVIDENCE");
+    if (input.listing.rulesTextPosture !== "COMPLETE") blockers.push("INCOMPLETE_RULE_EVIDENCE");
+    if (input.listing.rulesTextSourceCharacterCount !== undefined &&
+        input.listing.rulesTextSourceCharacterCount !== null &&
+        input.listing.rulesTextSourceCharacterCount !== input.listing.rulesText.length) {
+      blockers.push("INCOMPLETE_RULE_EVIDENCE");
+    }
     if (VOID_OR_DISCRETION.test(input.listing.rulesText)) {
       blockers.push("VOID_REFUND_OR_DISCRETION_OVERRIDE");
     }
@@ -175,9 +143,14 @@ function exactBlockers(input: Readonly<{
   if (input.venuePolicyEvidence.some((item) => VENUE_SETTLEMENT_DISCRETION.test(item.text))) {
     blockers.push("VOID_REFUND_OR_DISCRETION_OVERRIDE");
   }
-  if (!grounded(input.predicate, input.listing, input.entityRoleAssertions)) {
-    blockers.push("PREDICATE_TERMS_NOT_GROUNDED");
-  }
+  if (input.predicate.ambiguityNotes.length > 0) blockers.push("PREDICATE_AMBIGUITY");
+  const requiredPolicies = (input.listing.evidenceLocators ?? [])
+    .filter((item) => item.role === "VENUE_RULE_DOCUMENT");
+  if (requiredPolicies.some((locator) => !input.venuePolicyEvidence.some((policy) =>
+    policy.locatorIdentity === locator.locatorIdentity && policy.extractionStatus === "EXTRACTED" &&
+    policy.text.trim() !== ""))) blockers.push("MISSING_OR_INCOMPLETE_VENUE_POLICY");
+  const binding = bindSettlementCondition(input.listing.rulesText ?? "", input.predicate.semantic);
+  if (binding.blocker !== null) blockers.push(binding.blocker);
   return Object.freeze([...new Set(blockers)].sort());
 }
 
@@ -280,7 +253,7 @@ function observation(input: Omit<SettlementProjectionObservation,
     schemaVersion: "pmh.settlement-projection-observation.v1" as const,
     observationId: hashCanonical(identityBody),
     ...input,
-    compiler: "FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V2" as const,
+    compiler: "FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V3" as const,
     authority: "SETTLEMENT_PROJECTION_OBSERVATION_ONLY" as const,
     semanticDecisionAuthority: false as const,
     probabilityAuthority: false as const,
@@ -313,7 +286,8 @@ export function assertSettlementProjectionObservation(
       !["EXACT_PROJECTED", "RESEARCH_ONLY_PROJECTED", "BLOCKED"].includes(item.disposition) ||
       item.blockers.some((blocker) => !SETTLEMENT_PROJECTION_BLOCKERS.includes(blocker)) ||
       !["FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V1",
-        "FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V2"].includes(item.compiler) ||
+        "FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V2",
+        "FIRST_PARTY_CONSERVATIVE_BINARY_RULE_COMPILER_V3"].includes(item.compiler) ||
       item.authority !== "SETTLEMENT_PROJECTION_OBSERVATION_ONLY" ||
       item.semanticDecisionAuthority !== false || item.probabilityAuthority !== false ||
       item.certificateAuthority !== false || item.executionAuthority !== false ||
@@ -336,7 +310,7 @@ export function compileSettlementProjections(input: Readonly<{
   const listingByRef = new Map(input.corpus.listings.map((item) => [item.listingRef, item]));
   const nodeByRef = new Map(input.ontology.nodes.map((item) => [item.listingRef, item]));
   const predicateByListing = new Map<string, WorldPredicateArtifact[]>();
-  for (const predicate of input.predicates) {
+  for (const predicate of input.predicates.map(assertWorldPredicateArtifact)) {
     for (const binding of predicate.evidenceBindings) {
       predicateByListing.set(binding.listingRef,
         [...(predicateByListing.get(binding.listingRef) ?? []), predicate]);
@@ -362,6 +336,12 @@ export function compileSettlementProjections(input: Readonly<{
     if (listing === undefined) structural.push("STALE_LISTING_EVIDENCE");
     if (node === undefined) structural.push("STALE_ONTOLOGY_NODE");
     if (unique.length !== 1) structural.push("MULTIPLE_PREDICATES_FOR_LISTING");
+    if (listing !== undefined && node !== undefined && unique.some((predicate) =>
+      !predicate.evidenceBindings.some((binding) => binding.listingRef === listingRef &&
+        binding.nodeId === node.nodeId && binding.worldFacetId === node.worldFacet.facetId &&
+        binding.sourceRawHash === listing.sourceRawHash && binding.protocolIdentity === listing.protocolIdentity))) {
+      structural.push("STALE_LISTING_EVIDENCE");
+    }
     if (structural.length > 0 || listing === undefined || node === undefined || unique[0] === undefined) {
       observations.push(observation({ ...base, disposition: "BLOCKED",
         blockers: Object.freeze(structural.sort()), projectionArtifactHash: null }));
@@ -388,10 +368,13 @@ export function compileSettlementProjections(input: Readonly<{
       ...(sourcePredicate.supplementalEvidenceBindings ?? []).flatMap((item) =>
         [item.assertionId, item.sourceDocumentId, item.sourceRawHash, item.sourceTextHash]),
     ].sort());
+    const conditionBinding = bindSettlementCondition(listing.rulesText ?? "", sourcePredicate.semantic);
     const predicate = blockers.length === 0
       ? buildWorldPredicateArtifact({ ...sourcePredicate,
           observability: "RULE_DEFINED", epistemicPosture: "SETTLEMENT_BOUND_PREDICATE" })
-      : sourcePredicate;
+      : sourcePredicate.epistemicPosture === "SETTLEMENT_BOUND_PREDICATE"
+        ? buildWorldPredicateArtifact({ ...sourcePredicate, epistemicPosture: "EVIDENCE_BOUND_PROPOSITION" })
+        : sourcePredicate;
     predicates.push(predicate);
     const projection = buildSettlementProjection({
       listing: { listingRef, listingHash: hashCanonical(listing), venueId: listing.venueId,
@@ -401,11 +384,11 @@ export function compileSettlementProjections(input: Readonly<{
         sourceReceivedAt: listing.sourceReceivedAt },
       predicateArtifacts: [predicate], predicateIds: [predicate.predicateId],
       truthStates: blockers.length === 0 ? [
-        { truthByPredicateId: { [predicate.predicateId]: false }, listingTruth: false,
-          disposition: "RESOLVES", rationale: "The exact predicate is false; the explicit otherwise clause resolves No.",
+        { truthByPredicateId: { [predicate.predicateId]: false }, listingTruth: conditionBinding.inverted,
+          disposition: "RESOLVES", rationale: "The complete condition binding, including polarity, determines this false-predicate settlement.",
           ruleEvidenceHashes },
-        { truthByPredicateId: { [predicate.predicateId]: true }, listingTruth: true,
-          disposition: "RESOLVES", rationale: "The exact predicate is true; the explicit affirmative clause resolves Yes.",
+        { truthByPredicateId: { [predicate.predicateId]: true }, listingTruth: !conditionBinding.inverted,
+          disposition: "RESOLVES", rationale: "The complete condition binding, including polarity, determines this true-predicate settlement.",
           ruleEvidenceHashes },
       ] : [
         { truthByPredicateId: { [predicate.predicateId]: false }, listingTruth: null,

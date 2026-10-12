@@ -11,6 +11,7 @@ import {
   buildEvidenceDocumentFetchPolicy,
   buildEvidenceRequirements,
   compileSettlementProjections,
+  buildWorldPredicateArtifact,
   EvidenceDocumentFetcher,
   settlementVenuePolicyEvidenceFromCaptures,
   type DiscoveryCatalogListing,
@@ -106,7 +107,7 @@ describe("first-party settlement projection compiler", () => {
     });
     expect(result.observations[0]).toMatchObject({
       disposition: "RESEARCH_ONLY_PROJECTED",
-      blockers: ["VOID_REFUND_OR_DISCRETION_OVERRIDE"],
+      blockers: expect.arrayContaining(["VOID_REFUND_OR_DISCRETION_OVERRIDE"]),
     });
   });
 
@@ -167,7 +168,7 @@ describe("first-party settlement projection compiler", () => {
       state.ruleEvidenceHashes.includes(capture.extraction.record.textHash))).toBe(true);
     expect(result.observations[0]).toMatchObject({
       disposition: "RESEARCH_ONLY_PROJECTED",
-      blockers: ["VOID_REFUND_OR_DISCRETION_OVERRIDE"],
+      blockers: expect.arrayContaining(["VOID_REFUND_OR_DISCRETION_OVERRIDE"]),
     });
 
     const unbound = fixture();
@@ -178,8 +179,8 @@ describe("first-party settlement projection compiler", () => {
 
   it("records exact ambiguity debt instead of choosing between two predicates", () => {
     const input = fixture();
-    const second = { ...input.predicate,
-      artifactHash: hashCanonical({ duplicateRevision: input.predicate.artifactHash }) };
+    const second = buildWorldPredicateArtifact({ ...input.predicate,
+      proposedAt: "2026-08-14T00:00:01.000Z" });
     // Same semantic predicate ID with a different artifact revision is a single
     // predicate; a distinct semantic proposition bound to the same listing is not.
     const different = adaptMarketOntologyWorldProposition({

@@ -3467,7 +3467,8 @@ export function createControlPlane(options?: {
     return Object.freeze({ inputRevision: revision,
       taskPayload: worldRelationExperimentTaskPayload(revision), task, corpus,
       projections: worldRelationExperimentStore.loadSettlementProjections(2_048)
-        .filter((item) => projectionHashes.has(item.artifactHash)),
+        .filter((item) => item.compilerIdentity === SETTLEMENT_PROJECTION_COMPILER_IDENTITY &&
+          projectionHashes.has(item.artifactHash)),
       priorExperiments: worldRelationExperimentStore.loadWorldRelationExperiments(2_048)
         .filter((item) => experimentHashes.has(item.artifactHash)),
       priorEconomicMemories: revision.priorEconomicMemories ?? [] });
@@ -4180,7 +4181,8 @@ export function createControlPlane(options?: {
           inputRevision: revision,
           corpus: retainedCorpus,
           projections: worldRelationExperimentStore.loadSettlementProjections(2_048)
-            .filter((item) => projectionHashes.has(item.artifactHash)),
+            .filter((item) => item.compilerIdentity === SETTLEMENT_PROJECTION_COMPILER_IDENTITY &&
+          projectionHashes.has(item.artifactHash)),
         }),
       ]);
       materializedRunIds.add(checkpoint.sourceAgentRunId);
@@ -4855,14 +4857,11 @@ export function createControlPlane(options?: {
       const frontierPredicateIds = new Set(experiment.predicateIds);
       const listingByRef = new Map(corpus.listings.map((item) =>
         [item.listingRef, item] as const));
-      const projectionKey = (item: (typeof projections)[number]): string =>
-        `${item.listing.listingRef}\n${[...item.predicateIds].sort().join("\n")}`;
-      const currentCompilerProjectionKeys = new Set(projections.filter((item) =>
-        item.compilerIdentity === SETTLEMENT_PROJECTION_COMPILER_IDENTITY
-      ).map(projectionKey));
       const applicableProjections = projections.filter((item) => {
-        if (item.compilerIdentity !== SETTLEMENT_PROJECTION_COMPILER_IDENTITY &&
-            currentCompilerProjectionKeys.has(projectionKey(item))) return false;
+        // Old lexical exactness must not survive merely because no replacement
+        // exists yet or an old checkpoint pins its artifact hash. Keep history,
+        // but recompile before any current research routing.
+        if (item.compilerIdentity !== SETTLEMENT_PROJECTION_COMPILER_IDENTITY) return false;
         if (allowedHashes.has(item.artifactHash)) return true;
         const listing = listingByRef.get(item.listing.listingRef);
         return inspectedListingRefs.has(item.listing.listingRef) &&

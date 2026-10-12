@@ -28,7 +28,7 @@ function listing(ref: string, title: string, rulesText: string): DiscoveryCatalo
 }
 
 describe("world relation projection coverage", () => {
-  it("binds exact party/event text but refuses to infer a candidate party role", () => {
+  it("retains lexical coverage but requires complete conditions for exact settlement", () => {
     const democraticControl = listing("gemini:control-dem",
       "Which party will win the U.S. Senate? — Democratic Party",
       "This contract resolves to Yes if the Democratic Party controls the U.S. Senate following the 2026 United States midterm elections and to No otherwise.");
@@ -86,8 +86,11 @@ describe("world relation projection coverage", () => {
       listing: { listingRef: "gemini:control-dem" },
       predicateIds: [control.predicateId],
     });
-    expect(result.projections[0]?.compilerAdmission).toBe("EXACT_BINARY_ELIGIBLE");
-    expect(result.settlement.observations[0]?.blockers).toEqual([]);
+    // A topic label such as "Senate Midterm Winner" is not equivalent to the
+    // complete party-control settlement clause. Discovery coverage survives,
+    // but automatic exact admission must not.
+    expect(result.projections[0]?.compilerAdmission).toBe("RESEARCH_ONLY");
+    expect(result.settlement.observations[0]?.blockers).toContain("CONDITION_MISMATCH");
 
     const requirements = buildWorldRelationEntityRoleRequirements({ frontier, corpus,
       coverageObservations: result.observations });
@@ -122,9 +125,9 @@ describe("world relation projection coverage", () => {
     expect(joshProjection?.truthStates.every((state) =>
       state.ruleEvidenceHashes.includes(roleAssertion.assertionId))).toBe(true);
     expect(bridged.settlement.observations.find((item) =>
-      item.listingRef === "gemini:iowa-josh")?.blockers).toEqual([
-      "MISSING_NEGATIVE_RESOLUTION_CLAUSE",
-    ]);
+      item.listingRef === "gemini:iowa-josh" )?.blockers).toEqual(expect.arrayContaining([
+      "MISSING_NEGATIVE_RESOLUTION_CLAUSE", "UNSUPPORTED_COMPLETE_RULE",
+    ]));
 
     const replayPredicates = frontier.predicates.map((item) =>
       bridged.predicates.find((candidate) => candidate.predicateId === item.predicateId) ?? item);

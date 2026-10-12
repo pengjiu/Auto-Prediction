@@ -1,0 +1,9 @@
+{
+  "kind": "RETROSPECTIVE_RULE_ENVELOPE_COVERAGE_ONLY",
+  "source_manifest": "2675989c14a6f014707ca65fe6cf4119d5ae4c94b2812fdb336cb0cc882c5d88",
+  "markets": 16611,
+  "counts": {
+    "UNSUPPORTED_COMPLETE_RULE": 16611
+  },
+  "note": "Syntax census only; no new LLM analysis, semantic review, price execution or no-arbitrage conclusion."
+}

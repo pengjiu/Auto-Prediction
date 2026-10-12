@@ -1,0 +1,86 @@
+{
+  "authority": "RESEARCH_PROPOSAL_ONLY",
+  "coverage": "ASSUMED_STATES_ONLY",
+  "export_id": "sha256:4715e10ead8640ecb311cc154fa12dceb9ed991ec85d782c2310b7cac8849b39",
+  "scale": 1000000,
+  "quote_clock_span_ns": 10000000,
+  "s1": {
+    "model_hash": "sha256:28b7ebd45d9b817bac4eb1bc2abad6240fcc1fb4f5e78b631a357e95ea4b9efa",
+    "buys": [
+      {
+        "asset_id": "token-0-yes",
+        "quantity": 10,
+        "limit": 400000,
+        "fee_upper": 0,
+        "conservative_debit": 4000000,
+        "snapshot_cost_estimate": 4000000
+      },
+      {
+        "asset_id": "token-1-no",
+        "quantity": 10,
+        "limit": 500000,
+        "fee_upper": 0,
+        "conservative_debit": 5000000,
+        "snapshot_cost_estimate": 5000000
+      }
+    ],
+    "worst_state": "below",
+    "lower_floor": 1000000,
+    "snapshot_floor": 1000000,
+    "capital_required": 9000000,
+    "numeric_solver_status": "HIGHS_NUMERIC_OPTIMAL_EXACT_RECOMPUTED",
+    "scale": 1000000,
+    "authority": "RESEARCH_PROPOSAL_ONLY"
+  },
+  "same_depth_baseline": {
+    "model_hash": "sha256:28b7ebd45d9b817bac4eb1bc2abad6240fcc1fb4f5e78b631a357e95ea4b9efa",
+    "buys": [
+      {
+        "asset_id": "token-0-yes",
+        "quantity": 10,
+        "limit": 400000,
+        "fee_upper": 0,
+        "conservative_debit": 4000000,
+        "snapshot_cost_estimate": 4000000
+      },
+      {
+        "asset_id": "token-1-no",
+        "quantity": 10,
+        "limit": 500000,
+        "fee_upper": 0,
+        "conservative_debit": 5000000,
+        "snapshot_cost_estimate": 5000000
+      }
+    ],
+    "worst_state": "below",
+    "lower_floor": 1000000,
+    "snapshot_floor": 1000000,
+    "capital_required": 9000000,
+    "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+    "scale": 1000000,
+    "authority": "RESEARCH_PROPOSAL_ONLY"
+  },
+  "incremental_gross_floor": 0,
+  "independent_resolution_stress": {
+    "model_hash": "sha256:47548bf52c2e9a80aefeae0728034583049d90721f293c0c495424708f50e0bd",
+    "buys": [],
+    "worst_state": "independent_0",
+    "lower_floor": 0,
+    "snapshot_floor": 0,
+    "capital_required": 0,
+    "numeric_solver_status": "NO_POSITIVE_FLOOR",
+    "scale": 1000000,
+    "authority": "RESEARCH_PROPOSAL_ONLY"
+  },
+  "partial_fill_stress": {
+    "worst_floor": "-5",
+    "filled_mask": [
+      false,
+      true
+    ],
+    "assumption": "independent leg acceptance; no forced unwind; zero fees"
+  },
+  "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+  "realized_profit": null,
+  "execution": "NOT_EXECUTED_NOT_ATOMIC"
+}
