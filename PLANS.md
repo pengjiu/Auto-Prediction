@@ -1,19 +1,28 @@
 # Plans
 
-## Semantic precision candidate (2026-10-12)
+## Semantic correctness adopted; real-rule-family research (2026-10-12)
 
-The operator approved the next correctness-first step. The isolated
-`codex/mutation-semantic-binding` candidate is governed by
-`plans/semantic-binding-validation.md`. Main's lexical exactness admitted six
-wrong-condition counterexamples. The candidate consumes complete supported
-conditions, preserves polarity and numerical observation dimensions, rejects
-stale exact projections, and connects source-recompiled numeric payment tables
-to the unchanged S1/same-depth S2 research controls. No model or trade is called.
-A retrospective syntax-only census of 16,611 retained market descriptions found
-zero supported complete rule envelopes; do not present synthetic positive tests
-as real-market coverage or profit. Real rule-family/exception admission remains
-the next unresolved observation. Candidate decision is PARTIAL_ADOPT for review,
-not automatic mainline adoption; see research/payoff-economics/s3/README.md.
+The user explicitly requested PR #5 merge and continuation. PR #5 is now merged
+as main `239e91a0e2e2f76e2e4d5be2cd03aa90db6582d5`; post-merge qualification
+38206570455 succeeded. This adopts v3 semantic binding and conditional research
+plumbing, not a profitable strategy or unrestricted natural-language authority.
+
+The next isolated candidate `codex/mutation-real-rule-family` follows
+[plans/real-binance-family.md](plans/real-binance-family.md). It consumes complete
+real BTC/USDT Binance noon close descriptions and compares cross-event thresholds
+and ranges through the existing S1/same-depth controls. Source, date, adjacent
+brackets and exact endpoints are bound; unknown fallback, revisions and separate
+oracle outcomes remain explicit. The normal-path adapter has NO exact semantic
+or trading authority; the original generic exact gate remains unchanged.
+
+A predeclared eight-round capture over two observation dates returned 138 public
+GET receipts and 16 token books per round. The full-source replay admitted all
+16 date/round groups, with exact gross BUY-only no-arbitrage witnesses in the
+stated normal model and zero S1 increment over same-depth controls. The short,
+selected sample is not a broad efficiency claim or realized PnL. Policy/cache,
+real debit bounds and independent settlement remain unqualified. The candidate
+is reviewable research tooling; further adoption is not implied by existing
+merge authorization. See `research/payoff-economics/s3/REAL_FAMILY.md`.
 
 ## Selected research mainline continuation (2026-10-12)
 

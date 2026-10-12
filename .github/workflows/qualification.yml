@@ -32,6 +32,14 @@ jobs:
         run: |
           packages/control-plane/node_modules/.bin/tsx research/payoff-economics/s3/export.ts research/payoff-economics/s3/fixtures/synthetic-source.json "$RUNNER_TEMP/semantic-export.json"
           node --input-type=module -e 'import fs from "node:fs"; import assert from "node:assert/strict"; assert.deepEqual(JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/semantic-export.json")), JSON.parse(fs.readFileSync("research/payoff-economics/s3/fixtures/synthetic-export.json")));'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Optional wheels for cross-runtime real-capture replay
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+      - name: Recompile full real source and analyze original captured bytes
+        run: python research/payoff-economics/s3/replay_real_fixture.py --output "$RUNNER_TEMP/real-family-replay.json"
       - name: Tests cannot rewrite tracked source or historical evidence
         run: git diff --exit-code
   research:

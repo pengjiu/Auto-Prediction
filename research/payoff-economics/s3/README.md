@@ -5,6 +5,16 @@ The original six semantic-audit failures were reproduced on main `2a473d11`.
 The v3 compiler replaces keyword overlap as exact-admission authority. It does
 not solve arbitrary natural-language interpretation or certify actual resolution.
 
+## Real full-text family follow-up (2026-10-12)
+
+PR #5 was explicitly merged by the user as main `239e91a0`. The follow-up adds
+one venue-specific BTC/USDT final-close NORMAL-PATH adapter and real-source CLI,
+without changing the generic exact gate. See [REAL_FAMILY.md](REAL_FAMILY.md).
+Eight real contracts across two dates were parsed and 16 retained group/rounds
+analyzed; no positive gross or same-depth increment was found. This is not a
+profitability claim or complete real settlement coverage. The previous all-zero
+generic grammar census remains a historical result about a DIFFERENT gate.
+
 ## What changed
 
 - Consume the **entire** supported Yes-if / otherwise-No envelope. No ignored

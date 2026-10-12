@@ -17,7 +17,7 @@ def case():
     nanos = timestamp * 1_000_000_000
     for a, price in zip(export['assets'], prices):
         quotes[a['id']] = ({'started_ns':nanos, 'received_ns':nanos+10_000_000,
-            'duration_ns':10_000_000, 'method':'GET','status':200,'error':None},
+            'duration_ns':10_000_000, 'url':'https://clob.polymarket.com/book?token_id='+a['id'], 'method':'GET','status':200,'error':None},
             {'asset_id':a['id'], 'market':a['instrumentId'], 'hash':'SYNTHETIC',
              'timestamp':str(timestamp*1000), 'tick_size':'0.01','min_order_size':'1',
              'asks':[{'price':price,'size':'10'}], 'bids':[]})

@@ -1,0 +1,27 @@
+name: Real rule family evidence
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Bounded anonymous reads only
+        run: python3 research/payoff-economics/s3/capture_real.py --output "$RUNNER_TEMP/real-family-evidence"
+      - name: Bind provenance
+        if: always()
+        run: |
+          printf '%s\n' "$GITHUB_SHA" > "$RUNNER_TEMP/source-commit.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-family-evidence
+          retention-days: 7
+          path: |
+            ${{ runner.temp }}/real-family-evidence
+            ${{ runner.temp }}/source-commit.txt

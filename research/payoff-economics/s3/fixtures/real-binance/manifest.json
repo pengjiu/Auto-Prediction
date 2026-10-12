@@ -1,0 +1,88 @@
+{
+  "origin": "GENUINE_PUBLIC_GET_CAPTURE",
+  "run": 38206964619,
+  "artifact": 11726789293,
+  "artifact_sha256": "fac0590be30054a37d85775764d75bfe1fe59c6cc9d6ad533d02f307536f6e7a",
+  "records": [
+    {
+      "file": "bitcoin-above-on-october-12-2026.json",
+      "record": {
+        "body_sha256": "cc39e96949938c215dd005d0f97172df67b09c61df13338f90bc5adcaaaaa42d",
+        "bytes": 40817,
+        "duration_ns": 135735517,
+        "error": null,
+        "headers": {
+          "age": "210",
+          "cache-control": "public, max-age=300",
+          "content-type": "application/json",
+          "date": "Mon, 12 Oct 2026 05:12:54 GMT"
+        },
+        "label": "before:bitcoin-above-on-october-12-2026",
+        "method": "GET",
+        "received_ns": 1791781974997938205,
+        "started_ns": 1791781974862203009,
+        "status": 200,
+        "url": "https://gamma-api.polymarket.com/events?slug=bitcoin-above-on-october-12-2026"
+      }
+    },
+    {
+      "file": "bitcoin-price-on-october-12-2026.json",
+      "record": {
+        "body_sha256": "05b14096824c31f3eaf3e8f213655ff650084540af5a8c7766faee7424ceb98d",
+        "bytes": 42502,
+        "duration_ns": 52924771,
+        "error": null,
+        "headers": {
+          "age": "271",
+          "cache-control": "public, max-age=300",
+          "content-type": "application/json",
+          "date": "Mon, 12 Oct 2026 05:12:55 GMT"
+        },
+        "label": "before:bitcoin-price-on-october-12-2026",
+        "method": "GET",
+        "received_ns": 1791781975051786521,
+        "started_ns": 1791781974998861740,
+        "status": 200,
+        "url": "https://gamma-api.polymarket.com/events?slug=bitcoin-price-on-october-12-2026"
+      }
+    }
+  ],
+  "selection": [
+    {
+      "event_id": "1137835",
+      "event_label": "before:bitcoin-above-on-october-12-2026",
+      "market_id": "5330077",
+      "tokens": [
+        "58100326529466815661410944022020977939794449485588814468318733550215282047446",
+        "92680081476366853182748482046411810724477925318453135813668946841271245547553"
+      ]
+    },
+    {
+      "event_id": "1137835",
+      "event_label": "before:bitcoin-above-on-october-12-2026",
+      "market_id": "5330080",
+      "tokens": [
+        "102213575204902074760005916744838468334765332333994096763253127452371697884776",
+        "113182878498120046214623861889207910872139706781642053226350204705846036909263"
+      ]
+    },
+    {
+      "event_id": "1137831",
+      "event_label": "before:bitcoin-price-on-october-12-2026",
+      "market_id": "5330051",
+      "tokens": [
+        "63519624742286512386528015733301906915725612297161214304963571432487405917608",
+        "65240137642306783517968207219212976943841847303815164838214898124843344496860"
+      ]
+    },
+    {
+      "event_id": "1137831",
+      "event_label": "before:bitcoin-price-on-october-12-2026",
+      "market_id": "5330053",
+      "tokens": [
+        "115314961382608694707525490418977693990229158443707613676226408521447470021361",
+        "51941772278882495258719849031238390696092704532950004055583017215569284766226"
+      ]
+    }
+  ]
+}

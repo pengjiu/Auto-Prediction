@@ -56,6 +56,7 @@ def analyze_compiled(data, quote_records, *, budget=1000*SCALE):
     assets = data['assets']; tokens = [a['id'] for a in assets]
     if set(quote_records) != set(tokens):
         raise ValueError('missing or extra quote tokens')
+    check_quote_urls(quote_records)
     records, books = [], []
     for asset in assets:
         record, body = quote_records[asset['id']]
@@ -63,14 +64,25 @@ def analyze_compiled(data, quote_records, *, budget=1000*SCALE):
         books.append(parse_book(body, asset['id'], asset['instrumentId']))
     alignment(records, books)
     decision = max(r['received_ns'] for r in records)
-    for source in data['sources']:
-        parsed = datetime.fromisoformat(source['sourceReceivedAt'].replace('Z', '+00:00'))
+    clocks = [(source['sourceReceivedAt'], 'rule') for source in data['sources']]
+    if 'policySources' in data or data.get('interpretation') == 'FULL_DESCRIPTION_NORMAL_BRANCH_ONLY':
+        policies = data.get('policySources')
+        if not isinstance(policies, list) or not policies:
+            raise ValueError('policy source evidence missing')
+        for policy in policies:
+            if not isinstance(policy, dict):
+                raise ValueError('invalid policy evidence')
+            clocks.append((policy.get('receivedAt'), 'policy'))
+    for stamp, kind in clocks:
+        if not isinstance(stamp, str):
+            raise ValueError(kind + ' evidence time missing')
+        parsed = datetime.fromisoformat(stamp.replace('Z', '+00:00'))
         if parsed.tzinfo is None:
-            raise ValueError('source evidence time lacks timezone')
+            raise ValueError(kind + ' evidence time lacks timezone')
         delta = parsed - datetime(1970, 1, 1, tzinfo=timezone.utc)
         source_ns = ((delta.days * 86400 + delta.seconds) * 1_000_000 + delta.microseconds) * 1000
         if not 0 <= decision - source_ns <= 900_000_000_000:
-            raise ValueError('source evidence unavailable or stale at quote decision')
+            raise ValueError(kind + ' evidence unavailable or stale at quote decision')
     rows = [tuple(F(a['payoffs'][s]) for s in data['states']) for a in assets]
     model = model_from_books(data['exportId'], data['states'], tokens, rows, books, budget)
     # Same quotes/depth/budget/states, both sides use full-quantity-at-limit cost.
@@ -91,6 +103,16 @@ def analyze_compiled(data, quote_records, *, budget=1000*SCALE):
         'net_qualification': 'BLOCKED_UNQUALIFIED_FEES', 'realized_profit': None,
         'execution': 'NOT_EXECUTED_NOT_ATOMIC',
     }
+
+
+def check_quote_urls(quotes):
+    # Native response fields are not proof of which URL was actually requested.
+    from urllib.parse import parse_qs, urlparse
+    for token, (record, _) in quotes.items():
+        url = urlparse(record['url'])
+        if (url.scheme != 'https' or url.netloc != 'clob.polymarket.com' or url.fragment or
+                url.path != '/book' or parse_qs(url.query) != {'token_id': [token]}):
+            raise ValueError('quote URL does not bind requested token')
 
 
 def recompile(source: Path, output: Path):
@@ -114,12 +136,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='pmh-semantic-export-') as tmp:
         export = recompile(args.source, Path(tmp) / 'export.json')
     quotes = {a['id']: evidence.read(labels[a['id']]) for a in export['assets']}
-    # Token/condition checks above do not substitute for URL provenance.
-    from urllib.parse import parse_qs, urlparse
-    for token, (record, _) in quotes.items():
-        url = urlparse(record['url'])
-        if url.hostname != 'clob.polymarket.com' or url.path != '/book' or parse_qs(url.query).get('token_id') != [token]:
-            raise ValueError('quote URL does not bind requested token')
+    check_quote_urls(quotes)
     result = analyze_compiled(export, quotes)
     result['source_bytes_sha256'] = sha256(args.source.read_bytes()).hexdigest()
     result['quote_evidence_identity'] = evidence.digest
