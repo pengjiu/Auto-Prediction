@@ -20,3 +20,15 @@ Before observing new prices, request only BTC above/price event slugs for Octobe
 
 ## Selection
 ADOPT only after evidence for safe conditional research capability. HOLD unconditional auto-admission, complete LLM automation and profitability until independently supported. Existing v3 semantic gate stays strict. No new service, npm dependency, live action, keys, signatures, approvals or funds. New work stays an isolated reviewable PR; the explicitly requested PR #5 merge is separate.
+
+## Completed bounded experiment
+
+PR #5 merge is complete and independently qualified on main. The new isolated
+normal-path adapter and real source/quote bridge consumed eight original complete
+contracts and 16 date/round snapshots. Both S1 and same-depth control selected
+no-trade throughout; exact rational BUY-only gross price witnesses verified.
+Original capture, selection, cache-age limitations, failures/fixes, local results
+and boundaries are in `research/payoff-economics/s3/REAL_FAMILY.md`. Current
+candidate is PARTIAL_ADOPT for conditional research, not automatic exactness or
+an adopted trading strategy. Publication capture is manual-only after the single
+predeclared run; no repeated monitoring is scheduled.

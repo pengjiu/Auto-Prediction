@@ -1,0 +1,1189 @@
+{
+  "authority": "RESEARCH_PROPOSAL_ONLY",
+  "evidence_identity": "eb02d3f7ac0eba620010fb035bcb72843f3d53fdd688177bbdcaa53738f072eb",
+  "scope": "RETROSPECTIVE_BOUNDED_CAPTURE_NOT_CONTINUOUS_OR_EXECUTED",
+  "realized_profit": null,
+  "model_calls": 0,
+  "families": [
+    {
+      "date": "2026-10-12",
+      "selected": 4,
+      "rows": [
+        {
+          "cycle": 0,
+          "admitted": true,
+          "decision_ns": 1791781975575139040,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:97747e06b7a61b408453bafcf94aa42bb598511421bc1358ecfe389870c19a03",
+            "scale": 1000000,
+            "quote_clock_span_ns": 403878640,
+            "s1": {
+              "model_hash": "sha256:db2917f9b0199eecde0b3100fbec33eb97ae85395190b0f98020e4b10a311700",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:db2917f9b0199eecde0b3100fbec33eb97ae85395190b0f98020e4b10a311700",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:0e762bd683bde06740dc108a95dd44a47f0ce9c6ea2a47c274a1f9f5532f6784",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "1/50",
+            "0",
+            "1/200",
+            "69/200",
+            "3/100",
+            "3/5"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "4657/250000",
+            "0",
+            "32313/4000000",
+            "1303987/4000000",
+            "64097/1000000",
+            "729/1250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 1,
+          "admitted": true,
+          "decision_ns": 1791781976557692259,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:97747e06b7a61b408453bafcf94aa42bb598511421bc1358ecfe389870c19a03",
+            "scale": 1000000,
+            "quote_clock_span_ns": 386146138,
+            "s1": {
+              "model_hash": "sha256:888181d805790fd5f3cdc0e956c45fe9fe270ca63487b1c898ffbab3f5a27044",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:888181d805790fd5f3cdc0e956c45fe9fe270ca63487b1c898ffbab3f5a27044",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:cd0ecb7aa71458947e07f95fe4e00d6641a9f3f733eee56a782441f7d7e2f513",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "1/50",
+            "0",
+            "1/200",
+            "69/200",
+            "3/100",
+            "3/5"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "4657/250000",
+            "0",
+            "32313/4000000",
+            "1303987/4000000",
+            "64097/1000000",
+            "729/1250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 2,
+          "admitted": true,
+          "decision_ns": 1791781977568390860,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:97747e06b7a61b408453bafcf94aa42bb598511421bc1358ecfe389870c19a03",
+            "scale": 1000000,
+            "quote_clock_span_ns": 396708498,
+            "s1": {
+              "model_hash": "sha256:e53ffb1e789e2a106c542e1a6671300e49f26fb620f34b62e014108d4ee58527",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:e53ffb1e789e2a106c542e1a6671300e49f26fb620f34b62e014108d4ee58527",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:c617b6270cb89852e2227e68bbde91d9013fde99d3347c03ed294741e8fafcc7",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "1/50",
+            "0",
+            "1/200",
+            "69/200",
+            "3/100",
+            "3/5"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "4657/250000",
+            "0",
+            "32313/4000000",
+            "1303987/4000000",
+            "64097/1000000",
+            "729/1250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 3,
+          "admitted": true,
+          "decision_ns": 1791781978584498596,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:97747e06b7a61b408453bafcf94aa42bb598511421bc1358ecfe389870c19a03",
+            "scale": 1000000,
+            "quote_clock_span_ns": 412824294,
+            "s1": {
+              "model_hash": "sha256:d7caafa4c20ab559d69dc160e8615c21dc2cf64361dda000028d82e4fd9875f4",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:d7caafa4c20ab559d69dc160e8615c21dc2cf64361dda000028d82e4fd9875f4",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:31460417934671003152bb0ede50d78d0d317a70746721d47004c556ed4b8adc",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "1/50",
+            "0",
+            "1/200",
+            "69/200",
+            "3/100",
+            "3/5"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "4657/250000",
+            "0",
+            "32313/4000000",
+            "1303987/4000000",
+            "64097/1000000",
+            "729/1250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 4,
+          "admitted": true,
+          "decision_ns": 1791781979549148739,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:97747e06b7a61b408453bafcf94aa42bb598511421bc1358ecfe389870c19a03",
+            "scale": 1000000,
+            "quote_clock_span_ns": 377306702,
+            "s1": {
+              "model_hash": "sha256:7b2e42d95e7d24f8385eb764d280d104e14981fbeeffe853c85ef735a17f9b25",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:7b2e42d95e7d24f8385eb764d280d104e14981fbeeffe853c85ef735a17f9b25",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:ca5b7a311b2b377a773c0c627b57e7e5bc9ed39aec08fb82cd96b20b15e686a4",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "1/50",
+            "0",
+            "1/200",
+            "69/200",
+            "3/100",
+            "3/5"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "4657/250000",
+            "0",
+            "32313/4000000",
+            "1303987/4000000",
+            "64097/1000000",
+            "729/1250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 5,
+          "admitted": true,
+          "decision_ns": 1791781980584447499,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:97747e06b7a61b408453bafcf94aa42bb598511421bc1358ecfe389870c19a03",
+            "scale": 1000000,
+            "quote_clock_span_ns": 412529775,
+            "s1": {
+              "model_hash": "sha256:36d0fb59949191390f6f7dc1f66a42a60559372f6fb57eb158df5dc1dcda0844",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:36d0fb59949191390f6f7dc1f66a42a60559372f6fb57eb158df5dc1dcda0844",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:256f8197e5c6a9c006e5286b7f64df1b36b6f4131a1da002245be9e9903e26cc",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "1/50",
+            "0",
+            "1/200",
+            "69/200",
+            "3/100",
+            "3/5"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "4657/250000",
+            "0",
+            "32313/4000000",
+            "1303987/4000000",
+            "64097/1000000",
+            "729/1250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 6,
+          "admitted": true,
+          "decision_ns": 1791781981559522118,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:97747e06b7a61b408453bafcf94aa42bb598511421bc1358ecfe389870c19a03",
+            "scale": 1000000,
+            "quote_clock_span_ns": 387459183,
+            "s1": {
+              "model_hash": "sha256:f4a0f067e67322e9f20a7a08d61c703053138b145caf520ff6dbaf8614b957b3",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:f4a0f067e67322e9f20a7a08d61c703053138b145caf520ff6dbaf8614b957b3",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:83932d6e06f38b08914a1c0b81360613aecab9f8afeec2cc6b784d11d0bdbd8f",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "1/50",
+            "0",
+            "1/200",
+            "69/200",
+            "1/50",
+            "61/100"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "4657/250000",
+            "0",
+            "32313/4000000",
+            "1303987/4000000",
+            "1079/20000",
+            "593347/1000000"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 7,
+          "admitted": true,
+          "decision_ns": 1791781982570446278,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:97747e06b7a61b408453bafcf94aa42bb598511421bc1358ecfe389870c19a03",
+            "scale": 1000000,
+            "quote_clock_span_ns": 398274107,
+            "s1": {
+              "model_hash": "sha256:b3679a167c402833022f35a063391e690855536da6841b0d7c03fcea701a71ac",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:b3679a167c402833022f35a063391e690855536da6841b0d7c03fcea701a71ac",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:a18057c03eddf619b594e20fa03a815bb2342627c89cf730636a3961a5da1766",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "1/50",
+            "0",
+            "1/200",
+            "69/200",
+            "3/100",
+            "3/5"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "4657/250000",
+            "0",
+            "32313/4000000",
+            "1303987/4000000",
+            "64097/1000000",
+            "729/1250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        }
+      ],
+      "blocker": null,
+      "export_id": "sha256:97747e06b7a61b408453bafcf94aa42bb598511421bc1358ecfe389870c19a03",
+      "family_rule_identity": "sha256:8f60510bcd52978e65f577cec560dee3a927863886f9e4e21a8d1de1310f4db4",
+      "states": 7,
+      "stress_states": 81,
+      "unknowns": [
+        "MISSING_SOURCE_FALLBACK_NOT_SPECIFIED",
+        "FINAL_VALUE_REVISION_CUTOFF_NOT_SPECIFIED",
+        "CANDLE_CLOSE_TIMESTAMP_CONVENTION_NOT_INDEPENDENTLY_VERIFIED",
+        "ORACLE_OR_CLARIFICATION_OVERRIDE",
+        "INDEPENDENT_RESOLUTION_AND_COLLATERAL_TIMING_UNQUALIFIED"
+      ],
+      "fetched_rule_identities_equal_at_window_end": true,
+      "rule_observation_limitations": "HTTP_CACHE_AND_SAMPLED_RECHECK_NOT_CONTINUOUS_RULE_OR_POLICY_MONITOR",
+      "rule_response_cache_age_seconds": {
+        "before:bitcoin-above-on-october-12-2026": "210",
+        "before:bitcoin-price-on-october-12-2026": "271",
+        "after:bitcoin-above-on-october-12-2026": "217",
+        "after:bitcoin-price-on-october-12-2026": "279"
+      },
+      "nominal_rates": [
+        "7/100",
+        "7/100",
+        "7/100",
+        "7/100"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "selected": 4,
+      "rows": [
+        {
+          "cycle": 0,
+          "admitted": true,
+          "decision_ns": 1791781975601375594,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:1dd52c3aed22792ece59f9ac33f7e20f107d82d006c7f182721556cc9a6acef7",
+            "scale": 1000000,
+            "quote_clock_span_ns": 429622002,
+            "s1": {
+              "model_hash": "sha256:7d46f4890963cd4d0abbb2b064abe64acf5440e3848c810b44ef6c0eb2fcc89d",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:7d46f4890963cd4d0abbb2b064abe64acf5440e3848c810b44ef6c0eb2fcc89d",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:8d108d9c2b36c5309d0f2e8d357fa6aca9e50a52c4dd087a5bb3466bf03d6d64",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "3/50",
+            "0",
+            "3/100",
+            "33/100",
+            "1/50",
+            "14/25"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "14013/250000",
+            "0",
+            "39681/1000000",
+            "304191/1000000",
+            "14331/250000",
+            "16961/31250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 1,
+          "admitted": true,
+          "decision_ns": 1791781976574604313,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:1dd52c3aed22792ece59f9ac33f7e20f107d82d006c7f182721556cc9a6acef7",
+            "scale": 1000000,
+            "quote_clock_span_ns": 402441011,
+            "s1": {
+              "model_hash": "sha256:49ee631f8b7dbf3fe3350bcc3d1190c38248e81bcee853c48e5dfd348c74b163",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:49ee631f8b7dbf3fe3350bcc3d1190c38248e81bcee853c48e5dfd348c74b163",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:e6f7658dee1bfb7afc891f14132bb415a54fc59408477eeae7716fc228877c6a",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "3/50",
+            "0",
+            "3/100",
+            "33/100",
+            "1/50",
+            "14/25"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "14013/250000",
+            "0",
+            "39681/1000000",
+            "304191/1000000",
+            "14331/250000",
+            "16961/31250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 2,
+          "admitted": true,
+          "decision_ns": 1791781977592912469,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:1dd52c3aed22792ece59f9ac33f7e20f107d82d006c7f182721556cc9a6acef7",
+            "scale": 1000000,
+            "quote_clock_span_ns": 420642699,
+            "s1": {
+              "model_hash": "sha256:49ee631f8b7dbf3fe3350bcc3d1190c38248e81bcee853c48e5dfd348c74b163",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:49ee631f8b7dbf3fe3350bcc3d1190c38248e81bcee853c48e5dfd348c74b163",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:e6f7658dee1bfb7afc891f14132bb415a54fc59408477eeae7716fc228877c6a",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "3/50",
+            "0",
+            "3/100",
+            "33/100",
+            "1/50",
+            "14/25"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "14013/250000",
+            "0",
+            "39681/1000000",
+            "304191/1000000",
+            "14331/250000",
+            "16961/31250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 3,
+          "admitted": true,
+          "decision_ns": 1791781978578408639,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:1dd52c3aed22792ece59f9ac33f7e20f107d82d006c7f182721556cc9a6acef7",
+            "scale": 1000000,
+            "quote_clock_span_ns": 406178320,
+            "s1": {
+              "model_hash": "sha256:92dcb5a34155d390ad8d93adb23cde7e9c3d6a534261bf9d09a78ed797c38830",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:92dcb5a34155d390ad8d93adb23cde7e9c3d6a534261bf9d09a78ed797c38830",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:96e4ef5301cf0269b5f09ea095c6026a37538c42fe1d17af111b7851ecf6e565",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "3/50",
+            "0",
+            "3/100",
+            "33/100",
+            "1/50",
+            "14/25"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "14013/250000",
+            "0",
+            "39681/1000000",
+            "304191/1000000",
+            "14331/250000",
+            "16961/31250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 4,
+          "admitted": true,
+          "decision_ns": 1791781979583088664,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:1dd52c3aed22792ece59f9ac33f7e20f107d82d006c7f182721556cc9a6acef7",
+            "scale": 1000000,
+            "quote_clock_span_ns": 410634581,
+            "s1": {
+              "model_hash": "sha256:d47c7cdbc61d0ba392a6be841b44256514a2546e0b595f7a6f69dc8beb8ccd63",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:d47c7cdbc61d0ba392a6be841b44256514a2546e0b595f7a6f69dc8beb8ccd63",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:4320f70dee471f0a621ccacae2b630ed5a05eb2b803db60bef878672ce31d78b",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "3/50",
+            "0",
+            "3/100",
+            "33/100",
+            "1/50",
+            "14/25"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "14013/250000",
+            "0",
+            "39681/1000000",
+            "304191/1000000",
+            "14331/250000",
+            "16961/31250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 5,
+          "admitted": true,
+          "decision_ns": 1791781980589215086,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:1dd52c3aed22792ece59f9ac33f7e20f107d82d006c7f182721556cc9a6acef7",
+            "scale": 1000000,
+            "quote_clock_span_ns": 416790527,
+            "s1": {
+              "model_hash": "sha256:61963f1b1b89cc6a457bb9a52ca6c3a81634bbfe9d968e7fd12c7011df5386d7",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:61963f1b1b89cc6a457bb9a52ca6c3a81634bbfe9d968e7fd12c7011df5386d7",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:e975ece173d57f5ac4cbb1f75311abc53ed2db821c3fe5a57bbf83f049026a09",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "3/50",
+            "0",
+            "3/100",
+            "33/100",
+            "1/50",
+            "14/25"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "14013/250000",
+            "0",
+            "39681/1000000",
+            "304191/1000000",
+            "14331/250000",
+            "16961/31250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 6,
+          "admitted": true,
+          "decision_ns": 1791781981567980625,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:1dd52c3aed22792ece59f9ac33f7e20f107d82d006c7f182721556cc9a6acef7",
+            "scale": 1000000,
+            "quote_clock_span_ns": 395206411,
+            "s1": {
+              "model_hash": "sha256:4c4f4df6159f69024d7c2197e31d2aeaea8d9d7c0f8ec6a52ba2723f2fa945fd",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:4c4f4df6159f69024d7c2197e31d2aeaea8d9d7c0f8ec6a52ba2723f2fa945fd",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:01378efc204cbd50983e2ba96613c503b3fe251366aa7aecfa081b60b34ba88d",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "3/50",
+            "0",
+            "3/100",
+            "33/100",
+            "1/50",
+            "14/25"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "14013/250000",
+            "0",
+            "39681/1000000",
+            "304191/1000000",
+            "14331/250000",
+            "16961/31250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        },
+        {
+          "cycle": 7,
+          "admitted": true,
+          "decision_ns": 1791781982570902593,
+          "analysis": {
+            "authority": "RESEARCH_PROPOSAL_ONLY",
+            "coverage": "ASSUMED_STATES_ONLY",
+            "export_id": "sha256:1dd52c3aed22792ece59f9ac33f7e20f107d82d006c7f182721556cc9a6acef7",
+            "scale": 1000000,
+            "quote_clock_span_ns": 398061018,
+            "s1": {
+              "model_hash": "sha256:b8a42fbd4a41d52be2f7f7b2819b25d43318bdf5683578df2fdc493a0acb51e0",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "same_depth_baseline": {
+              "model_hash": "sha256:b8a42fbd4a41d52be2f7f7b2819b25d43318bdf5683578df2fdc493a0acb51e0",
+              "buys": [],
+              "worst_state": "below",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "EQUAL_SIZE_ALL_DEPTH",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "incremental_gross_floor": 0,
+            "independent_resolution_stress": {
+              "model_hash": "sha256:06f89ea93127630d98682ed33c0bdeda142f7120ef0ed47d4bdaa2457a99a574",
+              "buys": [],
+              "worst_state": "independent_0",
+              "lower_floor": 0,
+              "snapshot_floor": 0,
+              "capital_required": 0,
+              "numeric_solver_status": "NO_POSITIVE_FLOOR",
+              "scale": 1000000,
+              "authority": "RESEARCH_PROPOSAL_ONLY"
+            },
+            "partial_fill_stress": null,
+            "net_qualification": "BLOCKED_UNQUALIFIED_FEES",
+            "realized_profit": null,
+            "execution": "NOT_EXECUTED_NOT_ATOMIC"
+          },
+          "gross_witness": [
+            "0",
+            "3/50",
+            "0",
+            "3/100",
+            "33/100",
+            "1/50",
+            "14/25"
+          ],
+          "nominal_fee_witness": [
+            "0",
+            "14013/250000",
+            "0",
+            "39681/1000000",
+            "304191/1000000",
+            "14331/250000",
+            "16961/31250"
+          ],
+          "nominal_fee_qualification": "UNROUNDED_CURVE_SCENARIO_NOT_DEBIT_CERTIFICATE"
+        }
+      ],
+      "blocker": null,
+      "export_id": "sha256:1dd52c3aed22792ece59f9ac33f7e20f107d82d006c7f182721556cc9a6acef7",
+      "family_rule_identity": "sha256:763aa98f4f7f048ce99cd6f2cecfd450130e61f4f443ba7b432e149dca212443",
+      "states": 7,
+      "stress_states": 81,
+      "unknowns": [
+        "MISSING_SOURCE_FALLBACK_NOT_SPECIFIED",
+        "FINAL_VALUE_REVISION_CUTOFF_NOT_SPECIFIED",
+        "CANDLE_CLOSE_TIMESTAMP_CONVENTION_NOT_INDEPENDENTLY_VERIFIED",
+        "ORACLE_OR_CLARIFICATION_OVERRIDE",
+        "INDEPENDENT_RESOLUTION_AND_COLLATERAL_TIMING_UNQUALIFIED"
+      ],
+      "fetched_rule_identities_equal_at_window_end": true,
+      "rule_observation_limitations": "HTTP_CACHE_AND_SAMPLED_RECHECK_NOT_CONTINUOUS_RULE_OR_POLICY_MONITOR",
+      "rule_response_cache_age_seconds": {
+        "before:bitcoin-above-on-october-13-2026": "145",
+        "before:bitcoin-price-on-october-13-2026": "155",
+        "after:bitcoin-above-on-october-13-2026": "153",
+        "after:bitcoin-price-on-october-13-2026": "163"
+      },
+      "nominal_rates": [
+        "7/100",
+        "7/100",
+        "7/100",
+        "7/100"
+      ]
+    }
+  ],
+  "selection_exclusions": [],
+  "summary": {
+    "families_attempted": 2,
+    "families_source_admitted": 2,
+    "rounds_attempted": 16,
+    "rounds_admitted": 16,
+    "gross_positive_rounds": 0,
+    "same_depth_improvement_rounds": 0,
+    "exact_gross_witness_rounds": 16,
+    "after_fee_certification": false,
+    "live_execution": false
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "authority": "RESEARCH_VALIDATION_ONLY",
+  "tested_base_tree": "97af19a2c2256484cac3905228842e809e63a100",
+  "local_environment": {
+    "node": "22.22.1",
+    "pnpm": "11.13.1",
+    "typescript": "5.9.3",
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "results": {
+    "check": 0,
+    "build": 0,
+    "node_tests": 1140,
+    "s1_tests": 16,
+    "s2_tests": 32,
+    "s3_tests": 15,
+    "offline_tests": 43,
+    "patch_tool_tests": 8,
+    "real_cli": 0
+  },
+  "overlapping_tests_not_independent_total": true,
+  "log_hashes": {
+    "offline.log": {
+      "sha256": "f6b5e5b6e1373ffa48664d85d6e14c1a1c65387ed71c38db3e4808ebb854b652",
+      "bytes": 8270
+    },
+    "s1.log": {
+      "sha256": "a1be14a7d3a78bfc624d4941d633333966b6794924806c727c28949fb3e43b59",
+      "bytes": 2327
+    },
+    "patch-tool.log": {
+      "sha256": "cc2f3e49e734b5ac4b837fb21efd69ff63d1009862713a27d181d0ea98f6c002",
+      "bytes": 916
+    },
+    "check.log": {
+      "sha256": "5ccac730bc22ca65ef11c85570471b21705bc3bd2d175e7abaaea0e3c1d7a869",
+      "bytes": 1559
+    },
+    "test.log": {
+      "sha256": "c06c617452cb04d92f56b4a7a04e204e5a478bcb08b1be800e673e19cc5bcbf0",
+      "bytes": 67123
+    },
+    "s2.log": {
+      "sha256": "9f4a214bd68e5bd86d6a0c70fdc073404ec3ea931484295a45233914210a4f23",
+      "bytes": 4105
+    },
+    "s3.log": {
+      "sha256": "4c312342a4e1d36fbb045387f5d41c00085b07c1e1a1a1915d326bd5698ebb38",
+      "bytes": 2192
+    },
+    "real-cli.log": {
+      "sha256": "f305edccd973cc6121fd2ba518af900f9b0d75782d0722815a3580ff9b9484ae",
+      "bytes": 281
+    },
+    "build.log": {
+      "sha256": "138d3b777a907ffeac0acccdc156c59292c92ebf401e0418c0babe62548e4ebc",
+      "bytes": 5287
+    }
+  },
+  "capture_run": 38206964619,
+  "capture_artifact": 11726789293,
+  "capture_archive_sha256": "fac0590be30054a37d85775764d75bfe1fe59c6cc9d6ad533d02f307536f6e7a",
+  "realized_profit": null,
+  "model_calls": 0,
+  "remote_ci": "TO_BE_OBSERVED_AND_RECORDED_IN_PR"
+}

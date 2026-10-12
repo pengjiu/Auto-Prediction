@@ -93,6 +93,16 @@ def analyze_compiled(data, quote_records, *, budget=1000*SCALE):
     }
 
 
+def check_quote_urls(quotes):
+    # Native response fields are not proof of which URL was actually requested.
+    from urllib.parse import parse_qs, urlparse
+    for token, (record, _) in quotes.items():
+        url = urlparse(record['url'])
+        if (url.scheme != 'https' or url.netloc != 'clob.polymarket.com' or url.fragment or
+                url.path != '/book' or parse_qs(url.query) != {'token_id': [token]}):
+            raise ValueError('quote URL does not bind requested token')
+
+
 def recompile(source: Path, output: Path):
     tsx = ROOT / 'packages/control-plane/node_modules/.bin/tsx'
     if not tsx.exists():
@@ -114,12 +124,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix='pmh-semantic-export-') as tmp:
         export = recompile(args.source, Path(tmp) / 'export.json')
     quotes = {a['id']: evidence.read(labels[a['id']]) for a in export['assets']}
-    # Token/condition checks above do not substitute for URL provenance.
-    from urllib.parse import parse_qs, urlparse
-    for token, (record, _) in quotes.items():
-        url = urlparse(record['url'])
-        if url.hostname != 'clob.polymarket.com' or url.path != '/book' or parse_qs(url.query).get('token_id') != [token]:
-            raise ValueError('quote URL does not bind requested token')
+    check_quote_urls(quotes)
     result = analyze_compiled(export, quotes)
     result['source_bytes_sha256'] = sha256(args.source.read_bytes()).hexdigest()
     result['quote_evidence_identity'] = evidence.digest

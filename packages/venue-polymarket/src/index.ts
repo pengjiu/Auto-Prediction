@@ -237,3 +237,6 @@ export function decodePolymarketBookStream(
   }
   return updates;
 }
+
+export { parseBinanceCloseRule, closeRegionContains, checkNoonET, BINANCE_CLOSE_RULE,
+  parseBinanceCloseSource, parseBinanceEventPage, type CloseSourceRecord, type CloseSourceInput, type BinanceCloseRule, type CloseRegion } from "./binance-close-rule.js";
