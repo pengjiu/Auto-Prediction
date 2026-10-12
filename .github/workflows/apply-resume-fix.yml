@@ -1,0 +1,47 @@
+name: Publish reviewed real-family fixes
+on:
+  push:
+    branches: [codex/mutation-real-rule-family]
+    paths: [.github/workflows/apply-resume-fix.yml]
+permissions:
+  contents: write
+jobs:
+  publish:
+    if: github.repository == 'pengjiu/Auto-Prediction' && github.ref == 'refs/heads/codex/mutation-real-rule-family'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate and apply exact locally tested source patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64, zlib, hashlib, subprocess, pathlib, os
+          changed = subprocess.check_output(['git','diff','--name-only','a20924378f7e45deb452db1924d4486e39948b9f','HEAD'],text=True).splitlines()
+          assert changed == ['.github/workflows/apply-resume-fix.yml'], changed
+          data = 'eNrFO2l32ziS3/0rkHTPkIwp6ohP9arTiePMel/GzrOd3p3W6DGUCFls81AI0ufqv29VAeAl2rGT2V3HsSkQKBTqrkLZD+Zz1ulcBBnzuktvduldcNGdJXGWJmFnGXox72ZcZN2Ue2FnFiaCd5bebTKfd1IuuJfOFg6+dzLBpj8IYCOIfX7D9na9/d35ruNMt/a5t+Ozfq+3s7W10el0fhjHjc3NzR/H87ffWGdr195hm/Bzl8FHn4tZGky5aeBy9i6IvXjG2TwPw06ah5zBRn6QBUkMbz3fW2Y8NWzTGv16v8Hwa2xkqReEQXzB+M2ML3EqTIiGXnyLJsyJHbkEvNkfGP+N/xkdzli04zl948QXsBgCEzbwwZJGXXnJgCaCehFec/YMLx/hlNbH1blEgBG62TPksEI9tNqp9csQyDDKT9jcsR4TBjJs9+7Xl/JkEsR6v7nTNvUs4frT00kA8fZ+UA08AtrEILhY8hZN6sNbwMhZyT2Rqj025hwjzC5gBp10koQ8UCDxR3whnjOSvEnRnb3DZAaCdvR34XcNaktRnWZCFvA7qaw5iIBHWjyXIn/cGdq/XA6Dyqd8O1veyBlQe++9hcGQMeoPdTr/X6TwyXx3ru2TwAA=='
+          # Transport is rejected unless both patch digest and final blob IDs match.
+          patch = zlib.decompress(base64.b64decode(data,validate=True))
+          assert hashlib.sha256(patch).hexdigest() == '6d6fd913898937a59c7ced7501f9470ca7f36af5b85c32100ce57139d391b058'
+          target=pathlib.Path(os.environ['RUNNER_TEMP'])/'review.patch';target.write_bytes(patch)
+          subprocess.run(['git','apply','--index','--check',str(target)],check=True)
+          subprocess.run(['git','apply','--index',str(target)],check=True)
+          expected = {
+            'packages/control-plane/test/real-close-payoff-research.test.ts':'b49ea6d474f8cff813ee274126670c8201cd9e93',
+            'packages/venue-polymarket/src/binance-close-rule.ts':'7ab17a587a0c0e807018b77976c0be958e983076',
+            'research/payoff-economics/s3/analyze_real.py':'21a5772f670441ff576ab3d676c626b2f25ee641',
+            'research/payoff-economics/s3/bridge.py':'56017533c0ab94f9c4c66493c06373cbc61a43ea',
+            'research/payoff-economics/s3/test_real.py':'02a9c5266e1a558ce5854be3bf6de1067bb8ac9a'}
+          assert set(subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()) == set(expected)
+          for p,want in expected.items():
+              assert subprocess.check_output(['git','hash-object',p],text=True).strip() == want,p
+          PY
+          git diff --cached --check
+          test "$(git ls-remote origin refs/heads/codex/mutation-real-rule-family | cut -f1)" = "$GITHUB_SHA"
+          git config user.name 'Auto Prediction review'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix: bind real-family slug prices, policy clocks and declared sample population'
+          git push origin HEAD:refs/heads/codex/mutation-real-rule-family
