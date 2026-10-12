@@ -1,0 +1,110 @@
+{
+  "schema": "s4.observed-run-summary.v1",
+  "provenance": {
+    "record_kind": "SUMMARY_TRANSCRIBED_FROM_ACTUAL_JOB_OUTPUT_NOT_RAW_RECEIPT",
+    "run_id": 38253958332,
+    "job_id": 114827073406,
+    "capture_source_commit": "9a7d622d841bc0d8098f51de21999c80eb65437c",
+    "preregistration_commit": "cd877185a2e1c3da8df66989d28445943a182956",
+    "execution_location": "GITHUB_ACTIONS_ISOLATED_RUNNER",
+    "new_local_tests_executed": false,
+    "local_blocker": "container_and_python_infrastructure_ClientError"
+  },
+  "summary": {
+    "between_window_gap_ns": 60002061515,
+    "distinct_observation_dates": 4,
+    "exact_gross_witness_rounds": 96,
+    "fee_debit_certified": false,
+    "gross_positive_rounds": 0,
+    "group_rounds_admitted": 96,
+    "group_rounds_attempted": 96,
+    "group_rounds_excluded": 0,
+    "live_execution": false,
+    "model_calls": 0,
+    "no_trade_global_claim": false,
+    "planned_window_gap_met": true,
+    "realized_profit": null,
+    "same_depth_improvement_rounds": 0,
+    "source_probe_status": "NOT_ESTABLISHED",
+    "statistical_independence_established": false,
+    "windows_attempted": 2
+  },
+  "windows": [
+    {
+      "window": 0,
+      "first_request_ns": 1791810885763223046,
+      "last_receipt_ns": 1791810942912855670,
+      "responses": 402,
+      "http_or_capture_failures": 0,
+      "families": [
+        {"date": "2026-10-13", "admitted": 12, "blocker": null},
+        {"date": "2026-10-14", "admitted": 12, "blocker": null},
+        {"date": "2026-10-15", "admitted": 12, "blocker": null},
+        {"date": "2026-10-16", "admitted": 12, "blocker": null}
+      ]
+    },
+    {
+      "window": 1,
+      "first_request_ns": 1791811002914917185,
+      "last_receipt_ns": 1791811060056198892,
+      "responses": 402,
+      "http_or_capture_failures": 0,
+      "families": [
+        {"date": "2026-10-13", "admitted": 12, "blocker": null},
+        {"date": "2026-10-14", "admitted": 12, "blocker": null},
+        {"date": "2026-10-15", "admitted": 12, "blocker": null},
+        {"date": "2026-10-16", "admitted": 12, "blocker": null}
+      ]
+    }
+  ],
+  "source_responses": [
+    {"label": "binance-rest", "status": 200, "bytes": 181189, "sha256": "49ea6809243fc7fb426e07f2fe662097736c7bb405bd2da5eef637d715427999"},
+    {"label": "polymarket-resolution", "status": 200, "bytes": 7545, "sha256": "2264660d3f55b7d3df875d73b68098d7d62c1489cdd252bd846932e3088cd047"},
+    {"label": "uma-yes-no", "status": 200, "bytes": 8919, "http_age_seconds": 7050, "sha256": "94b3988101d472c888998a9e27bdca3b3f2a695341eff5e72179d37d1321afb5"},
+    {"label": "binance-candles", "status": 451, "bytes": 224, "sha256": "79c1db471a4cdc1c8565b5dfc52e0ed2d29962738ee4d28597696fcd0920e348", "selected_contract_value": null}
+  ],
+  "unresolved": [
+    "CONTRACT_UI_TO_API_CANDLE_MAPPING",
+    "FINAL_VALUE_REVISION_CUTOFF",
+    "UNAVAILABLE_SOURCE_FALLBACK",
+    "ONCHAIN_ANCILLARY_AND_CLARIFICATION_MATCH",
+    "INDEPENDENT_ORACLE_OUTCOMES",
+    "COLLATERAL_REDEMPTION_TIMING",
+    "MATCH_LEVEL_FEE_DEBIT"
+  ],
+  "remote_tests": {
+    "node": "22.22.1",
+    "pnpm": "11.13.1",
+    "typescript": "5.9.3",
+    "python": "3.13.16",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "workspace_check": "PASS",
+    "workspace_build": "PASS",
+    "node_tests_passed": 1144,
+    "node_tests_failed": 0,
+    "s1": 16,
+    "s2": 32,
+    "s3": 24,
+    "s4": 19,
+    "offline_p0": 43,
+    "patch_tools": 8,
+    "counts_overlap": true,
+    "original_real_archive": {"families": 2, "admitted": 16, "gross_witnesses": 16, "positive": 0, "increment": 0},
+    "tracked_source_and_evidence_unchanged": true
+  },
+  "artifact": {
+    "id": 11749144587,
+    "name": "source-evidence-replication",
+    "bytes": 4981008,
+    "sha256": "0e495f3774c908a881475626dc333e403676a174c5b53f31771f32e8f7362e7a",
+    "expires_at": "2026-11-11T13:17:58Z"
+  },
+  "test_log_artifact": {
+    "id": 11749019562,
+    "bytes": 7030,
+    "sha256": "ef224d716d029689ac67415d68b96a9b51df778209c04743755a10f16f510193"
+  },
+  "interpretation": "FINITE_CONDITIONAL_BUY_MODELS_ONLY; repeated snapshots are not independent opportunities; no PnL summation",
+  "selection": "HOLD_PROFITABILITY_AND_UNCONDITIONAL_SETTLEMENT; PARTIAL_ADOPT_CANDIDATE_RESEARCH_TOOLS"
+}

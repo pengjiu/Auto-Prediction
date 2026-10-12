@@ -1,7 +1,5 @@
 name: Source evidence and bounded replication
 on:
-  push:
-    branches: [codex/mutation-source-evidence]
   workflow_dispatch:
 permissions:
   contents: read
@@ -45,7 +43,7 @@ jobs:
               if re.search(r'# (tests|pass|fail) |Tests\s+\d+|Test Files', line):
                   print(line)
           PY
-      - name: S1 S2 S3 and new source/protocol regressions
+      - name: S1 S2 S3 and source/protocol regressions
         run: |
           python -m unittest discover -s research/payoff-economics/s1 -p 'test_*.py' -v
           python -m unittest discover -s research/payoff-economics/s2 -p 'test_*.py' -v
@@ -55,22 +53,19 @@ jobs:
           node research/payoff-economics/offline/run.mjs
       - name: Retrospective original real archive still admits the original population
         run: python research/payoff-economics/s3/replay_real_fixture.py --output "$RUNNER_TEMP/original-replay.json"
-      - name: One predeclared public source and two-window capture
-        if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'capture(source-evidence):')
+      - name: Explicitly requested fixed public source and two-window capture
         run: |
           mkdir -p "$RUNNER_TEMP/s4"
           git rev-parse HEAD > "$RUNNER_TEMP/s4/source-head.txt"
           git archive --format=tar.gz HEAD > "$RUNNER_TEMP/s4/source.tar.gz"
           python research/payoff-economics/s4/campaign.py capture --root "$RUNNER_TEMP/s4/capture"
-      - name: Recompile original source and evaluate new quotes without updating rules
-        if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'capture(source-evidence):')
+      - name: Recompile source and evaluate quotes without updating rules
         run: |
           python research/payoff-economics/s4/campaign.py analyze --root "$RUNNER_TEMP/s4/capture" --output "$RUNNER_TEMP/s4/result.json"
           python - <<'PY'
           import json, os, pathlib
           root = pathlib.Path(os.environ['RUNNER_TEMP']) / 's4'
-          result = json.loads((root / 'result.json').read_text())
-          summary = result['summary']
+          summary = json.loads((root / 'result.json').read_text())['summary']
           assert summary['group_rounds_attempted'] == 96
           assert summary['group_rounds_admitted'] + summary['group_rounds_excluded'] == 96
           assert summary['realized_profit'] is None and summary['live_execution'] is False
@@ -80,7 +75,7 @@ jobs:
       - name: Verify tracked source and old evidence remain unchanged
         run: git diff --exit-code
       - name: Retain exact new raw bytes, source and computed results
-        if: always() && (github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'capture(source-evidence):'))
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: source-evidence-replication

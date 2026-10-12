@@ -1,54 +1,56 @@
 # S4 — source evidence and out-of-window replication
 
-This optional research slice builds on PR #6, not on a claimed profitable strategy. It does not change the venue parser, exact verifier, numerical solver, fee qualification or execution authority. All network methods are anonymous GET. No model API is invoked.
+This optional research slice builds on PR #6. It does not change the venue parser, exact verifier, numerical solver, fee qualification or execution authority. All network methods are anonymous GET; no model API is invoked. The completed observation and actual test provenance are in [OBSERVATIONS.md](OBSERVATIONS.md).
 
-## What is being tested
+## Scope
 
-1. Independently retain official source/methodology documents and, if accessible, the two Binance one-minute candles bracketing the previous day's noon ET boundary.
-2. Reuse the complete real-rule compiler and identical S1/S2 same-depth economics for a predeclared new population: October 13–16, 2026, thresholds 82k/84k and ranges 80–82k/82–84k. Two windows of 12 rounds, target interval 5 seconds, minimum gap 60 seconds.
-3. Preserve missing members, failed reads and missing windows in the original 96 date/window/round denominator. The manifest does not choose its own expected population.
+The specification in `plans/source-evidence-validation.md` was committed before the fresh quotes. Fixed BTC dates October 13–16, 2026; above 82k/84k, ranges 80–82k/82–84k; two windows of 12 rounds, five-second target interval, minimum sixty-second gap. Missing members cannot be substituted and the denominator stays 96 date/window/round attempts. Different future observation dates and separated short windows are not statistically independent market samples or four elapsed days of observation.
 
-The primary experiment specification was committed first in `plans/source-evidence-validation.md`. New prices must not change dates, strikes, reference data or stopping rules. If dates are not yet listed, record that gap; do not substitute more promising listings. Data acquired within this turn is still a short, correlated BTC sample. Different target dates and temporally disjoint windows are not a claim of statistical independence.
+`source_audit.py` uses four literal anonymous URLs: official Binance Spot REST documentation, Polymarket resolution documentation, UMA yes/no methodology, and one fixed historical BTCUSDT 1m two-candle request around October 11 noon ET. It permits no redirects, retries, proxy or alternative source, and caps response bytes. Both adjacent candles are validated by integer timestamps and exact decimal OHLC if returned; the code never chooses one as the contract final value. In this actual run Binance returned HTTP 451, so the probe is NOT_ESTABLISHED, not a successful observation of two candles.
 
-## Source facts versus assumptions
+## Facts are not contract guarantees
 
-Reviewed primary sources:
+Primary sources retained and reviewed:
 
-- Binance Spot market data: https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/rest-api/market#klinecandlestick-data
-- Original machine-readable specification: https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md
-- Polymarket resolution: https://docs.polymarket.com/concepts/resolution
-- UMA yes/no verification: https://docs.uma.xyz/verification-guide/yes_or_no
+- https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/rest-api/market#klinecandlestick-data
+- https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md
+- https://docs.polymarket.com/concepts/resolution
+- https://docs.uma.xyz/verification-guide/yes_or_no
 
-The Binance API identifies klines by OPEN time and exposes both Close and close-time fields; start/end timestamps are UTC independently of the interval timezone option. This does not itself choose how a particular prediction market's named UI candle maps onto that API. The probe validates the two complete 12-field rows with integer millisecond identities and exact decimal OHLC values. It reports both candidates and never selects a contract's final price. Equal Close values also do not establish candle identity or future equivalence.
+Binance specifies kline open/close fields and UTC request bounds. That does not on its own prove which API interval matches a particular contract's named UI candle. Contract-specific ancillary data, final-value revision cutoff, fallback, clarification, oracle outcome, fee debit and collateral timing remain unresolved. No success status or generic document removes these assumptions. Equal prices in adjacent source intervals would not establish identical intervals either.
 
-Polymarket resolution rules and UMA ancillary data, not a strategy's parser, govern the final token payments. Unknown/50-50, too-early requests, clarification and final-value timing remain separate issues. The original parser's unknown list is NOT rewritten on a successful probe. General documentation or two consistent API samples cannot prove revision immutability, fallback, per-contract ancillary equality, future oracle behavior, match-level debit rounding or simultaneous collateral redemption.
+Documentation fetched after an older trading observation is post-hoc evidence, not information available at that earlier decision time. Raw byte hashes bind records to retained data, not proof of authenticity if an attacker can rewrite the entire evidence chain. Preserve the independent artifact digest and source commit.
 
-If the official source returns HTTP 403/451 or cannot be reached, record `NOT_ESTABLISHED`; do not fetch another exchange or use a proxy and pretend it is the same source. New documentation is post-hoc evidence for earlier observations, never backfilled information available at those earlier decision times.
+## Code boundaries
 
-## Implementation boundaries
+- `source_audit.py`: fixed-URL source collection and independent raw receipt replay; contract and execution authority always false.
+- `campaign.py`: immutable expected population, two bounded windows and analysis using the existing TypeScript source compiler, S1 and same-depth S2 controls. No duplicated payoff inference.
+- `s3/capture_real.py` and `s3/analyze_real.py`: an explicit bounded protocol parameter. Historical original captures remain reproducible with the original protocol; future collection rejects past target dates. Replay does not trust a captured manifest to define its own sample universe.
+- Tests cover positive controls, both DST transitions, incomplete/future/misidentified candles, decimal precision, tampering, HTTP failures, changed populations and missing entire windows. Synthetic tests are not network observations.
 
-- `source_audit.py`: four literal read-only URLs, no redirects/retries, capped bytes, original request/status/time/hash records; independent raw replay with contract authority always false.
-- `campaign.py`: one immutable expected population; bounded collection and deterministic offline reanalysis. Reuses S3 source recompilation and S1/S2 controls, with no duplicated payoff inference.
-- `capture_real.py` / `analyze_real.py`: small explicit protocol parameter. The original recorded experiment remains reproducible by its original default. New captures require future observation dates; historical replay does not.
-- Current emitted records are research evidence, not signed authenticity statements. Keep the independent GitHub artifact digest and source commit alongside the capture. Raw hashes detect alteration relative to a retained receipt, not a malicious re-authoring of the entire evidence chain.
-- Financial outputs are conditional gross floors and exact price witnesses. No repeated-snapshot floor summation is called PnL. No-trade in an incomplete subset is not global no-arbitrage.
+Output is conditional gross floor, exact price witness, or exclusion. Repeated snapshot floors are never added up as captured PnL. Source API failure remains NOT_ESTABLISHED; missing market observations are exclusions, not no-arbitrage witnesses.
 
-## Run
+## Reproduce
 
-From the repository with locked Node/pnpm dependencies and optional Python NumPy/SciPy installed:
+From the repository with its locked Node/pnpm dependencies and optional NumPy/SciPy installed:
 
 ```sh
 python -m unittest discover -s research/payoff-economics/s4 -p 'test_*.py' -v
-python research/payoff-economics/s4/campaign.py capture --root /new/path/capture
-python research/payoff-economics/s4/campaign.py analyze --root /new/path/capture --output /new/path/results.json
+python research/payoff-economics/s4/campaign.py analyze --root /path/to/original/capture --output /new/path/results.json
 ```
 
-These commands perform no trading. Capture is intentionally date-bounded: after the first target date passes, a NEW independently specified experiment is needed rather than silently altering this one. Output files are create-only. Original data/fixtures and historical reports must not be overwritten.
+Raw archive metadata is in `evidence/observation-summary.json`. Verify the external ZIP digest before inspecting or extracting it. The archive contains the exact capture source and full results. Output files are create-only. Do not overwrite original evidence or historical results.
 
-The dedicated workflow first performs clean installation, full Node check/build/test, S1/S2/S3/S4/P0 regressions and original real-archive replay. Network capture is enabled only for an explicitly prefixed `capture(source-evidence):` commit or manual workflow dispatch, never on a PR/main merge or an ordinary fix commit. There is no recurring schedule. See the run receipt for actual outcomes; code existence is not evidence of a successful run.
+The collection command is deliberately separate:
 
-## Verification status at authoring
+```sh
+python research/payoff-economics/s4/campaign.py capture --root /new/path/capture
+```
 
-The local container and Python tools returned infrastructure `ClientError`, including a minimal echo attempt. No new local test success is claimed in this slice. Clean isolated GitHub Actions tests and actual evidence results will be reported separately after observation. Prior local tests belong to PR #6 and cannot certify new code.
+After the first target date has passed, a newly preregistered protocol is required, not a silent date edit. The initial bounded run was explicitly triggered by commit prefix `capture(source-evidence):`. The final dedicated workflow is **manual-only**; ordinary fixes, PR events and merges do not capture. The shared qualification workflow includes S4 tests alongside existing gates. No recurring schedule is installed.
 
-Selection is HOLD for broad semantic automation and profitability; narrowly useful evidence and replay tools may be partially adopted after qualification. Main and PR #6 are unchanged by this stacked branch.
+## Actual verification boundary
+
+The local container and Python tools failed with infrastructure ClientError, including a minimal echo. **No new local testing is claimed.** Clean GitHub Actions run 38253958332 completed full check/build, 1,144 Node tests, S1 16, S2 32, S3 24, S4 19, P0 offline 43 and patch tools 8, then recompiled the original archive and collected/analyzed the new samples. Focused/offline tests overlap workspace coverage.
+
+Both new windows admitted every planned group snapshot but found no positive gross basket and no S1 improvement over same-depth controls. This is evidence about a narrow conditional BUY-only sample, not all-market efficiency or a failed proof of every possible strategy. Actual fee debits, broad LLM semantic automation and profitability remain unqualified. Main and PR #6 are unchanged by this stacked candidate.

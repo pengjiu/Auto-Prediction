@@ -58,6 +58,7 @@ jobs:
       - run: python -m unittest discover -s research/payoff-economics/s1 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/s2 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/s3 -p 'test_*.py' -v
+      - run: python -m unittest discover -s research/payoff-economics/s4 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/tests -v
-      - name: Research cannot mutate production sources
-        run: git diff --exit-code -- packages apps pnpm-lock.yaml package.json
+      - name: Research cannot mutate production sources or historical evidence
+        run: git diff --exit-code
