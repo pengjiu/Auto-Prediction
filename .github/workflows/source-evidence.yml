@@ -1,0 +1,92 @@
+name: Source evidence and bounded replication
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: source-evidence-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Pinned clean toolchain and dependencies
+        run: |
+          node --version
+          pnpm --version
+          python --version
+          pnpm install --frozen-lockfile
+          python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+      - run: pnpm run check
+      - run: pnpm run build
+      - name: Complete Node workspace regression
+        run: |
+          pnpm run test > "$RUNNER_TEMP/s4-node-tests.log" 2>&1 || { tail -100 "$RUNNER_TEMP/s4-node-tests.log"; exit 1; }
+          python - <<'PY'
+          import os, pathlib, re
+          text = pathlib.Path(os.environ['RUNNER_TEMP'], 's4-node-tests.log').read_text()
+          text = re.sub(r'\x1b\[[0-9;]*[A-Za-z]', '', text)
+          for line in text.splitlines():
+              if re.search(r'# (tests|pass|fail) |Tests\s+\d+|Test Files', line):
+                  print(line)
+          PY
+      - name: S1 S2 S3 and source/protocol regressions
+        run: |
+          python -m unittest discover -s research/payoff-economics/s1 -p 'test_*.py' -v
+          python -m unittest discover -s research/payoff-economics/s2 -p 'test_*.py' -v
+          python -m unittest discover -s research/payoff-economics/s3 -p 'test_*.py' -v
+          python -m unittest discover -s research/payoff-economics/s4 -p 'test_*.py' -v
+          python -m unittest discover -s research/payoff-economics/tests -v
+          node research/payoff-economics/offline/run.mjs
+      - name: Retrospective original real archive still admits the original population
+        run: python research/payoff-economics/s3/replay_real_fixture.py --output "$RUNNER_TEMP/original-replay.json"
+      - name: Explicitly requested fixed public source and two-window capture
+        run: |
+          mkdir -p "$RUNNER_TEMP/s4"
+          git rev-parse HEAD > "$RUNNER_TEMP/s4/source-head.txt"
+          git archive --format=tar.gz HEAD > "$RUNNER_TEMP/s4/source.tar.gz"
+          python research/payoff-economics/s4/campaign.py capture --root "$RUNNER_TEMP/s4/capture"
+      - name: Recompile source and evaluate quotes without updating rules
+        run: |
+          python research/payoff-economics/s4/campaign.py analyze --root "$RUNNER_TEMP/s4/capture" --output "$RUNNER_TEMP/s4/result.json"
+          python - <<'PY'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 's4'
+          summary = json.loads((root / 'result.json').read_text())['summary']
+          assert summary['group_rounds_attempted'] == 96
+          assert summary['group_rounds_admitted'] + summary['group_rounds_excluded'] == 96
+          assert summary['realized_profit'] is None and summary['live_execution'] is False
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write('## Conditional research only\n\n```json\n' + json.dumps(summary, indent=2) + '\n```\n')
+          PY
+      - name: Verify tracked source and old evidence remain unchanged
+        run: git diff --exit-code
+      - name: Retain exact new raw bytes, source and computed results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-evidence-replication
+          path: ${{ runner.temp }}/s4/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Retain full Node regression log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-evidence-tests
+          path: ${{ runner.temp }}/s4-node-tests.log
+          retention-days: 30
+          if-no-files-found: warn
