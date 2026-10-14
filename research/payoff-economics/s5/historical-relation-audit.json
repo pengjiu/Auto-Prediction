@@ -1,0 +1,406 @@
+[
+  {
+    "event_id": "255195",
+    "title": "Iran leadership change by...?",
+    "interpretation": "ASSUMED_IDENTICAL_QUALIFYING_OCCURRENCE_IN_OWN_CREATION_WINDOW",
+    "members": [
+      {
+        "marketId": "3399450",
+        "question": "Iran leadership change by October 31?",
+        "conditionId": "0xa4b952e2e0ab85e2949b2f67190d10da6212e030993ad930f55b21adbefda2d3",
+        "tokens": [
+          "76758908365678711322172114828022663697257752796914712513878834641665977747840",
+          "49234118435352323291730777734805386699990286390595415348937712915074904021022"
+        ],
+        "startNS": "1786112593456845000",
+        "endNS": "1793505540000000000",
+        "endMinuteNS": "1793505599999999999",
+        "fullRuleHash": "70cf37ca51ca148883ce9a020b48a667a51cc8cf137d80b0470fd50949e42996"
+      },
+      {
+        "marketId": "3399451",
+        "question": "Iran leadership change by November 30?",
+        "conditionId": "0x7a611b2ae4e3b871580dececcf7cf126eead47fe58ebea15b1865a7c8a881376",
+        "tokens": [
+          "56396807188893577427894903077983762835144811505310749557721935062829741210541",
+          "106457173661711072800954463114296112322414039881870249204907915075846013240261"
+        ],
+        "startNS": "1786112622925791000",
+        "endNS": "1796101140000000000",
+        "endMinuteNS": "1796101199999999999",
+        "fullRuleHash": "70cf37ca51ca148883ce9a020b48a667a51cc8cf137d80b0470fd50949e42996"
+      },
+      {
+        "marketId": "1535973",
+        "question": "Iran leadership change by December 31?",
+        "conditionId": "0x377e7fe65cf198a7fc4fdae3f2136b74729279267858daaf96718b23bc2a5607",
+        "tokens": [
+          "18652479948917565296149340091675894865339012333173025944893512396354173886674",
+          "60499458684380641857666641513383149627633695110197406276308452075860198022694"
+        ],
+        "startNS": "1773024904203706000",
+        "endNS": "1798779540000000000",
+        "endMinuteNS": "1798779599999999999",
+        "fullRuleHash": "70cf37ca51ca148883ce9a020b48a667a51cc8cf137d80b0470fd50949e42996"
+      }
+    ],
+    "state_masks": [
+      0,
+      4,
+      5,
+      6,
+      7
+    ],
+    "relations": {
+      "pairwise_implications": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "pairwise_masks": [
+        0,
+        4,
+        5,
+        6,
+        7
+      ],
+      "higher_order_covers": [],
+      "naive_deadline_counterexamples": [
+        {
+          "earlier": 0,
+          "later": 1,
+          "counterworld_mask": 5,
+          "witness": {
+            "timesNS": [
+              "1786112593456845000"
+            ],
+            "intervalsNS": [
+              [
+                "1786112593456845000",
+                "1793505540000000000"
+              ],
+              [
+                "1786112622925791000",
+                "1796101140000000000"
+              ],
+              [
+                "1773024904203706000",
+                "1798779540000000000"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "source_kind": "HISTORICAL_SEMANTIC_EXTRACT_NOT_FRESH_QUOTES"
+  },
+  {
+    "event_id": "1103681",
+    "title": "Ohio enacts data center moratorium by...?",
+    "interpretation": "ASSUMED_IDENTICAL_QUALIFYING_OCCURRENCE_IN_OWN_CREATION_WINDOW",
+    "members": [
+      {
+        "marketId": "5123848",
+        "question": "Will Ohio enact a data center moratorium by December 31, 2026?",
+        "conditionId": "0x48f445c1ec9ea8effe9a89314179eae44cef49bb800559b74478cc860c8df699",
+        "tokens": [
+          "68236442884985067383872546412519493826154858257547212819513846583608803216256",
+          "115022076572460728819880923365315963944157059609499196969876855057688610380583"
+        ],
+        "startNS": "1790691319827277000",
+        "endNS": "1798779540000000000",
+        "endMinuteNS": "1798779599999999999",
+        "fullRuleHash": "2d8dd977e3d84db4e739fc87c2245a5603eac54b420da78b1c1f36b2f18b8c59"
+      },
+      {
+        "marketId": "5123849",
+        "question": "Will Ohio enact a data center moratorium by June 30, 2027?",
+        "conditionId": "0x5ec06cf1f43f123ffeee3f5d127cc75edad156f541963227b01220e03ed1176c",
+        "tokens": [
+          "106271587781768688786817611161273107901222823349336007789760071203913818080066",
+          "13311022121254928883082043768725100106435463988242643643593771102474758049303"
+        ],
+        "startNS": "1790691320377885000",
+        "endNS": "1814414340000000000",
+        "endMinuteNS": "1814414399999999999",
+        "fullRuleHash": "2d8dd977e3d84db4e739fc87c2245a5603eac54b420da78b1c1f36b2f18b8c59"
+      },
+      {
+        "marketId": "5123850",
+        "question": "Will Ohio enact a data center moratorium by December 31, 2027?",
+        "conditionId": "0xb9a948ca5dcbafe204aec86b1cc2889e33182868de18459b3f678e6dda38fb4f",
+        "tokens": [
+          "83578989958484702465841140742989788249027311873823224397200251475245109172644",
+          "98437913976683859598908609766542470256588698046456403652527953773857981077595"
+        ],
+        "startNS": "1790691320785951000",
+        "endNS": "1830315540000000000",
+        "endMinuteNS": "1830315599999999999",
+        "fullRuleHash": "2d8dd977e3d84db4e739fc87c2245a5603eac54b420da78b1c1f36b2f18b8c59"
+      }
+    ],
+    "state_masks": [
+      0,
+      1,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "relations": {
+      "pairwise_implications": [],
+      "pairwise_masks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "higher_order_covers": [
+        {
+          "antecedent": 1,
+          "cover": [
+            0,
+            2
+          ]
+        }
+      ],
+      "naive_deadline_counterexamples": [
+        {
+          "earlier": 0,
+          "later": 1,
+          "counterworld_mask": 1,
+          "witness": {
+            "timesNS": [
+              "1790691319827277000"
+            ],
+            "intervalsNS": [
+              [
+                "1790691319827277000",
+                "1798779540000000000"
+              ],
+              [
+                "1790691320377885000",
+                "1814414340000000000"
+              ],
+              [
+                "1790691320785951000",
+                "1830315540000000000"
+              ]
+            ]
+          }
+        },
+        {
+          "earlier": 0,
+          "later": 2,
+          "counterworld_mask": 1,
+          "witness": {
+            "timesNS": [
+              "1790691319827277000"
+            ],
+            "intervalsNS": [
+              [
+                "1790691319827277000",
+                "1798779540000000000"
+              ],
+              [
+                "1790691320377885000",
+                "1814414340000000000"
+              ],
+              [
+                "1790691320785951000",
+                "1830315540000000000"
+              ]
+            ]
+          }
+        },
+        {
+          "earlier": 1,
+          "later": 2,
+          "counterworld_mask": 3,
+          "witness": {
+            "timesNS": [
+              "1790691320377885000"
+            ],
+            "intervalsNS": [
+              [
+                "1790691319827277000",
+                "1798779540000000000"
+              ],
+              [
+                "1790691320377885000",
+                "1814414340000000000"
+              ],
+              [
+                "1790691320785951000",
+                "1830315540000000000"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "source_kind": "HISTORICAL_SEMANTIC_EXTRACT_NOT_FRESH_QUOTES"
+  },
+  {
+    "event_id": "1103684",
+    "title": "Texas enacts data center moratorium by...?",
+    "interpretation": "ASSUMED_IDENTICAL_QUALIFYING_OCCURRENCE_IN_OWN_CREATION_WINDOW",
+    "members": [
+      {
+        "marketId": "5123855",
+        "question": "Will Texas enact a data center moratorium by December 31, 2026?",
+        "conditionId": "0xefc45792f1a9b1bb7099b50624af95b0390132afce22e2ec04a977ae297df596",
+        "tokens": [
+          "96644266669163652444765500564130195473830110427112477056274540727808439322306",
+          "6095135387098504804657413501038558704436156258876241785515156483951299853871"
+        ],
+        "startNS": "1790691367263711000",
+        "endNS": "1798779540000000000",
+        "endMinuteNS": "1798779599999999999",
+        "fullRuleHash": "18f96497b99cc736d37377f78de61212258ee84a8adc568a79da869fa1528a3f"
+      },
+      {
+        "marketId": "5123856",
+        "question": "Will Texas enact a data center moratorium by June 30, 2027?",
+        "conditionId": "0xada358aecc6681e630ff79ecb925d9f06a2da1ab2d271590f2e4251a6f8f41e6",
+        "tokens": [
+          "73886725936543336197802060634252152558751132251354428636963017872004133849072",
+          "40872657629566790731002639244660076252221192212320080025376595780110993079497"
+        ],
+        "startNS": "1790691367636008000",
+        "endNS": "1814414340000000000",
+        "endMinuteNS": "1814414399999999999",
+        "fullRuleHash": "18f96497b99cc736d37377f78de61212258ee84a8adc568a79da869fa1528a3f"
+      },
+      {
+        "marketId": "5123857",
+        "question": "Will Texas enact a data center moratorium by December 31, 2027?",
+        "conditionId": "0x3f03623cab92b3a8f0ab8cc09483c1448d48bb66a92d6cb7d1afaf2f824d2789",
+        "tokens": [
+          "22007935324383614741304787778360750052563990755989237617249489952581834753660",
+          "50764817770955285448067746937148987390987626663525640120746087606309625347660"
+        ],
+        "startNS": "1790691368065030000",
+        "endNS": "1830315540000000000",
+        "endMinuteNS": "1830315599999999999",
+        "fullRuleHash": "18f96497b99cc736d37377f78de61212258ee84a8adc568a79da869fa1528a3f"
+      }
+    ],
+    "state_masks": [
+      0,
+      1,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "relations": {
+      "pairwise_implications": [],
+      "pairwise_masks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "higher_order_covers": [
+        {
+          "antecedent": 1,
+          "cover": [
+            0,
+            2
+          ]
+        }
+      ],
+      "naive_deadline_counterexamples": [
+        {
+          "earlier": 0,
+          "later": 1,
+          "counterworld_mask": 1,
+          "witness": {
+            "timesNS": [
+              "1790691367263711000"
+            ],
+            "intervalsNS": [
+              [
+                "1790691367263711000",
+                "1798779540000000000"
+              ],
+              [
+                "1790691367636008000",
+                "1814414340000000000"
+              ],
+              [
+                "1790691368065030000",
+                "1830315540000000000"
+              ]
+            ]
+          }
+        },
+        {
+          "earlier": 0,
+          "later": 2,
+          "counterworld_mask": 1,
+          "witness": {
+            "timesNS": [
+              "1790691367263711000"
+            ],
+            "intervalsNS": [
+              [
+                "1790691367263711000",
+                "1798779540000000000"
+              ],
+              [
+                "1790691367636008000",
+                "1814414340000000000"
+              ],
+              [
+                "1790691368065030000",
+                "1830315540000000000"
+              ]
+            ]
+          }
+        },
+        {
+          "earlier": 1,
+          "later": 2,
+          "counterworld_mask": 3,
+          "witness": {
+            "timesNS": [
+              "1790691367636008000"
+            ],
+            "intervalsNS": [
+              [
+                "1790691367263711000",
+                "1798779540000000000"
+              ],
+              [
+                "1790691367636008000",
+                "1814414340000000000"
+              ],
+              [
+                "1790691368065030000",
+                "1830315540000000000"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "source_kind": "HISTORICAL_SEMANTIC_EXTRACT_NOT_FRESH_QUOTES"
+  }
+]

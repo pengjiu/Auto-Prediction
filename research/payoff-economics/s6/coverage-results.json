@@ -1,0 +1,82 @@
+{
+  "schema": "s6.coverage-observation.v1",
+  "scope": "RETROSPECTIVE_RETAINED_CATALOG_NOT_MARKET_WIDE",
+  "routing_uses_quotes": false,
+  "catalog_archive_sha256": "ea09da11e9b87c8a174029679fc34ff3f69c9c81fbe17fe17d766949d793e0e1",
+  "manifest_sha256": "278f5f28c5260f30771500a0022233d04947eafc6c4c7743528ac56864ed26a4",
+  "catalog_pages": 40,
+  "unavailable_pages": [],
+  "summary": {
+    "events": 398,
+    "market_records": 16611,
+    "unique_market_ids": 16611,
+    "distinct_market_rule_texts": 9598,
+    "open_orderbook_records": 14071,
+    "all_cross_event_pairs": 79003,
+    "shared_block_candidate_pairs": 1871,
+    "title_candidate_pairs": 5715,
+    "ignored_high_frequency_blocks": 1,
+    "review_budget_per_router": 32,
+    "top_pair_overlap": 0,
+    "block_only_top_pairs": 32,
+    "semantic_certificates": 0,
+    "economic_tests": 0
+  },
+  "discovery_provenance": "IN_SESSION_INSPECTION_NOT_INDEPENDENT_LABEL_SET",
+  "review_examples": [
+    {
+      "rank": 1,
+      "event_ids": [
+        "1167027",
+        "1167030"
+      ],
+      "candidate_source_identity": "2640883a862bb511cf096daefe255e2ae7dc55a57a3c3338dec180353b6d81b3",
+      "disposition": "NO_HARD_RELATION_FROM_SHARED_TEXT",
+      "reason": "Different matches can have independent winners despite identical cancellation and forfeit clauses.",
+      "first_evidence_block_hash": "b61f8947ea3adf6f38749e2d962d8563fbc2d40757a86b9f26a8e2f48b123aeb"
+    },
+    {
+      "rank": 3,
+      "event_ids": [
+        "32224",
+        "32228"
+      ],
+      "candidate_source_identity": "87505866f9e3cfa8304de371123ed3218b3bfe98527142a8bc40aef8af59ae4f",
+      "disposition": "CONDITIONAL_COMPOSITION_RESEARCH",
+      "reason": "Shared Senate-control definition routes to joint and marginal claims; full descriptions and House counterpart separately inspected. No independent settlement guarantee.",
+      "first_evidence_block_hash": "ea02592042161fa97fbd9ddde838a89a04d9c1ea2c7b18c600810405a63ef916"
+    },
+    {
+      "rank": 4,
+      "event_ids": [
+        "1103681",
+        "1103684"
+      ],
+      "candidate_source_identity": "618a9cf635f587ad48d3e1e49af33a8660d4b66289444923912dd3a0fb0fe631",
+      "disposition": "NO_HARD_RELATION_FROM_SHARED_TEXT",
+      "reason": "Qualifying moratorium definitions share text, but different states may enact independently; do not assert one implies the other.",
+      "first_evidence_block_hash": "0472d4071608a1508fb1937201fe45152a77e8d0cf51e6e6436a0af30b9811cf"
+    },
+    {
+      "rank": 29,
+      "event_ids": [
+        "1170745",
+        "1170746"
+      ],
+      "candidate_source_identity": "3893728d0e5c3e215cb406fc9f079312790da8b4f5aab96855890214ac314f12",
+      "disposition": "NO_HARD_RELATION_FROM_SHARED_TEXT",
+      "reason": "Same weather method in different cities does not imply the same observation value.",
+      "first_evidence_block_hash": "750ce403768c029134b03efe8b1cd652eb4a99ebb22b8647775d70673eb1a13d"
+    }
+  ],
+  "limits": [
+    "CATALOG_PARTLY_LIQUIDITY_RANKED",
+    "AVAILABLE_ORDERBOOK_FLAGS_ARE_HISTORICAL_METADATA",
+    "NO_PRECISION_OR_RECALL_ESTIMATE",
+    "SHARED_TEXT_NOT_PAYOFF_EQUIVALENCE",
+    "NO_PROVIDER_LLM_CALLS"
+  ],
+  "joint_pair_retrieved": true,
+  "joint_pair_in_block_top32": false,
+  "factor_source_pair_in_title_top32": false
+}

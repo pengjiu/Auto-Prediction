@@ -27,6 +27,14 @@ jobs:
       - run: pnpm run check
       - run: pnpm run build
       - run: pnpm run test
+      - name: Strict temporal source checks and mutation regressions
+        run: |
+          pnpm exec tsc --noEmit --strict --target es2022 --module esnext --moduleResolution bundler --allowImportingTsExtensions --types node --skipLibCheck research/payoff-economics/s5/export.ts research/payoff-economics/s5/test-export.ts
+          packages/control-plane/node_modules/.bin/tsx research/payoff-economics/s5/test-export.ts
+      - name: Strict coverage source and composition regressions
+        run: |
+          pnpm exec tsc --noEmit --strict --target es2022 --module esnext --moduleResolution bundler --allowImportingTsExtensions --types node --skipLibCheck research/payoff-economics/s6/export.ts research/payoff-economics/s6/test-export.ts
+          packages/control-plane/node_modules/.bin/tsx research/payoff-economics/s6/test-export.ts
       - run: node research/payoff-economics/offline/run.mjs
       - name: Recompile source through the actual semantic export CLI
         run: |
@@ -40,6 +48,8 @@ jobs:
           python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
       - name: Recompile full real source and analyze original captured bytes
         run: python research/payoff-economics/s3/replay_real_fixture.py --output "$RUNNER_TEMP/real-family-replay.json"
+      - name: Replay the pinned complete temporal capture without network
+        run: python research/payoff-economics/s5/replay.py --output "$RUNNER_TEMP/temporal-replay.json"
       - name: Tests cannot rewrite tracked source or historical evidence
         run: git diff --exit-code
   research:
@@ -59,6 +69,8 @@ jobs:
       - run: python -m unittest discover -s research/payoff-economics/s2 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/s3 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/s4 -p 'test_*.py' -v
+      - run: python -m unittest discover -s research/payoff-economics/s5 -p 'test_*.py' -v
+      - run: python -m unittest discover -s research/payoff-economics/s6 -p 'test_*.py' -v
       - run: python -m unittest discover -s research/payoff-economics/tests -v
       - name: Research cannot mutate production sources or historical evidence
         run: git diff --exit-code

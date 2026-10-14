@@ -1,0 +1,179 @@
+{
+  "schema": "s5-reviewed-scopes.v1",
+  "scopes": [
+    {
+      "eventId": "255195",
+      "title": "Iran leadership change by...?",
+      "description": "This market will resolve to \"Yes\" if the Supreme Leader of Iran, Mojtaba Khamenei, ceases to be the de facto leader of Iran at any point between market creation and the listed date (ET). Otherwise, this market will resolve to \"No\".\n\nMojtaba Khamenei will be considered to no longer be the de facto leader of Iran if he is removed from power, is detained, or otherwise loses his position or is prevented from acting as the de facto leader of Iran within this market's timeframe.\n\nAn official announcement of Mojtaba Khamenei’s resignation or removal will qualify for a \"Yes\" resolution regardless of when the announced departure goes into effect.\n\nThe primary resolution source for this market will be a consensus of credible reporting.",
+      "members": [
+        {
+          "id": "3399450",
+          "question": "Iran leadership change by October 31?",
+          "slug": "iran-leadership-change-by-october-31",
+          "createdAt": "2026-08-07T14:23:13.456845Z",
+          "endDate": "2026-11-01T03:59:00Z",
+          "groupItemTitle": "October 31",
+          "conditionId": "0xa4b952e2e0ab85e2949b2f67190d10da6212e030993ad930f55b21adbefda2d3",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"76758908365678711322172114828022663697257752796914712513878834641665977747840\", \"49234118435352323291730777734805386699990286390595415348937712915074904021022\"]"
+        },
+        {
+          "id": "3399451",
+          "question": "Iran leadership change by November 30?",
+          "slug": "iran-leadership-change-by-november-30",
+          "createdAt": "2026-08-07T14:23:42.925791Z",
+          "endDate": "2026-12-01T04:59:00Z",
+          "groupItemTitle": "November 30",
+          "conditionId": "0x7a611b2ae4e3b871580dececcf7cf126eead47fe58ebea15b1865a7c8a881376",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"56396807188893577427894903077983762835144811505310749557721935062829741210541\", \"106457173661711072800954463114296112322414039881870249204907915075846013240261\"]"
+        },
+        {
+          "id": "1535973",
+          "question": "Iran leadership change by December 31?",
+          "slug": "iran-leadership-change-by-december-31-974-976-658-482-568-685-996-469-827",
+          "createdAt": "2026-03-09T02:55:04.203706Z",
+          "endDate": "2027-01-01T04:59:00Z",
+          "groupItemTitle": "December 31",
+          "conditionId": "0x377e7fe65cf198a7fc4fdae3f2136b74729279267858daaf96718b23bc2a5607",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"18652479948917565296149340091675894865339012333173025944893512396354173886674\", \"60499458684380641857666641513383149627633695110197406276308452075860198022694\"]"
+        }
+      ],
+      "review": "IN_SESSION_ASSISTANT_CONDITIONAL_READING_NOT_INDEPENDENT_AUDIT",
+      "historical_receipt": {
+        "body_sha256": "d4e9c5737bcbc807f7b504fb16f3c1375434b0a94f89da80b0da1bb5cc7eb87e",
+        "bytes": 968816,
+        "duration_ns": 300880225,
+        "error": null,
+        "headers": {
+          "cache-control": "public, max-age=300",
+          "content-type": "application/json",
+          "date": "Sun, 11 Oct 2026 13:14:05 GMT"
+        },
+        "label": "catalog:liquidity:210",
+        "method": "GET",
+        "received_ns": 1791724445707296447,
+        "started_ns": 1791724445406416132,
+        "status": 200,
+        "url": "https://gamma-api.polymarket.com/events?limit=10&offset=210&active=true&closed=false&order=liquidity&ascending=false"
+      }
+    },
+    {
+      "eventId": "1103681",
+      "title": "Ohio enacts data center moratorium by...?",
+      "description": "This market will resolve to \"Yes\" if the State of Ohio enacts a law or constitutional provision that establishes a statewide moratorium on new data centers between market creation and the specified date, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA statewide moratorium on new data centers refers to a binding policy with legal force that generally prohibits or suspends the approval, permitting, construction, grid interconnection, or operation of all new data centers, or a subset of data centers that includes all new data centers with an interconnection capacity above 100 MW per facility (requested or nameplate), throughout the state. Suspensions of tax incentives, exemption certifications, or economic development awards alone will not qualify, nor will a moratorium adopted by a local government or limited to part of the state. Specific exemptions (e.g., for specified applications, executed agreements, or interconnection requests) do not prevent a measure from generally applying to all new data centers, or a qualifying subset of new data centers, provided that data center approval, permitting, construction, grid interconnection, or operation is prohibited by default, rather than permitted subject to conditions or restrictions. Conditions on the resumption or termination of a suspension do not make a measure one that permits subject to conditions; a measure that suspends approvals, permitting, construction, or interconnection until a specified condition is satisfied qualifies.\n\nEnactment occurs when a bill becomes law under the state's constitution and laws, whether by gubernatorial signature, veto override, becoming law without signature, approval at a statewide referendum election, or any other legal mechanism by which statutes can be enacted. For an initiated or referred statute or constitutional amendment, or other voter referendum, the relevant law is considered to have been enacted on the election day on which it was approved, as reflected in the certified results, regardless of when the measure is certified or takes effect. Passage by one or both chambers, or a Governor's announced intent to sign, is not enactment.\n\nExecutive orders, agency orders, and other measures which are not statutory or constitutional do not qualify as enactment regardless of legal force. A provision removed by line-item veto is not enacted unless the veto is overridden as to that item. The operative text of the measure at enactment controls; provisions amended out before enactment do not qualify.\n\nThe moratorium provision must be mandatory on its face. A statute that merely authorizes a state agency or the Governor to impose a moratorium at their discretion does not qualify. A statute that directs suspension of approvals or interconnection upon a specified condition qualifies only if the condition is objectively determinable and is not deferred to be determined by the implementing agency's findings, certifications, or completion of its own proceedings.\n\nThis market resolves based on the date of enactment, not the effective date. Resolution will not be affected by failure to implement a law, judicial invalidation, repeal, or expiry that follows a relevant enactment, or an effective date that comes after the date of enactment.\n\nThe primary resolution source will be official information from the state government of Ohio; however, a consensus of credible reporting may also be used.",
+      "members": [
+        {
+          "id": "5123848",
+          "question": "Will Ohio enact a data center moratorium by December 31, 2026?",
+          "slug": "will-ohio-enact-a-data-center-moratorium-by-december-31-2026",
+          "createdAt": "2026-09-29T14:15:19.827277Z",
+          "endDate": "2027-01-01T04:59:00Z",
+          "groupItemTitle": "December 31, 2026",
+          "conditionId": "0x48f445c1ec9ea8effe9a89314179eae44cef49bb800559b74478cc860c8df699",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"68236442884985067383872546412519493826154858257547212819513846583608803216256\", \"115022076572460728819880923365315963944157059609499196969876855057688610380583\"]"
+        },
+        {
+          "id": "5123849",
+          "question": "Will Ohio enact a data center moratorium by June 30, 2027?",
+          "slug": "will-ohio-enact-a-data-center-moratorium-by-june-30-2027",
+          "createdAt": "2026-09-29T14:15:20.377885Z",
+          "endDate": "2027-07-01T03:59:00Z",
+          "groupItemTitle": "June 30, 2027",
+          "conditionId": "0x5ec06cf1f43f123ffeee3f5d127cc75edad156f541963227b01220e03ed1176c",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"106271587781768688786817611161273107901222823349336007789760071203913818080066\", \"13311022121254928883082043768725100106435463988242643643593771102474758049303\"]"
+        },
+        {
+          "id": "5123850",
+          "question": "Will Ohio enact a data center moratorium by December 31, 2027?",
+          "slug": "will-ohio-enact-a-data-center-moratorium-by-december-31-2027",
+          "createdAt": "2026-09-29T14:15:20.785951Z",
+          "endDate": "2028-01-01T04:59:00Z",
+          "groupItemTitle": "December 31, 2027",
+          "conditionId": "0xb9a948ca5dcbafe204aec86b1cc2889e33182868de18459b3f678e6dda38fb4f",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"83578989958484702465841140742989788249027311873823224397200251475245109172644\", \"98437913976683859598908609766542470256588698046456403652527953773857981077595\"]"
+        }
+      ],
+      "review": "IN_SESSION_ASSISTANT_CONDITIONAL_READING_NOT_INDEPENDENT_AUDIT",
+      "historical_receipt": {
+        "body_sha256": "7a0e773e37fe69712a9943cf6bb57748cc9cc77b2aafec6cf98e88cd4e56b50b",
+        "bytes": 1792321,
+        "duration_ns": 331370649,
+        "error": null,
+        "headers": {
+          "cache-control": "public, max-age=300",
+          "content-type": "application/json",
+          "date": "Sun, 11 Oct 2026 13:14:00 GMT"
+        },
+        "label": "catalog:liquidity:50",
+        "method": "GET",
+        "received_ns": 1791724440374496641,
+        "started_ns": 1791724440043125500,
+        "status": 200,
+        "url": "https://gamma-api.polymarket.com/events?limit=10&offset=50&active=true&closed=false&order=liquidity&ascending=false"
+      }
+    },
+    {
+      "eventId": "1103684",
+      "title": "Texas enacts data center moratorium by...?",
+      "description": "This market will resolve to \"Yes\" if the State of Texas enacts a law or constitutional provision that establishes a statewide moratorium on new data centers between market creation and the specified date, 11:59 PM ET. Otherwise, this market will resolve to \"No\".\n\nA statewide moratorium on new data centers refers to a binding policy with legal force that generally prohibits or suspends the approval, permitting, construction, grid interconnection, or operation of all new data centers, or a subset of data centers that includes all new data centers with an interconnection capacity above 100 MW per facility (requested or nameplate), throughout the state. Suspensions of tax incentives, exemption certifications, or economic development awards alone will not qualify, nor will a moratorium adopted by a local government or limited to part of the state. Specific exemptions (e.g., for specified applications, executed agreements, or interconnection requests) do not prevent a measure from generally applying to all new data centers, or a qualifying subset of new data centers, provided that data center approval, permitting, construction, grid interconnection, or operation is prohibited by default, rather than permitted subject to conditions or restrictions. Conditions on the resumption or termination of a suspension do not make a measure one that permits subject to conditions; a measure that suspends approvals, permitting, construction, or interconnection until a specified condition is satisfied qualifies.\n\nEnactment occurs when a bill becomes law under the state's constitution and laws, whether by gubernatorial signature, veto override, becoming law without signature, approval at a statewide referendum election, or any other legal mechanism by which statutes can be enacted. For an initiated or referred statute or constitutional amendment, or other voter referendum, the relevant law is considered to have been enacted on the election day on which it was approved, as reflected in the certified results, regardless of when the measure is certified or takes effect. Passage by one or both chambers, or a Governor's announced intent to sign, is not enactment.\n\nExecutive orders, agency orders, and other measures which are not statutory or constitutional do not qualify as enactment regardless of legal force. A provision removed by line-item veto is not enacted unless the veto is overridden as to that item. The operative text of the measure at enactment controls; provisions amended out before enactment do not qualify.\n\nThe moratorium provision must be mandatory on its face. A statute that merely authorizes a state agency or the Governor to impose a moratorium at their discretion does not qualify. A statute that directs suspension of approvals or interconnection upon a specified condition qualifies only if the condition is objectively determinable and is not deferred to be determined by the implementing agency's findings, certifications, or completion of its own proceedings.\n\nThis market resolves based on the date of enactment, not the effective date. Resolution will not be affected by failure to implement a law, judicial invalidation, repeal, or expiry that follows a relevant enactment, or an effective date that comes after the date of enactment.\n\nThe primary resolution source will be official information from the state government of Texas; however, a consensus of credible reporting may also be used.",
+      "members": [
+        {
+          "id": "5123855",
+          "question": "Will Texas enact a data center moratorium by December 31, 2026?",
+          "slug": "will-texas-enact-a-data-center-moratorium-by-december-31-2026",
+          "createdAt": "2026-09-29T14:16:07.263711Z",
+          "endDate": "2027-01-01T04:59:00Z",
+          "groupItemTitle": "December 31, 2026",
+          "conditionId": "0xefc45792f1a9b1bb7099b50624af95b0390132afce22e2ec04a977ae297df596",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"96644266669163652444765500564130195473830110427112477056274540727808439322306\", \"6095135387098504804657413501038558704436156258876241785515156483951299853871\"]"
+        },
+        {
+          "id": "5123856",
+          "question": "Will Texas enact a data center moratorium by June 30, 2027?",
+          "slug": "will-texas-enact-a-data-center-moratorium-by-june-30-2027",
+          "createdAt": "2026-09-29T14:16:07.636008Z",
+          "endDate": "2027-07-01T03:59:00Z",
+          "groupItemTitle": "June 30, 2027",
+          "conditionId": "0xada358aecc6681e630ff79ecb925d9f06a2da1ab2d271590f2e4251a6f8f41e6",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"73886725936543336197802060634252152558751132251354428636963017872004133849072\", \"40872657629566790731002639244660076252221192212320080025376595780110993079497\"]"
+        },
+        {
+          "id": "5123857",
+          "question": "Will Texas enact a data center moratorium by December 31, 2027?",
+          "slug": "will-texas-enact-a-data-center-moratorium-by-december-31-2027",
+          "createdAt": "2026-09-29T14:16:08.06503Z",
+          "endDate": "2028-01-01T04:59:00Z",
+          "groupItemTitle": "December 31, 2027",
+          "conditionId": "0x3f03623cab92b3a8f0ab8cc09483c1448d48bb66a92d6cb7d1afaf2f824d2789",
+          "outcomes": "[\"Yes\", \"No\"]",
+          "clobTokenIds": "[\"22007935324383614741304787778360750052563990755989237617249489952581834753660\", \"50764817770955285448067746937148987390987626663525640120746087606309625347660\"]"
+        }
+      ],
+      "review": "IN_SESSION_ASSISTANT_CONDITIONAL_READING_NOT_INDEPENDENT_AUDIT",
+      "historical_receipt": {
+        "body_sha256": "2fe5e23ccb11bcb9ae928d135945ebb2a70dc475761085cc019161829803baea",
+        "bytes": 1362935,
+        "duration_ns": 339063142,
+        "error": null,
+        "headers": {
+          "cache-control": "public, max-age=300",
+          "content-type": "application/json",
+          "date": "Sun, 11 Oct 2026 13:14:01 GMT"
+        },
+        "label": "catalog:liquidity:70",
+        "method": "GET",
+        "received_ns": 1791724441044161655,
+        "started_ns": 1791724440705097922,
+        "status": 200,
+        "url": "https://gamma-api.polymarket.com/events?limit=10&offset=70&active=true&closed=false&order=liquidity&ascending=false"
+      }
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "schema": "s5.observed-temporal-economics.v1",
+  "capture_source_commit": "49e71917a89df323967e7b485b859a45c9273a19",
+  "original_run": 38283606507,
+  "original_artifact": 11762581792,
+  "original_zip_sha256": "2c43f339e01feb64fedf66769f38d58dd16aff31229925b37bd466b821647c5c",
+  "observation_start_utc": "2026-10-12T17:23:07.792591740Z",
+  "observation_end_utc": "2026-10-12T17:23:15.814400829Z",
+  "duration_ns": 8021809089,
+  "requests": 80,
+  "http_errors": 0,
+  "summary": {
+    "attempted": 12,
+    "admitted": 12,
+    "excluded": 0,
+    "source_families": 3,
+    "positive_gross": 0,
+    "algorithm_improvements": 0,
+    "semantic_improvements": 0,
+    "exact_gross_witnesses": 12
+  },
+  "protocol_completed": true,
+  "distinct_numeric_models": 3,
+  "quote_skew_ns": [
+    520356299,
+    653560086
+  ],
+  "nominal_fee_witnesses": 12,
+  "group_relations": [
+    {
+      "event_id": "255195",
+      "pairwise_implications": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "higher_order_covers": [],
+      "naive_deadline_counterexamples": 1
+    },
+    {
+      "event_id": "1103681",
+      "pairwise_implications": [],
+      "higher_order_covers": [
+        {
+          "antecedent": 1,
+          "cover": [
+            0,
+            2
+          ]
+        }
+      ],
+      "naive_deadline_counterexamples": 3
+    },
+    {
+      "event_id": "1103684",
+      "pairwise_implications": [],
+      "higher_order_covers": [
+        {
+          "antecedent": 1,
+          "cover": [
+            0,
+            2
+          ]
+        }
+      ],
+      "naive_deadline_counterexamples": 3
+    }
+  ],
+  "first_round_cover_examples": [
+    {
+      "event_id": "1103681",
+      "basket": "YES(A)+NO(B)+YES(C)",
+      "minimum_normal_payoff": "1",
+      "ask_cost": "273/250",
+      "gross_floor": "-23/250"
+    },
+    {
+      "event_id": "1103684",
+      "basket": "YES(A)+NO(B)+YES(C)",
+      "minimum_normal_payoff": "1",
+      "ask_cost": "1101/1000",
+      "gross_floor": "-101/1000"
+    }
+  ],
+  "validation": {
+    "node_full_tests": 1144,
+    "s1": 16,
+    "s2": 32,
+    "s3": 24,
+    "s4": 31,
+    "s5_python": 20,
+    "s5_typescript": 17,
+    "p0_offline": 43,
+    "patch_tools": 8,
+    "full_check": true,
+    "full_build": true,
+    "full_test": true,
+    "earlier_full_test": "FAILED_PREEXISTING_5S_RETENTION_TIMEOUT_THEN_UNMODIFIED_RERUN_PASSED",
+    "skipped_tests": false
+  },
+  "limits": [
+    "CONDITIONAL_IDENTICAL_QUALIFYING_OCCURRENCE",
+    "IN_SESSION_REVIEW_NOT_INDEPENDENT",
+    "NO_FULL_CATALOG_LLM_AUTOMATION",
+    "REPEATED_QUOTES_NOT_INDEPENDENT_SAMPLES",
+    "CREATION_AND_ENDPOINT_ASSUMPTIONS",
+    "INDEPENDENT_ORACLE_AND_CLARIFICATION",
+    "FEES_NOT_CERTIFIED",
+    "TERMINAL_CASHFLOWS_EXCLUDE_FINANCING",
+    "NO_EXECUTION_OR_PROFITABILITY_QUALIFICATION"
+  ],
+  "realized_profit": null,
+  "live_execution": false,
+  "model_provider_calls": 0,
+  "local_log_sha256": {
+    "baseline-full-test.log": "56069a16bb3e1c1ac4577c413270c564413460900e034e19bba4514223dc27b4",
+    "final-full-build.log": "4a862daf45cf1db059fefeea0119bb0a30cb0803a8e4380ec2c10d56a8cebbd0",
+    "final-full-check.log": "7228acd66b952487f713cef55bdc9702dc8e6bb0c3af52640792efc289708f7f",
+    "final-full-test.log": "aeb0278aa06fd6d98cc75f1f1c092da97e061985d2b197a530e91dd752e6da30",
+    "final-offline.log": "7c99fd0f503a5964d7411e72c5c1e218b83c1c030a3688667758d775852407c9",
+    "final-original-replay.log": "cfaa0cb581d30e15df368ed048b6546bc10fc6c8c7aca462d542ef77b855bed3",
+    "final-patch.log": "c6e9e8cc41ae411d97eb0a22b1761e699901582febfc1d0b8fea8cbda426aded",
+    "final-runner.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "final-s1.log": "53571f259cf11c0dd8ff49a6f57bb12c918f3dc097ba33604297c7d98701b097",
+    "final-s2.log": "fa1d56cc3f2ced12a3111b5827d30f9232c7c3d28fc874dfe084bde1c5e15571",
+    "final-s3.log": "c996cfa677624ceeed831c7fdc72b11827c9921e86e0b2dbfabbba10f46d3347",
+    "final-s4.log": "78e240d2eb549eb99efcf8a5c23a19c2239fe5051f2322a31f3eb24f6ef09c83",
+    "final-s5-python.log": "8c981bb339135f0347a53dcaf192928ca38a0e00eddc28a6f724b8cc8dc09023",
+    "final-s5-ts.log": "9e54905f4a9ae5b559849c6b3bbd9391eb9def6dd3e9722689054f0f33abc06c",
+    "final-s5-types.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "final-s5.log": "66d1fe5fa150e93bdb55ba03b04e612ecd5369d8a0ff324d98a3907777eb298a",
+    "retention-isolated.log": "28dde75de0a9e680fc9ea25311a88addde70a916955a66590aea0bc229b78988"
+  }
+}
