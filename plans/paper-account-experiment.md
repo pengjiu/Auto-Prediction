@@ -1,0 +1,19 @@
+# Minimal virtual-account experiment — 2026-10-14
+
+The user selected a no-human-in-the-loop research assay. The in-session model owns complete-clause interpretation and a frozen relation pack; code owns all subsequent sizing, virtual orders, failures, inventory and accounting. No new numbered research subsystem, universal parser, optimizer, service, production dependency or real trading authority. Extend the existing isolated PR #8; do not merge other drafts. This plan precedes new experiment prices.
+
+## Reuse and deliverable
+Reuse the existing S1 proposer, first-party `simulateClobTaker`, `ShadowOrderMachine` and `CapitalLedger`. One small paper-runner connects a source-bound frozen pack and timestamped public observations to two separate virtual accounts. B uses pairwise/simple relations; E uses the same solver and information plus the reviewed high-order constraints. The same execution assumptions and capital apply. A journal, account summary and automatic verdict are the outputs, not another relationship census.
+
+## Fixed initial protocol
+Virtual collateral 10,000, maximum 250 per basket, 2–4 active legs, no borrowing/shorting/making. Fees and amounts are fixed-point integers. Decision uses only received information. Ideal, baseline and stress scenarios have fixed latency, depth and failure parameters; never infer an unobserved fill probability. Baskets enter with independent FOK legs. At most one bounded completion attempt, then IOC unwind; unfilled inventory stays on the account. Unknown outcomes retain reservations until reconciliation. Each simulated fill consumes virtual depth; a changed book hash alone never restores it. No deadline-based fabricated settlement. Official reported payouts, when available, and simulated redemption timing are explicitly separate. Realized real-money PnL remains null.
+
+Use finite source packs rather than require 1,000 parses or 30 groups to begin. The existing complete-clause joint/marginal family is an engineering control, not a new discovery or a representative profitable universe. Rules/asset/fee changes disable entries. Unsupported payment exceptions retain conditional status. The same model reviewing its output is not independent adjudication.
+
+## Experiment and limits
+A 14-day prospective budget is configurable but is not considered executed by running a short integration capture. No unattended long-running process or recurring network schedule is created in this implementation turn. First qualify synthetic adverse paths and existing original-byte tapes, then a bounded fresh public-data smoke test where the environment permits. Distinguish new network data from historical replay. A seven-second no-trade account cannot decide the strategy's commercial viability.
+
+Only a sufficiently covered declared period can yield a scoped decision. Positive simulations must include failed legs, fees, residuals, cash recovery and capital occupation; unresolved or tiny samples yield INSUFFICIENT_EVIDENCE, not success. No-edge rejection requires verified optimistic price witnesses, not just a solver returning zero. Favor a simple baseline if the complex account has no increment. No claim of exact exchange matching, own market impact, unbounded semantic correctness or actual profitability.
+
+## Acceptance
+Test full entry, rejection, partial completion, timeout/reconciliation, IOC loss/dust, rule change, gaps, no look-ahead, shared-depth consumption, separate account independence, official-report versus cash recovery, end-of-tape outstanding capital, and conservation at each event. Execute full local workspace checks/build/tests and research regressions; independently qualify the exact committed tree in CI. Synthetic profitable cases prove mechanics only. Keep the production certificate gate unchanged and retain the original raw evidence.
